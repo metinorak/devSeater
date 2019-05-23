@@ -155,10 +155,6 @@ class UI{
         var likeNumber = `<a href="#" class="like-number"></a>`;
       } 
 
-
-
-      //Render markdown
-
       postToAdd.innerHTML = 
         `
           <div class="post-header mb-2">
@@ -211,8 +207,6 @@ class UI{
 
       </div>
 
-      
-
         `;
         let theNewestPost = document.querySelector(".post");
         theNewestPost.insertAdjacentElement("beforebegin", postToAdd);
@@ -221,6 +215,132 @@ class UI{
 
     this.newFollowingPostNumberButton.style.display = "none";
   }
+
+  showPreviousFollowingPosts(posts, currentUser){
+    posts.forEach(post => {
+      this.addUserPostToTheBottom(post, currentUser);
+    });
+  }
+
+  addUserPostToTheBottom(post, currentUser){
+    let posts = document.querySelectorAll(".post");
+    let lastPost = posts[posts.length - 1];
+
+    let postToAdd = document.createElement("div");
+    postToAdd.setAttribute("class", "post");
+    postToAdd.setAttribute("upid", post["upid"]);
+
+    //Specify photo
+    if (post["photo"] === null){
+      var userPhoto = "static/img/empty-profile.png";
+    }
+    else{
+      var userPhoto = `static/uploads/users/up/${post['photo']}`;
+    }
+
+    //Specify drop menu content
+    if(post["uid"] == currentUser["uid"]){
+      var menuContent = 
+      `
+      <li><a class="dropdown-item delete-post">Delete</a></li>
+      <li><a class="dropdown-item edit-post">Edit</a></li>
+      `;
+    }
+    else{
+      var menuContent = ``;
+    }
+
+    if(post["isLiked"] == "1"){
+      var likeButton = `<button class="btn btn-post mr-2 like-button liked">Like</button>`;
+    }
+    else{
+      var likeButton = `<button class="btn btn-post mr-2 like-button">Like</button>`;
+    }
+
+    if(post["commentNumber"] > 1){
+      var commentNumber = `<a href="#" class="comment-number">${post["commentNumber"]}</a>`;
+    }
+    else if(post["commentNumber"] == 1){
+      var commentNumber = `<a href="#" class="comment-number">${post["commentNumber"]} comments</a>`;
+    }
+    else{
+      var commentNumber = `<a href="#" class="comment-number"></a>`;
+    } 
+
+
+    if(post["likeNumber"] > 1){
+      var likeNumber = `<a href="#" class="like-number">${post["likeNumber"]} </a>`;
+    }
+    else if(post["likeNumber"] == 1){
+      var likeNumber = `<a href="#" class="like-number">1 like</a>`;
+    }
+    else{
+      var likeNumber = `<a href="#" class="like-number"></a>`;
+    } 
+
+
+
+    //Render markdown
+
+    postToAdd.innerHTML = 
+      `
+        <div class="post-header mb-2">
+        <a href="/u/${post['username']}">
+          <span ><img width="55px" class="rounded-circle" src="${userPhoto}" alt=""></span>
+        </a>    
+        <span>
+            <a href="/u/${post['username']}">
+                <h4>${post['full_name']}</h4>
+                <span style="font-size:13px" class="text-muted">@${post['username']}</span>
+            </a>
+            <p class="time">${this.timeSince(post["time"])} ago</p>
+        </span>
+        <span class="float-right">
+            <div class="dropdown">
+                <button type="button" class="btn btn-basic" data-toggle="dropdown"><b>...</b></button>
+                <ul class="dropdown-menu">
+                  ${menuContent}
+                </ul>
+            </div>
+        </span>
+    </div>
+
+    <div class="post-body mb-2">
+    <?prettify?>
+    <p>${post['post']}</p>
+    </div>
+
+    <div class="post-footer">
+    <hr>
+    <span class="row container post-footer-links mb-2">
+        ${likeNumber}
+        ${commentNumber}
+    </span>
+    ${likeButton}
+    <button class="btn btn-post mr-2 comment-button">Comment</button>
+    <button class="btn btn-post mr-2">Share</button>
+    </div>
+
+    <div style="display: none;" class="comment-box mt-2">
+        <form class="row container comment-form">
+            <textarea class="form-control col-sm-10" rows="1" placeholder="Add a comment..."></textarea>
+            <input class="col-sm-2 btn btn-secondary container" type="submit" value="Send">
+        </form>
+        <button  class="btn btn-link load-comments">Load previous comments...</button>
+        
+        <div class="comments container">
+            
+        </div>
+
+    </div>
+
+    
+
+      `;
+      lastPost.insertAdjacentElement("afterend", postToAdd);
+
+  }  
+
 
   removeUserPost(upid){
     upid = upid.trim();

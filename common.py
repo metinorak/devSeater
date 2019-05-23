@@ -73,4 +73,9 @@ def getCurrentUser():
   else:
     return None
 
+def getCurrentUid():
+  if isLoggedIn():
+    return session["uid"]
+  return None
+
 

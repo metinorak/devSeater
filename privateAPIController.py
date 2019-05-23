@@ -87,7 +87,7 @@ def isGlobalAdmin(uid):
 @app.route("/private-api/follow/<string:uid>")
 @login_required
 def follow(uid):
-    ModelObject["userModel"].follow(session["uid"], uid)
+    ModelObject["userModel"].follow(getCurrentUid(), uid)
 
     return json.dumps({
         "result": "success"
@@ -96,7 +96,7 @@ def follow(uid):
 @app.route("/private-api/unfollow/<string:uid>")
 @login_required
 def unfollow(uid):
-    ModelObject["userModel"].unfollow(session["uid"], uid)
+    ModelObject["userModel"].unfollow(getCurrentUid(), uid)
 
     return json.dumps({
         "result": "success"
@@ -107,12 +107,12 @@ def unfollow(uid):
 def userLinks():
     if request.method == "GET":
         #Getting all user's links
-        links = ModelObject["userModel"].getUserLinks(session["uid"])
+        links = ModelObject["userModel"].getUserLinks(getCurrentUid())
         return json.dumps(links, cls=DateTimeEncoder)
     elif request.method == "POST":
         #Adding new user link
         data = json.loads(request.data)
-        ModelObject["userModel"].addUserLink(session["uid"], data["name"], data["link"])
+        ModelObject["userModel"].addUserLink(getCurrentUid(), data["name"], data["link"])
         return json.dumps({"result" : "success"})
         
     elif request.method == "PUT":
@@ -121,7 +121,7 @@ def userLinks():
         ulid = request.args.get("ulid")
         link = ModelObject["userModel"].getUserLink(ulid)
 
-        if link["uid"] == session["uid"]:
+        if link["uid"] == getCurrentUid():
             ModelObject["userModel"].updateUserLink(ulid, data["name"], data["link"])
             return json.dumps({"result" : "success"})
         else:
@@ -134,7 +134,7 @@ def userLinks():
         ulid = request.args.get("ulid")
         link = ModelObject["userModel"].getUserLink(ulid)
 
-        if link["uid"] == session["uid"]:
+        if link["uid"] == getCurrentUid():
             ModelObject["userModel"].removeUserLink(ulid)
             return json.dumps({"result" : "success"})
         else:
@@ -150,18 +150,21 @@ def userPosts():
         #Get last posts
         uid = request.args.get("uid")
         upid = request.args.get("upid")
+
+        if uid == None:
+            uid = getCurrentUid()
         
         if upid != None:
-            posts = ModelObject["userPostModel"].getLastUserPosts(uid, 10, session["uid"])
+            posts = ModelObject["userPostModel"].getLastUserPosts(uid, 10, getCurrentUid())
         else:
-            posts = ModelObject["userPostModel"].getNextUserPosts(uid, upid, 10, currentUser)
+            posts = ModelObject["userPostModel"].getPreviousUserPosts(uid, upid, 10, getCurrentUid())
         
         return json.dumps(posts, cls=DateTimeEncoder)
 
     elif request.method == "POST":
         #Add user post
         data = json.loads(request.data)
-        ModelObject["userPostModel"].addUserPost(session["uid"], data["post"])
+        ModelObject["userPostModel"].addUserPost(getCurrentUid(), data["post"])
         return json.dumps({"result" : "success"})
 
     elif request.method == "PUT":
@@ -171,7 +174,7 @@ def userPosts():
 
         post = ModelObject["userPostModel"].getUserPost(upid)
 
-        if post["uid"] == session["uid"]:
+        if post["uid"] == getCurrentUid():
             ModelObject["userPostModel"].updateUserPost(data["upid"], data["post"])
             return json.dumps({"result" : "success"})
         else:
@@ -184,46 +187,43 @@ def userPosts():
 
         post = ModelObject["userPostModel"].getUserPost(upid)
 
-        if post["uid"] == session["uid"]:
+        if post["uid"] == getCurrentUid():
             ModelObject["userPostModel"].removeUserPost(upid)
             return '{"result" : "success"}'
         else:
             return render_template("private-api/forbidden-request.html")
 
-@app.route("/private-api/next-following-posts")
+@app.route("/private-api/previous-following-posts")
 @login_required
-def getNextFollowingPosts():
-    if request.method == "GET":
-        upid = request.args.get("upid")
-        
-        if upid != None:
-            posts = ModelObject["userPostModel"].getNextFollowingPosts(session["uid"], upid)
-            return json.dumps(posts, cls=DateTimeEncoder)
+def getPreviousFollowingPosts():
+    upid = request.args.get("upid")
+    
+    if upid != None:
+        posts = ModelObject["userPostModel"].getPreviousFollowingPosts(getCurrentUid(), upid, 10)
+        return json.dumps(posts, cls=DateTimeEncoder)
     
     return render_template("private-api/unknown-request.html")
 
 @app.route("/private-api/new-following-post-number")
 @login_required
 def getNewFollowingPostNumber():
-    if request.method == "GET":
-        upid = request.args.get("upid")
-        if upid != None:
-            number = ModelObject["userPostModel"].getNewFollowingPostNumber(session["uid"], upid)
+    upid = request.args.get("upid")
+    if upid != None:
+        number = ModelObject["userPostModel"].getNewFollowingPostNumber(getCurrentUid(), upid)
 
-            return json.dumps({
-                "number" : number
-            })
+        return json.dumps({
+            "number" : number
+        })
     return render_template("private-api/unknown-request.html")
 
 @app.route("/private-api/new-following-posts")
 @login_required
 def getNewFollowingPosts():
-    if request.method == "GET":
-        upid = request.args.get("upid")
+    upid = request.args.get("upid")
 
-        if upid != None:
-            posts = ModelObject["userPostModel"].getNewFollowingPosts(session["uid"], upid)
-            return json.dumps(posts, cls=DateTimeEncoder)
+    if upid != None:
+        posts = ModelObject["userPostModel"].getNewFollowingPosts(getCurrentUid(), upid)
+        return json.dumps(posts, cls=DateTimeEncoder)
 
     return render_template("private-api/unknown-request.html")
 
@@ -231,7 +231,7 @@ def getNewFollowingPosts():
 @login_required
 def likeUserPost(upid):
 
-    ModelObject["userPostModel"].likeUserPost(session["uid"], upid)
+    ModelObject["userPostModel"].likeUserPost(getCurrentUid(), upid)
     return json.dumps({"result" : "success"})
 
 
@@ -239,7 +239,7 @@ def likeUserPost(upid):
 @login_required
 def unlikeUserPost(upid):
 
-    ModelObject["userPostModel"].unlikeUserPost(session["uid"], upid)
+    ModelObject["userPostModel"].unlikeUserPost(getCurrentUid(), upid)
     return json.dumps({"result" : "success"})
 
 @app.route("/private-api/user-posts/<string:upid>/likes/number")
@@ -272,16 +272,16 @@ def userPostComments(upid):
             number = 2
 
         if upcid == None:
-            comments = ModelObject["userPostModel"].getLastUserPostComments(upid, number, session["uid"])
+            comments = ModelObject["userPostModel"].getLastUserPostComments(upid, number, getCurrentUid())
         else:
-            comments = ModelObject["userPostModel"].getPreviousUserPostComments(upid, upcid, number, session["uid"])
+            comments = ModelObject["userPostModel"].getPreviousUserPostComments(upid, upcid, number, getCurrentUid())
             print(comments)
         return json.dumps(comments, cls=DateTimeEncoder)
 
     elif request.method == "POST":
         #Add a new user post comment
         data = json.loads(request.data)
-        ModelObject["userPostModel"].addUserPostComment(session["uid"], upid, data["comment"])
+        ModelObject["userPostModel"].addUserPostComment(getCurrentUid(), upid, data["comment"])
 
         return json.dumps({"result" : "success"})
     elif request.method == "PUT":
@@ -290,7 +290,7 @@ def userPostComments(upid):
         data = json.loads(request.data)
         comment = ModelObject["userPostModel"].getUserPostComment(upcid)
 
-        if comment["uid"] == session["uid"]:
+        if comment["uid"] == getCurrentUid():
             ModelObject["userPostModel"].updateUserPostComment(upcid, data["comment"])
             return json.dumps({"result" : "success"})
         
@@ -301,7 +301,7 @@ def userPostComments(upid):
         upcid = request.args.get("upcid")
         comment = ModelObject["userPostModel"].getUserPostComment(upcid)
 
-        if comment["uid"] == session["uid"]:
+        if comment["uid"] == getCurrentUid():
             ModelObject["userPostModel"].removeUserPostComment(upcid)
             return '{"result" : "success"}'
         
@@ -313,14 +313,14 @@ def userPostComments(upid):
 @app.route("/private-api/user-posts/comments/<string:upcid>/like")
 @login_required
 def likeUserPostComment(upcid):
-    ModelObject["userPostModel"].likeUserPostComment(session["uid"], upcid)
+    ModelObject["userPostModel"].likeUserPostComment(getCurrentUid(), upcid)
     return '{"result" : "success"}'
 
 
 @app.route("/private-api/user-posts/comments/<string:upcid>/unlike")
 @login_required
 def unlikeUserPostComment(upcid):
-    ModelObject["userPostModel"].unlikeUserPostComment(session["uid"], upcid)
+    ModelObject["userPostModel"].unlikeUserPostComment(getCurrentUid(), upcid)
     return '{"result" : "success"}'
 
 @app.route("/private-api/user-posts/comments/<string:upcid>/like-number")
@@ -339,7 +339,7 @@ def userSkills():
         uid = request.args.get("uid")
 
         if uid == None:
-            uid == session["uid"]
+            uid == getCurrentUid()
         
         skills = ModelObject["skillModel"].getUserSkills(uid)
 
@@ -348,7 +348,7 @@ def userSkills():
     elif request.method == "POST":
         skill = request.args.get("skill")
         if skill != None:
-            ModelObject["skillModel"].addUserSkill(session["uid"], skill)
+            ModelObject["skillModel"].addUserSkill(getCurrentUid(), skill)
             return '{"result" : "success"}'
 
     else:
@@ -358,7 +358,7 @@ def userSkills():
         if skid != None:
             skill = ModelObject["skillModel"].getUserSkill(skid)
 
-            if skill["uid"] == session["uid"]:
+            if skill["uid"] == getCurrentUid():
                 ModelObject["skillModel"].removeUserSkill(skid)
                 return '{"result" : "success"}'
             else:
@@ -386,7 +386,7 @@ def seaterSkills():
 
         pid = ModelObject["seaterModel"].getSeater(sid)["pid"]
 
-        if ModelObject["projectModel"].isProjectAdmin(session["uid"], pid):
+        if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), pid):
             if skill != None:
                 ModelObject["skillModel"].addSeaterSkill(sid, skill)
                 return '{"result" : "success"}'
@@ -398,7 +398,7 @@ def seaterSkills():
         if skid != None:
             skill = ModelObject["skillModel"].getUserSkill(skid)
 
-            if skill["uid"] == session["uid"]:
+            if skill["uid"] == getCurrentUid():
                 ModelObject["skillModel"].removeUserSkill(skid)
                 return '{"result" : "success"}'
             else:
@@ -458,7 +458,7 @@ def getSeater(sid):
 @login_required
 def createSeater(pid):
     print("1")
-    if ModelObject["projectModel"].isProjectAdmin(session["uid"], pid):
+    if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), pid):
         seater = json.loads(request.data)
         seater["pid"] = pid
         ModelObject["seaterModel"].createSeater(pid, seater)
@@ -471,7 +471,7 @@ def createSeater(pid):
 def removeSeater(sid):
     seater = ModelObject["seaterModel"].getSeater(sid)
     if seater != None:
-        if ModelObject["projectModel"].isProjectAdmin(session["uid"], seater["pid"]):
+        if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), seater["pid"]):
             ModelObject["seaterModel"].removeSeater(sid)
             return '{"result" : "success"}'
         else:
@@ -484,7 +484,7 @@ def dismissUser(sid):
     seater = ModelObject["seaterModel"].getSeater(sid)
 
     if seater != None:
-        if ModelObject["projectModel"].isProjectAdmin(session["uid"], seater["pid"]):
+        if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), seater["pid"]):
             ModelObject["seaterModel"].dismissUser(sid)
             return '{"result" : "success"}'
         else:
@@ -498,7 +498,7 @@ def updateSeater(sid):
     seater = ModelObject["seaterModel"].getSeater(sid)
 
     if seater != None:
-        if ModelObject["projectModel"].isProjectAdmin(session["uid"], seater["pid"]):
+        if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), seater["pid"]):
             seater = json.loads(request.data)
             ModelObject["seaterModel"].updateSeater(sid, seater["title"], seater["description"])
             return '{"result" : "success"}'
@@ -513,7 +513,7 @@ def assignUser(sid, uid):
     seater = ModelObject["seaterModel"].getSeater(sid)
 
     if seater != None:
-        if ModelObject["projectModel"].isProjectAdmin(session["uid"], seater["pid"]):
+        if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), seater["pid"]):
             if ModelObject["seaterModel"].isThereSeaterAspiration(uid, sid):
                 ModelObject["seaterModel"].assignUser(uid, sid)
                 return '{"result" : "success"}'
@@ -528,7 +528,7 @@ def unassignUser(sid, uid):
     seater = ModelObject["seaterModel"].getSeater(sid)
 
     if seater != None:
-        if ModelObject["projectModel"].isProjectAdmin(session["uid"], seater["pid"]):
+        if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), seater["pid"]):
             ModelObject["seaterModel"].unassignUser(sid)
             return '{"result" : "success"}'
         else:
@@ -539,14 +539,14 @@ def unassignUser(sid, uid):
 @app.route("/private-api/seaters/<string:sid>/aspire")
 @login_required
 def aspireSeater(sid):
-    ModelObject["seaterModel"].aspireSeater(session["uid"], sid)
+    ModelObject["seaterModel"].aspireSeater(getCurrentUid(), sid)
     return '{"result" : "success"}'
 
 @app.route("/private-api/seaters/<string:sid>/cancel-aspiration")
 @login_required
 def cancelSeaterAspiration(sid):
-    if ModelObject["seaterModel"].isThereSeaterAspiration(session["uid"], sid):
-        ModelObject["seaterModel"].cancelSeaterAspiration(session["uid"], sid)
+    if ModelObject["seaterModel"].isThereSeaterAspiration(getCurrentUid(), sid):
+        ModelObject["seaterModel"].cancelSeaterAspiration(getCurrentUid(), sid)
         return '{"result" : "success"}'
     else:
         return render_template("private-api/forbidden-request.html")
@@ -554,7 +554,7 @@ def cancelSeaterAspiration(sid):
 @app.route("/private-api/projects/<string:pid>/seater-aspirations")
 @login_required
 def seaterAspirations(pid):
-    if ModelObject["projectModel"].isProjectAdmin(session["uid"], pid):
+    if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), pid):
         aspirations = ModelObject["seaterModel"].getSeaterAspirations(pid)
         return json.dumps(aspirations, cls=DateTimeEncoder)
     return render_template("private-api/forbidden-request.html")
@@ -566,7 +566,7 @@ def rejectSeater(sid):
     uid = request.args.get("uid")
 
     if seater != None and uid != None:
-        if ModelObject["projectModel"].isProjectAdmin(session["uid"], seater["pid"]):
+        if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), seater["pid"]):
             ModelObject["seaterModel"].rejectSeaterAspiration(uid, sid)
             return '{"result" : "success"}'
         else:
@@ -628,7 +628,7 @@ def isThereThisProjectName(name):
 @app.route("/private-api/projects/<string:pid>/photo", methods = ["PUT", "DELETE"])
 @login_required
 def projectPhoto(pid):
-    if not ModelObject["projectModel"].isProjectAdmin(session["uid"], pid):
+    if not ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), pid):
         return render_template("private-api/forbidden-request.html")
 
     if request.method == "PUT":
@@ -657,7 +657,7 @@ def projectPhoto(pid):
 @app.route("/private-api/projects/<string:pid>/name/<string:newName>", methods = ["PUT"])
 @login_required
 def updateProjectName(pid, newName):
-    if not ModelObject["projectModel"].isProjectAdmin(session["uid"], pid):
+    if not ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), pid):
         return render_template("private-api/forbidden-request.html")
 
     if not isValidProjectName(newName):
@@ -672,7 +672,7 @@ def updateProjectName(pid, newName):
 @app.route("/private-api/projects/<string:pid>/short-description", methods = ["PUT"])
 @login_required
 def updateProjectShortDescription(pid):
-    if not ModelObject["projectModel"].isProjectAdmin(session["uid"], pid):
+    if not ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), pid):
         return render_template("private-api/forbidden-request.html")
     
     description = json.loads(request.data)["description"]
@@ -683,7 +683,7 @@ def updateProjectShortDescription(pid):
 @app.route("/private-api/projects/<string:pid>/full-description", methods = ["PUT"])
 @login_required
 def updateProjectFullDescription(pid):
-    if not ModelObject["projectModel"].isProjectAdmin(session["uid"], pid):
+    if not ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), pid):
         return render_template("private-api/forbidden-request.html")
     
     description = json.loads(request.data)["description"]
@@ -709,23 +709,23 @@ def projectPosts(pid):
         #Get last posts
         ppid = request.args.get("ppid")
         if ppid == None:
-            ModelObject["projectPostModel"].getLastPosts(pid, 10, session["uid"])
+            ModelObject["projectPostModel"].getLastPosts(pid, 10, getCurrentUid())
         else:
-            ModelObject["projectPostModel"].getNextPosts(pid, ppid, 10, currentUser)
+            ModelObject["projectPostModel"].getPreviousPosts(pid, ppid, 10, getCurrentUid())
 
         return json.dumps(posts, cls=DateTimeEncoder)
 
     elif request.method == "POST":
-        if not ModelObject["projectModel"].isProjectMember(session["uid"], pid):
+        if not ModelObject["projectModel"].isProjectMember(getCurrentUid(), pid):
             return render_template("private-api/forbidden-request.html")
 
         #Add project post
         data = json.loads(request.data)
-        ModelObject["projectPostModel"].addPost(session["uid"], pid, data["post"])
+        ModelObject["projectPostModel"].addPost(getCurrentUid(), pid, data["post"])
         return json.dumps({"result" : "success"})
 
     elif request.method == "PUT":
-        if not ModelObject["projectModel"].isProjectMember(session["uid"], pid):
+        if not ModelObject["projectModel"].isProjectMember(getCurrentUid(), pid):
             return render_template("private-api/forbidden-request.html")
 
         #Update project post
@@ -734,7 +734,7 @@ def projectPosts(pid):
 
         post = ModelObject["projectPostModel"].getProjectPost(ppid)
 
-        if post["uid"] == session["uid"]:
+        if post["uid"] == getCurrentUid():
             ModelObject["projectPostModel"].updateProjectPost(data["ppid"], data["post"])
             return json.dumps({"result" : "success"})
         else:
@@ -747,7 +747,7 @@ def projectPosts(pid):
 
         post = ModelObject["projectPostModel"].getProjectPost(ppid)
 
-        if post["uid"] == session["uid"]:
+        if post["uid"] == getCurrentUid():
             ModelObject["userModel"].removeUserPost(ppid)
             return '{"result" : "success"}'
         else:
@@ -756,14 +756,14 @@ def projectPosts(pid):
 @app.route("/private-api/project-posts/<string:ppid>/like")
 @login_required
 def likeProjectPost(ppid):
-    ModelObject["projectPostModel"].likeProjectPost(session["uid"], ppid)
+    ModelObject["projectPostModel"].likeProjectPost(getCurrentUid(), ppid)
     return json.dumps({"result" : "success"})
 
 
 @app.route("/private-api/project-posts/<string:ppid>/unlike")
 @login_required
 def unlikeProjectPost(ppid):
-    ModelObject["projectPostModel"].unlikeProjectPost(session["uid"], upid)
+    ModelObject["projectPostModel"].unlikeProjectPost(getCurrentUid(), upid)
     return json.dumps({"result" : "success"})
 
 @app.route("/private-api/project-posts/<string:ppid>/like-number")
@@ -780,14 +780,14 @@ def projectPostComments(ppid):
         #Get last post comments
         ppcid = request.args.get("ppcid")
         if ppcid == None:
-            comments = ModelObject["projectPostModel"].getLastProjectPostComments(ppid, 5, session["uid"])
+            comments = ModelObject["projectPostModel"].getLastProjectPostComments(ppid, 5, getCurrentUid())
         else:
-            comments = ModelObject["projectPostModel"].getNextProjectPostComments(ppid, ppcid, 5, session["uid"])
+            comments = ModelObject["projectPostModel"].getNextProjectPostComments(ppid, ppcid, 5, getCurrentUid())
         return json.dumps(comments, cls=DateTimeEncoder)
     elif request.method == "POST":
         #Add a new user post comment
         data = json.loads(request.data)
-        ModelObject["projectPostModel"].addProjectPostComment(session["uid"], ppid, data["comment"])
+        ModelObject["projectPostModel"].addProjectPostComment(getCurrentUid(), ppid, data["comment"])
 
         return json.dumps({"result" : "success"})
     elif request.method == "PUT":
@@ -796,7 +796,7 @@ def projectPostComments(ppid):
         ppcid = request.args.get("ppcid")
         comment = ModelObject["projectPostModel"].getProjectPostComment(ppcid)
 
-        if comment["uid"] == session["uid"]:
+        if comment["uid"] == getCurrentUid():
             ModelObject["projectPostModel"].updateProjectPostComment(ppcid, data["comment"])
             return json.dumps({"result" : "success"})
         
@@ -807,7 +807,7 @@ def projectPostComments(ppid):
         ppcid = request.args.get("ppcid")
         comment = ModelObject["projectPostModel"].getProjectPostComment(ppcid)
 
-        if comment["uid"] == session["uid"]:
+        if comment["uid"] == getCurrentUid():
             ModelObject["userPostModel"].removeProjectPostComment(ppcid)
             return '{"result" : "success"}'
         
@@ -819,14 +819,14 @@ def projectPostComments(ppid):
 @app.route("/private-api/project-posts/comments/<string:ppcid>/like")
 @login_required
 def likeProjectPostComment(ppcid):
-    ModelObject["projectPostModel"].likeProjectPostComment(session["uid"], ppcid)
+    ModelObject["projectPostModel"].likeProjectPostComment(getCurrentUid(), ppcid)
     return '{"result" : "success"}'
 
 
 @app.route("/private-api/project-posts/comments/<string:ppcid>/unlike")
 @login_required
 def unlikeProjectPostComment(upcid):
-    ModelObject["projectPostModel"].unlikeProjectPostComment(session["uid"], ppcid)
+    ModelObject["projectPostModel"].unlikeProjectPostComment(getCurrentUid(), ppcid)
     return '{"result" : "success"}'
 
 @app.route("/private-api/project-posts/comments/<string:ppcid>/like-number")
@@ -842,13 +842,13 @@ def projectPostCommentLikeNumber(upcid):
 @app.route("/private-api/notifications/new")
 @login_required
 def getNewNotifications():
-    notifications = ModelObject["notificationModel"].getNewNotifications(session["uid"], 10)
+    notifications = ModelObject["notificationModel"].getNewNotifications(getCurrentUid(), 10)
     return json.dumps(notifications, cls=DateTimeEncoder)
 
 @app.route("/private-api/notifications/new/number")
 @login_required
 def getNewNotificationNumber():
-    number = ModelObject["notificationModel"].getNewNotificationNumber(session["uid"])
+    number = ModelObject["notificationModel"].getNewNotificationNumber(getCurrentUid())
     return json.dumps({
         "number" : number
     })
@@ -857,7 +857,7 @@ def getNewNotificationNumber():
 @app.route("/private-api/notifications/last")
 @login_required
 def getLastNotifications():
-    notifications = ModelObject["notificationModel"].getNotifications(session["uid"], 20)
+    notifications = ModelObject["notificationModel"].getNotifications(getCurrentUid(), 20)
     return json.dumps(notifications, cls=DateTimeEncoder)
 
 
@@ -866,22 +866,22 @@ def getLastNotifications():
 @login_required
 def sendMessage():
     message = json.loads(request.data)
-    ModelObject["messageModel"].sendMessage(session["uid"], message["receiver_id"], message["text"])
+    ModelObject["messageModel"].sendMessage(getCurrentUid(), message["receiver_id"], message["text"])
     return '{"result" : "success"}'
 
 @app.route("/private-api/messages/delete/<string:mid>")
 @login_required
 def deleteMessage(mid):
-    if not ModelObject["messageModel"].isTheUserMessageOwner(session["uid"], mid):
+    if not ModelObject["messageModel"].isTheUserMessageOwner(getCurrentUid(), mid):
         return render_template("private-api/forbidden-request.html")
 
-    ModelObject["messageModel"].deleteMessage(session["uid"], mid)
+    ModelObject["messageModel"].deleteMessage(getCurrentUid(), mid)
     return '{"result" : "success"}'
 
 @app.route("/private-api/messages/new-dialog-number")
 @login_required
 def newDialogNumber():
-    number = ModelObject["messageModel"].getNewMessageDialogNumber(session["uid"])
+    number = ModelObject["messageModel"].getNewMessageDialogNumber(getCurrentUid())
     return json.dumps({
         "number" : number
     })
@@ -889,7 +889,7 @@ def newDialogNumber():
 @app.route("/private-api/messages/dialogs")
 @login_required
 def getDialogList():
-    dialogList = ModelObject["messageModel"].getDialogList(session["uid"])
+    dialogList = ModelObject["messageModel"].getDialogList(getCurrentUid())
 
     return json.dumps({
         "dialogList" : dialogList
@@ -904,7 +904,7 @@ def getDialog(uid):
     if page == None:
         page = 1
     
-    msgList = ModelObject["messageModel"].getDialog(session["uid"], uid, page, 10)
+    msgList = ModelObject["messageModel"].getDialog(getCurrentUid(), uid, page, 10)
 
     return json.dumps({
         "msgList" : msgList

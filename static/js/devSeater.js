@@ -25,6 +25,10 @@ class DevSeater{
     return this.request.get(this.url + "new-following-posts?upid=" + upid);
   }
 
+  async previousFollowingPosts(upid){
+    return this.request.get(this.url + `previous-following-posts?upid=${upid}`);
+  }
+
   async sendUserPost(post){
     return this.request.post(this.url + "user-posts", {post: post});
   }
