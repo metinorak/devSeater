@@ -1,0 +1,305 @@
+body{
+  padding-top: 60px;
+  background: #89bda521;
+}
+
+.container{
+  max-width: 1000px;
+}
+
+*{
+  font-size: 14px;
+}
+
+
+#search-input{
+  color: #89bda5;
+  border: 3px solid;
+  border-radius: 5px;
+  height: 40px;
+  width: 100%;
+  padding: 2px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  font-size: 12px;
+  width: 250px;
+}
+
+.list-group-item{
+  padding: 5px;
+}
+
+h1{
+  font-size: 22px;
+  font-size: bold;
+}
+
+h2{
+  font-size: 16px;
+  font-weight: bold;
+}
+
+h3{
+  font-size: 15px;
+  font-weight: bold;
+}
+
+h4{
+  font-size: 13px;
+  font-weight: bold;
+  margin:0px;
+}
+
+h5{
+  font-size: 11px;
+  font-weight: bold;
+  margin:0px;
+}
+
+
+a, a:visited{
+  color: #47472d;
+  text-decoration: none;
+}
+
+a:hover{
+  color: #e14705;
+  text-decoration: none;
+}
+
+
+header{
+  background-color: #dde19c;
+  color: #529f82;
+  font-family: monospace;
+  font-size: 0.9em;
+  font-weight: bold;
+  height: 45px;
+}
+
+@media (max-width: 1000px) {
+  /* mobile devices*/
+  header{
+    height: auto;
+  }
+
+  #profile-header-cols > div{
+    margin-bottom: 15px;
+  }
+}
+
+#seaters{
+  display: flex;
+  flex-grow: column;
+  overflow-x: scroll;
+  
+}
+
+#seaters > div{
+  min-height: 200px;
+  min-width: 200px;
+  max-width: 200px;
+  margin-right: 5px;
+}
+
+
+#index-cols > div > div{
+  background: white;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+#profile-header-cols{
+  margin-bottom: 15px;
+}
+
+#profile-header-cols > div > div{
+  background: white;
+  padding: 10px;
+  height: 100%;
+}
+
+.content-area > div{
+  background: white;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+
+.right-area > div{
+  background: white;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+
+.btn-light{
+  border-radius: 10px;
+  border: solid 2px;
+}
+
+.btn-light:hover{
+  background-color: #e1470591;
+}
+
+.btn-primary{
+  background: #89bda557;
+  color: black;
+  border: none;
+}
+
+.btn-secondary{
+  background: #dde19c55;
+  color: #648d7d;
+  font-weight: bold;
+}
+
+.btn-primary:hover{
+  background-color: #e1470591;
+}
+
+.btn-primary:target{
+  background-color: #e14705;
+}
+
+.btn-img{
+  border: none;
+  background: none;
+}
+
+.btn-post{
+  background: #89bda56e;
+}
+
+.btn-post:hover{
+  background: #e1470591;
+}
+
+
+.text-primary{
+  color: #529f82 !important;
+}
+
+#post-textarea{
+  width: 100%;
+  padding: 5px;
+}
+
+.flex-container{
+  display: flex;
+}
+
+#member-options > a{
+  margin-bottom: 10px;
+}
+
+.post{
+  display: block;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: #89bda5 2px dashed;
+}
+
+.post-header{
+  display: grid;
+  grid-template-columns: 3fr 20fr 3fr;
+}
+
+
+.post-footer-links > a{
+  font-size: 13px;
+  
+}
+
+#search-results{
+  display: none;
+  position: fixed;
+  padding: 5px;
+  background: white;
+  border: 1px solid #89bda5;
+  border-radius: 3px;
+  width: 250px;
+}
+
+#search-results.list-group>a{
+  border: none;
+  font-weight: normal;
+}
+
+
+#profile-img{
+  height: 150px;
+  border: #dde19c solid 5px;
+  border-radius: 500px;
+}
+
+.link-list > a{
+  display: block;
+  margin-bottom: 10px;
+  break-inside: auto;
+}
+
+.CodeMirror, .CodeMirror-scroll {
+	min-height: 50px;
+}
+
+.post-body img{
+  max-width: 600px;
+  max-height: 500px;
+}
+
+li.L0, li.L1, li.L2, li.L3, li.L4,
+li.L5, li.L6, li.L7, li.L8, li.L9 {
+  list-style-type: decimal !important;
+  color: lightgray;
+}
+
+.prettyprint{
+  max-height: 500px;
+}
+
+.liked{
+  font-weight: bold;
+  color:#e1470591;
+}
+
+.comment-like-button{
+  margin: 0px;
+  margin-right: 10px;
+  font-size: 11px;
+  background: #dde19c6b;
+  border: solid 1px;
+  border-radius: 3px;
+
+}
+
+.comment-like-button .liked{
+  font-weight: bold;
+  color:#e1470591;
+}
+
+
+.comment-delete-button{
+  margin: 0px;
+  margin-right: 10px;
+  font-size: 11px;
+  background: #e1470536;
+  color: #000000;
+  border: solid 1px;
+  border-radius: 3px;
+
+}
+
+
+.comment{
+  padding: 5px;
+  background: #89bda534;
+  margin-bottom: 5px;
+}
+
+.time{
+  font-size: 12px;
+  color: lightgray;
+  font-style: italic;
+}
+

@@ -1,0 +1,52 @@
+
+    <header class="navbar navbar-expand-lg navbar-dark fixed-top" >
+        <div class="container">
+          <a class="navbar-brand" href="{{url_for('index')}}">
+            <img src="{{url_for('static', filename='img/text-logo.png')}}" height="20px" alt="">
+          </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-links" aria-controls="navbar-links" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+  
+          <div class="collapse navbar-collapse" id="navbar-links">
+            <ul class="navbar-nav mr-auto">
+                <li>
+                  <a href="#" id = "messages-link" class="mr-3">messages<span style="display:none" class="badge badge-success ml-1"></span></a>
+                </li>
+                <li>
+                  <a href="#" id="notifications-link">notifications<span style="display:none" class="badge badge-info ml-1"></span></a>
+                </li>
+
+            </ul>
+
+            <form autocomplete="off" class="mr-3" id = "search-form">
+              <input aria-owns="search-results" class="form-control " id ="search-input" list="search-results" placeholder="search me" aria-label="Search">
+              <div id="search-results" class="list-group"></div> 
+            </form>
+
+            <div class="dropdown">
+              <button type="button" class="mobile-hidden btn dropdown-toggle" data-toggle="dropdown">
+                {% if currentUser.photo == None %}
+                  <img src="{{url_for('static', filename= 'img/empty-profile.png') }}" height="30px" class="rounded" alt="">
+                {% else %}
+                  <img src="{{url_for('static', filename= 'uploads/users/up/' + currentUser.photo) }}" height="30px" class="rounded" alt="">  
+                {% endif %}
+                
+              </button>
+              <div id="member-options" class="dropdown-menu">
+                <a class="dropdown-item" href="/u/{{currentUser.username}}">
+                  {{currentUser.full_name}}
+                  <br>
+                  <span class="text-muted">@{{currentUser.username}}</span>
+                </a>
+                <hr>
+                <a class="dropdown-item" href="#">Projects</a>
+                <a class="dropdown-item" href="#">Seaters</a>
+                <a class="dropdown-item" href="#">Settings</a>
+                <hr>
+                <a class="dropdown-item" href="{{url_for('logout')}}">Log out</a>
+              </div>
+            </div> 
+          </div>
+        </div>
+      </header>

@@ -1,0 +1,234 @@
+{% extends "layout.html" %}
+
+
+{% block body %}
+  <main class="container">
+
+
+        <div class="row" id="profile-header-cols" >
+                <div class="col-lg-4 text-center">
+                  <div>
+                      {% if user.photo != None %}
+                        <img id="profile-img" src="{{url_for('static', filename='uploads/users/up/' + user.photo)}}" alt=""><br>
+                      {% else %}
+                        <img id="profile-img" src="{{url_for('static', filename='img/empty-profile.png')}}" alt=""><br>
+                      {% endif %}
+                      
+                      
+                      
+                      <h1>{{user.full_name}}</h1>
+                      <span class="text-muted">@{{user.username}}</span><br>
+                      <span>
+                          {% if user.bio != None %}
+                                  {{user.bio}}
+                          {% endif %}
+                          
+                      </span><br>
+                      {% if user.isFollowed %}
+                        <button class="btn btn-light follow-button followed">Followed</button>
+                      {% else %}
+                        <button class="btn btn-light follow-button">Follow</button>
+                      {% endif %}
+                      
+                      
+                      <button class="btn btn-light">Message</button>
+                  </div>
+      
+                </div>
+      
+                <div class="col-lg-4">
+                  <div>
+                      <h1 class="text-muted">Links</h1>
+                      <span class="link-list">
+                          {% if not userLinks %}
+                            <span>This user does not have any link.</span>
+                          {% else %}
+                            {% for link in userLinks %}
+                                <a target="_blank" href="{{link.link}}">{{link.name}}</a>
+                            {% endfor %}
+                          {% endif %}
+                          
+                          
+                      </span> 
+                  </div>
+                </div>
+                <div class="col-lg-4 text-center" >
+                  <div>
+                    <h1 class="text-muted">Projects</h1>
+                    <div class="list-group">
+                        {% if not userProjects %}
+                            <span>This user does not have any projects</span>
+                        {% else %}
+                            {% for project in userProjects %}
+                                <a type="button" href="/p/{{project.project_name}}" class="list-group-item list-group-item-action">{{project.project_name}}</a>   
+                            {% endfor %}                            
+                        {% endif %}
+                        
+
+                        
+                    </div>
+                  </div>
+      
+                </div>
+              </div>
+      
+              <div class="row" id="profile-body-cols">
+
+                <div class="col-lg-8">
+                  <div class="mb-3 bg-light" style="padding: 0;">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-outline-secondary">Posts</button>
+                      <button type="button" class="btn btn-outline-secondary">Seaters</button>
+                      <button type="button" class="btn btn-outline-secondary">Skills</button>
+                      <button type="button" class="btn btn-outline-secondary">Projects</button>
+                      <button type="button" class="btn btn-outline-secondary">About</button>
+                    </div>
+                  </div>
+                  <div class="content-area">
+                      <div class="post">
+                          <div class="post-header mb-2">
+                              <span ><img width="55px" class="rounded-circle" src="img/0.jpeg" alt=""></span>
+                              <span ><h4>Metin Orak</h4><span style="font-size:13px" class="text-muted">@metinorak</span></span>
+                              <span class="float-right">
+                                  <div class="dropdown">
+                                      <button type="button" class="btn btn-basic" data-toggle="dropdown"><b>...</b></button>
+                                      <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#">Delete</a></li>
+                                        <li><a class="dropdown-item" href="#">Edit</a></li>
+                                        <li><a class="dropdown-item" href="#"></a></li>
+                                      </ul>
+                                  </div>
+                              </span>
+                          </div>
+              
+                          <div class="post-body mb-2">
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad, ipsa?Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cumque, sit corrupti laborum vitae at esse corporis voluptas laboriosam iste numquam repudiandae nulla tempora mollitia libero! Sunt, consequuntur fuga. Atque, ullam asperiores consequuntur praesentium eius ea hic dolore totam delectus aperiam at, mollitia eligendi sequi autem eos accusamus maiores beatae nemo?</p>
+                          </div>
+          
+                          <div class="post-footer">
+                            <hr>
+                            <span class="row container post-footer-links mb-2">
+                              <a class="mr-3" href="">1 Like</a>
+                              <a href="">3 Comments</a>
+                            </span>
+                            <button class="btn btn-post mr-2">Like</button>
+                            <button class="btn btn-post mr-2">Comment</button>
+                            <button class="btn btn-post mr-2">Share</button>
+                          </div>
+                      </div>
+                      <div class="post">
+                          <div class="post-header mb-2">
+                              <span ><img width="55px" class="rounded-circle" src="img/0.jpeg" alt=""></span>
+                              <span ><h4>Metin Orak</h4><span style="font-size:13px" class="text-muted">@metinorak</span></span>
+                              <span class="float-right">
+                                  <div class="dropdown">
+                                      <button type="button" class="btn btn-basic" data-toggle="dropdown"><b>...</b></button>
+                                      <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#">Delete</a></li>
+                                        <li><a class="dropdown-item" href="#">Edit</a></li>
+                                        <li><a class="dropdown-item" href="#"></a></li>
+                                      </ul>
+                                  </div>
+                              </span>
+                          </div>
+              
+                          <div class="post-body mb-2">
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad, ipsa?Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cumque, sit corrupti laborum vitae at esse corporis voluptas laboriosam iste numquam repudiandae nulla tempora mollitia libero! Sunt, consequuntur fuga. Atque, ullam asperiores consequuntur praesentium eius ea hic dolore totam delectus aperiam at, mollitia eligendi sequi autem eos accusamus maiores beatae nemo?</p>
+                          </div>
+          
+                          <div class="post-footer">
+                            <hr>
+                            <span class="row container post-footer-links mb-2">
+                              <a class="mr-3" href="">1 Like</a>
+                              <a href="">3 Comments</a>
+                            </span>
+                            <button class="btn btn-post mr-2">Like</button>
+                            <button class="btn btn-post mr-2">Comment</button>
+                            <button class="btn btn-post mr-2">Share</button>
+                          </div>
+                      </div>
+                  </div>
+                </div>
+      
+              <div class="col-lg-4 d-none d-lg-block right-area">
+                        <div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><h2>Who to Follow</h2></li>
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-3"><img class="rounded-circle" src="img/0.jpeg" width="50px" alt=""></div>
+                                        <div class="col-9">
+                                          <a href="#">Metin Orak</a>
+                                          <br>
+                                          <button class="btn btn-light">Follow</button>
+                                          
+                                        </div>  
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-3"><img class="rounded-circle" src="img/0.jpeg" width="50px" alt=""></div>
+                                        <div class="col-9">
+                                          <a href="#">Metin Orak</a>
+                                          <br>
+                                          <button class="btn btn-light">Follow</button>
+                                          
+                                        </div>  
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-3"><img class="rounded-circle" src="img/0.jpeg" width="50px" alt=""></div>
+                                        <div class="col-9">
+                                          <a href="#">Metin Orak</a>
+                                          <br>
+                                          <button class="btn btn-light">Follow</button>
+                                          
+                                        </div>  
+                                    </div>
+                                </li>
+                              </ul>  
+                        </div>
+     
+                        
+                  <div>
+                      <ul class="list-group list-group-flush">
+                          
+                          <li class="list-group-item"><h2>Popular Projects</h2></li>
+                          <li class="list-group-item">
+                              <div class="card">
+                                  <img class="card-img-top" src="img/project1.jpg" alt="Card image">
+                                  <div class="card-body">
+                                    <h3 class="card-title"><a href="#">Project1</a></h3>
+                                    <p class="card-text">Some example text. Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique, dolore.</p>
+                                  </div>
+                              </div>
+                          </li>
+                          <li class="list-group-item">
+                              <div class="card">
+                                  <img class="card-img-top" src="img/project1.jpg" alt="Card image">
+                                  <div class="card-body">
+                                    <h3 class="card-title"><a href="#">Project1</a></h3>
+                                    <p class="card-text">Some example text. Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique, dolore.</p>
+                                  </div>
+                              </div>
+                          </li>
+                          <li class="list-group-item">
+                              <div class="card">
+                                  <img class="card-img-top" src="img/project1.jpg" alt="Card image">
+                                  <div class="card-body">
+                                    <h3 class="card-title"><a href="#">Project1</a></h3>
+                                    <p class="card-text">Some example text. Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique, dolore.</p>
+                                  </div>
+                              </div>
+                          </li>
+                      </ul>
+                  </div>
+              </div>
+            </div>
+      
+    </main>
+
+  {% endblock %}
+  
+      

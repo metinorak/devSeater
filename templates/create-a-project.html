@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+{% block title %}Create a new project{% endblock %}
+
+
+{% block body %}
+<main class="container">
+
+    <div class="card">
+        <div class="card-header">
+          Create A New Project
+        </div>
+        <div class="card-body">
+            {% if errorMessages %}
+                {% for msg in errorMessages.values() %}
+                  <p class="alert alert-danger">{{msg}}</p>
+                {% endfor %}
+                
+            {% endif %}
+            
+
+            <form method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                  <label for="project-name">Project Name:</label>
+                  <input type="text" class="form-control" name="project-name" placeholder="ex: facebook, google, twitter :)">
+                </div>
+                <div class="form-group">
+                    <label for="short-description">Short Description:</label>
+                    <textarea type="text" class="form-control" name="short-description"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="full-description">Full Description (optional) (markdown):</label>
+                    <textarea type="text" class="form-control" rows="7" name="full-description"></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="project-links">Project Links (optional):</label>
+                  <div class="form-row">
+                    <div class="col-md-8">
+                      <input type="text" class="form-control" name="links[]" placeholder="http://">
+                    </div>
+                    <div class="col-md-4">
+                      <input type="text" class="form-control" name="link-names[]" placeholder="link name (ex: Github)">
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="form-group">
+                    <a class="btn btn-primary" id="add-another-link-button">Add another link</a>
+                </div>
+
+                <center><input type="submit" value="Create Project" class="btn btn-light w-50"></center>
+
+            </form>
+        </div>
+      </div>
+</main>
+
+{% endblock %}
+
+

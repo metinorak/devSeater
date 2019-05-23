@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>DevSeater</title>
+  <link rel="shortcut icon" href="{{url_for('static', filename='img/favicon.ico')}}" type="image/x-icon">
+  <link rel="stylesheet" href="{{url_for('static', filename='css/intro.css')}}">
+
+</head>
+  <body>
+    <div class="main_frame">
+    <header>
+      <div id = "logo">
+        <img src="{{url_for('static', filename='img/logo.png')}}" alt="logo" height="110px">
+      </div>
+      <div id="links">
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact</a>
+        <a href="/login">Log In</a>
+      </div>
+    </header>
+      <div class="container">
+        <div>
+          <div class="intro-content">
+            <div>
+                <h2><span class = "mobile_hidden">devSeater </span>is a social network for developers.</h2>
+                <span class="mobile_hidden" id = "typed"></span>
+            </div>
+            <div class="signup-form">
+              <h1>Sign up now!</h1>
+                <form action="/" method="post">
+                  {% if form == undefined %}
+                    <label for="name">Name: </label><br>
+                    <input type="text" name = "name"><br>
+
+                    <label for="username">Username: </label><br>
+                    <input type="text" name = "username"><br>
+
+                    <label for="email">Email: </label><br>
+                    <input type="email" name = "email"><br>
+
+                    <label for="password">Password:</label><br>
+                    <input type="password" name = "password"><br><br>
+
+                    <input type="checkbox" name="terms">
+                    I aggree to the DevSeater terms
+                  {% else %}
+                    <label for="name">Name: </label><br>
+                    <input type="text" name = "name" value="{{form.get('name')}}"><br>
+                    <p class="alert">{{errorMessages.name}}</p>
+
+                    <label for="username">Username: </label><br>
+                    <input type="text" name = "username" value="{{form.get('username')}}"><br>
+                    <p class="alert">{{errorMessages.username}}</p>
+
+                    <label for="email">Email: </label><br>
+                    <input type="email" name = "email" value="{{form.get('email')}}"><br>
+                    <p class="alert">{{errorMessages.email}}</p>
+
+                    <label for="password">Password:</label><br>
+                    <input type="password" name = "password" value="{{form.get('password')}}">
+                    <p class="alert">{{errorMessages.password}}</p>
+
+
+                    <input type="checkbox" name="terms">
+                    I aggree to the DevSeater terms
+                    <p class="alert">{{errorMessages.terms}}</p>
+                  {% endif %}
+                  
+
+                  <input type="submit" value="Sign up"><br><br>
+                </form>
+                <a href="/login">Already have an account?</a>
+            </div>
+          </div>
+        </div>
+        <footer align = "center"> © All Rights Reserved. devSeater 2018</footer>
+      </div>
+    </div>
+    <script src = "{{url_for('static', filename='js/typed.js')}}"></script>
+    <script src = "{{url_for('static', filename='js/intro.js')}}"></script>
+
+  </body>
+</html>
