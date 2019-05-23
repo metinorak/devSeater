@@ -263,6 +263,13 @@ li.L5, li.L6, li.L7, li.L8, li.L9 {
   color:#e1470591;
 }
 
+.followed{
+  font-weight: bold;
+  color: #356b56;
+  background: #dde19c7a;
+  border: solid #e14705;
+}
+
 .comment-like-button{
   margin: 0px;
   margin-right: 10px;

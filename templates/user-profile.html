@@ -1,6 +1,14 @@
 {% extends "layout.html" %}
 
 
+{% block title %}user.full_name{% endblock %}
+
+{% block scripts %}
+    <script src="{{url_for('static', filename='js/userProfile.js')}}"></script>
+{% endblock %}
+
+
+
 {% block body %}
   <main class="container">
 

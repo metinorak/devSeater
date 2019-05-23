@@ -1,5 +1,11 @@
 {% extends "layout.html" %}
 
+{% block title %}home{% endblock %}
+
+{% block scripts %}
+    <script src="{{url_for('static', filename='js/index.js')}}"></script>
+{% endblock %}
+
 
 {% block body %}
   <main class="container">
