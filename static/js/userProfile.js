@@ -53,10 +53,9 @@ function eventListeners(){
 					post["post"] = markDownConverter.makeHtml(post["post"]);
 				});
 
-				ui.showPreviousFollowingPosts(posts, Session.getCurrentUser());
+				ui.showPreviousUserPosts(posts, Session.getCurrentUser());
 			})
 			.catch(err => console.error(err));
-
     }
 	};
   

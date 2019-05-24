@@ -57,7 +57,6 @@ class UserPostModel(Database):
     ORDER BY time DESC LIMIT %s"""
     cursor.execute(query, (currentUser, uid, upid, number))
     result = cursor.fetchall()
-    print(result)
     cursor.close()
     connection.close()
     return result
