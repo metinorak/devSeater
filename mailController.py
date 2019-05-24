@@ -80,7 +80,7 @@ def emailVerify():
     if email != None and ModelObject["userModel"].isThereThisEmail(email) and hashCode != None:
       if hashCode == generateEmailVerificationHashCode(email):
         ModelObject["userModel"].verifyEmail(email)
-        flash("Your email address is verified successfully.", "success")
+        flash("Your email address verified successfully!", "success")
         return redirect(url_for("login"))
 
   return redirect(url_for("index"))
