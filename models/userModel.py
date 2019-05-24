@@ -2,6 +2,7 @@ from models.database import *
 from passlib.hash import sha256_crypt
 
 class UserModel(Database):
+  @exception_handling
   def getUser(self, uid, currentUser = None):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -14,7 +15,8 @@ class UserModel(Database):
     cursor.close()
     connection.close()
     return result
-  
+
+  @exception_handling
   def getUserByUsername(self, username, currentUser = None):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -27,6 +29,7 @@ class UserModel(Database):
     connection.close()
     return result
 
+  @exception_handling
   def getUserByEmail(self, email, currentUser = None):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -39,6 +42,7 @@ class UserModel(Database):
     connection.close()
     return result
 
+  @exception_handling
   def addUser(self, user):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -48,6 +52,7 @@ class UserModel(Database):
     cursor.close()
     connection.close()
 
+  @exception_handling
   def removeUser(self, uid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -59,6 +64,7 @@ class UserModel(Database):
 
   
   #CHECKING
+  @exception_handling
   def login(self, email, password):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -74,6 +80,7 @@ class UserModel(Database):
     
     return False
   
+  @exception_handling
   def isThereThisUsername(self, username):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -84,6 +91,7 @@ class UserModel(Database):
     connection.close()
     return (result != None)
 
+  @exception_handling
   def isThereThisEmail(self, email):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -94,6 +102,7 @@ class UserModel(Database):
     connection.close()
     return (result != None)
   
+  @exception_handling
   def isEmailVerified(self, email):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -104,6 +113,7 @@ class UserModel(Database):
     connection.close()
     return (result != None)
   
+  @exception_handling
   def isGlobalAdmin(self, uid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -115,6 +125,7 @@ class UserModel(Database):
     return (result != None)
 
   #UPDATE
+  @exception_handling
   def updateFullname(self, uid, fullname):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -124,6 +135,7 @@ class UserModel(Database):
     cursor.close()
     connection.close()
   
+  @exception_handling
   def updateUsername(self, uid, username):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -133,6 +145,7 @@ class UserModel(Database):
     cursor.close()
     connection.close()
   
+  @exception_handling
   def updatePassword(self, uid, password):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -142,6 +155,7 @@ class UserModel(Database):
     cursor.close()
     connection.close()
   
+  @exception_handling
   def updateProfilePhoto(self, uid, photo):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -151,6 +165,7 @@ class UserModel(Database):
     cursor.close()
     connection.close()
 
+  @exception_handling
   def updateEmail(self, uid, email):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -160,6 +175,7 @@ class UserModel(Database):
     cursor.close()
     connection.close()
   
+  @exception_handling
   def updateBio(self, uid, bio):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -169,7 +185,7 @@ class UserModel(Database):
     cursor.close()
     connection.close()
   
-  
+  @exception_handling
   def verifyEmail(self, email):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -181,6 +197,7 @@ class UserModel(Database):
   
   
   #FOLLOW ACTIONS
+  @exception_handling
   def follow(self, followerId, followedId):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -190,6 +207,7 @@ class UserModel(Database):
     cursor.close()
     connection.close()
   
+  @exception_handling
   def unFollow(self, followerId, followedId):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -201,6 +219,7 @@ class UserModel(Database):
 
 
   #USER LINKS
+  @exception_handling
   def getUserLinks(self, uid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -211,6 +230,7 @@ class UserModel(Database):
     connection.close()
     return result
   
+  @exception_handling
   def getUserLink(self, ulid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -221,6 +241,7 @@ class UserModel(Database):
     connection.close()
     return result
 
+  @exception_handling
   def addUserLink(self, uid, name, link):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -230,6 +251,7 @@ class UserModel(Database):
     cursor.close()
     connection.close()
   
+  @exception_handling
   def removeUserLink(self, ulid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -239,6 +261,7 @@ class UserModel(Database):
     cursor.close()
     connection.close()
 
+  @exception_handling
   def updateUserLink(self, ulid, name, link):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -248,6 +271,7 @@ class UserModel(Database):
     cursor.close()
     connection.close()
   
+  @exception_handling
   def searchUsers(self, keyword, number):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)

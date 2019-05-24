@@ -1,6 +1,7 @@
 from models.database import *
 
 class SkillModel(Database):
+  @exception_handling
   def getUserSkills(self, uid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -11,6 +12,7 @@ class SkillModel(Database):
     connection.close()
     return result
   
+  @exception_handling
   def getUserSkill(self, skid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -21,7 +23,7 @@ class SkillModel(Database):
     connection.close()
     return result
 
-
+  @exception_handling
   def getSeaterSkill(self, skid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -32,7 +34,7 @@ class SkillModel(Database):
     connection.close()
     return result
 
-  
+  @exception_handling
   def getSeaterSkills(self, sid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -43,6 +45,7 @@ class SkillModel(Database):
     connection.close()
     return result
   
+  @exception_handling
   def getSkillByName(self, skill):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -53,6 +56,7 @@ class SkillModel(Database):
     connection.close()
     return result
 
+  @exception_handling
   def addUserSkill(self, uid, skill):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -76,8 +80,7 @@ class SkillModel(Database):
     cursor.close()
     connection.close()
 
-
-  
+  @exception_handling
   def addSeaterSkill(self, sid, skill):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -101,7 +104,7 @@ class SkillModel(Database):
     cursor.close()
     connection.close()
 
-  
+  @exception_handling
   def removeUserSkill(self, skid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -112,6 +115,7 @@ class SkillModel(Database):
     cursor.close()
     connection.close()
   
+  @exception_handling
   def removeSeaterSkill(self, skid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -121,6 +125,7 @@ class SkillModel(Database):
     cursor.close()
     connection.close()
 
+  @exception_handling
   def searchSkills(self, keyword, number):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -131,6 +136,7 @@ class SkillModel(Database):
     connection.close()
     return result
 
+  @exception_handling
   def isThereThisSkill(self, skillName):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)

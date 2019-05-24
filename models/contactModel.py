@@ -1,6 +1,7 @@
 from models.database import *
 
 class ContactModel(Database):
+  @exception_handling
   def addContactMessage(self, msg):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -10,6 +11,7 @@ class ContactModel(Database):
     cursor.close()
     connection.close()
 
+  @exception_handling
   def getLastContactMessages(self, page, messageNumberPerPage):
     previousMessageNumber = (page - 1) * messageNumberPerPage
 
@@ -22,6 +24,7 @@ class ContactModel(Database):
     connection.close()
     return result
   
+  @exception_handling
   def removeContactMessage(self, cmid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)

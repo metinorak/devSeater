@@ -2,7 +2,7 @@ from models.database import *
 
 class UserPostModel(Database):
   
-  @decorator
+  @exception_handling
   def addUserPost(self, uid, post):
     connection = self.getConnection() 
     cursor = connection.cursor(dictionary=True)
@@ -12,7 +12,7 @@ class UserPostModel(Database):
     cursor.close()
     connection.close()
     
-  @decorator
+  @exception_handling
   def getUserPost(self, upid, currentUser = None):
     connection = self.getConnection() 
     cursor = connection.cursor(dictionary=True)
@@ -27,7 +27,7 @@ class UserPostModel(Database):
     connection.close()
     return result
 
-  @decorator
+  @exception_handling
   def getLastUserPosts(self, uid, number, currentUser = None):
     connection = self.getConnection() 
     cursor = connection.cursor(dictionary=True)
@@ -42,7 +42,7 @@ class UserPostModel(Database):
     connection.close()
     return result
 
-  @decorator
+  @exception_handling
   def getPreviousUserPosts(self, uid, upid, number, currentUser = None):
     connection = self.getConnection() 
     cursor = connection.cursor(dictionary=True)
@@ -57,7 +57,7 @@ class UserPostModel(Database):
     connection.close()
     return result
 
-  @decorator
+  @exception_handling
   def removeUserPost(self, upid):
     connection = self.getConnection() 
     cursor = connection.cursor(dictionary=True)
@@ -67,7 +67,7 @@ class UserPostModel(Database):
     cursor.close()
     connection.close()
   
-  @decorator
+  @exception_handling
   def updateUserPost(self, upid, post):
     connection = self.getConnection() 
     cursor = connection.cursor(dictionary=True)
@@ -77,7 +77,7 @@ class UserPostModel(Database):
     cursor.close()
     connection.close()
   
-  @decorator
+  @exception_handling
   def getLastFollowingPosts(self, uid, number):
     connection = self.getConnection() 
     cursor = connection.cursor(dictionary=True)
@@ -94,7 +94,7 @@ class UserPostModel(Database):
     connection.close()
     return result
 
-  @decorator
+  @exception_handling
   def getNewFollowingPosts(self, uid, upid):
     connection = self.getConnection() 
     cursor = connection.cursor(dictionary=True)
@@ -112,7 +112,7 @@ class UserPostModel(Database):
     connection.close()
     return result
   
-  @decorator
+  @exception_handling
   def getNewFollowingPostNumber(self, uid, upid):
     connection = self.getConnection() 
     cursor = connection.cursor(dictionary=True)
@@ -125,7 +125,7 @@ class UserPostModel(Database):
     connection.close()
     return count
 
-  @decorator
+  @exception_handling
   def getPreviousFollowingPosts(self, uid, upid, number):
     connection = self.getConnection() 
     cursor = connection.cursor(dictionary=True)
@@ -143,7 +143,7 @@ class UserPostModel(Database):
     connection.close()
     return result
 
-  @decorator
+  @exception_handling
   def likeUserPost(self, uid, upid):
     connection = self.getConnection() 
     cursor = connection.cursor(dictionary=True)
@@ -153,7 +153,7 @@ class UserPostModel(Database):
     cursor.close()
     connection.close()
   
-  @decorator
+  @exception_handling
   def unlikeUserPost(self, uid, upid):
     connection = self.getConnection() 
     cursor = connection.cursor(dictionary=True)
@@ -163,7 +163,7 @@ class UserPostModel(Database):
     cursor.close()
     connection.close()
 
-  @decorator
+  @exception_handling
   def getUserPostLikeNumber(self, upid):
     connection = self.getConnection() 
     cursor = connection.cursor(dictionary=True)
@@ -174,7 +174,7 @@ class UserPostModel(Database):
     connection.close()
     return result
 
-  @decorator
+  @exception_handling
   def getUserPostCommentNumber(self, upid):
     connection = self.getConnection() 
     cursor = connection.cursor(dictionary=True)
@@ -185,7 +185,7 @@ class UserPostModel(Database):
     connection.close()
     return result
 
-  @decorator
+  @exception_handling
   def isPostLiked(self,uid, upid):
     connection = self.getConnection() 
     cursor = connection.cursor(dictionary=True)
@@ -199,7 +199,7 @@ class UserPostModel(Database):
   
 
   #COMMENT OPERATIONS
-  @decorator
+  @exception_handling
   def addUserPostComment(self, uid, upid, comment):
     connection = self.getConnection() 
     cursor = connection.cursor(dictionary=True)
@@ -209,7 +209,7 @@ class UserPostModel(Database):
     cursor.close()
     connection.close()
 
-  @decorator
+  @exception_handling
   def getUserPostComment(self, upcid, currentUser = None):
     connection = self.getConnection() 
     cursor = connection.cursor(dictionary=True)
@@ -226,7 +226,7 @@ class UserPostModel(Database):
     connection.close()
     return result
 
-  @decorator
+  @exception_handling
   def removeUserPostComment(self, upcid):
     connection = self.getConnection() 
     cursor = connection.cursor(dictionary=True)
@@ -236,7 +236,7 @@ class UserPostModel(Database):
     cursor.close()
     connection.close()
 
-  @decorator
+  @exception_handling
   def updateUserPostComment(self, upcid, comment):
     connection = self.getConnection() 
     cursor = connection.cursor(dictionary=True)
@@ -246,7 +246,7 @@ class UserPostModel(Database):
     cursor.close()
     connection.close()
 
-  @decorator
+  @exception_handling
   def getLastUserPostComments(self, upid, number, currentUser = None):
     connection = self.getConnection() 
     cursor = connection.cursor(dictionary=True)
@@ -263,7 +263,7 @@ class UserPostModel(Database):
     connection.close()
     return result
 
-  @decorator
+  @exception_handling
   def getPreviousUserPostComments(self, upid, upcid, number, currentUser = None):
     connection = self.getConnection() 
     cursor = connection.cursor(dictionary=True)
@@ -280,7 +280,7 @@ class UserPostModel(Database):
     connection.close()
     return result
 
-  @decorator
+  @exception_handling
   def getLastUserPostComment(self, upid, currentUser = None):
     connection = self.getConnection() 
     cursor = connection.cursor(dictionary=True)
@@ -297,7 +297,7 @@ class UserPostModel(Database):
     connection.close()
     return result
 
-  @decorator
+  @exception_handling
   def likeUserPostComment(self, uid, upcid):
     connection = self.getConnection() 
     cursor = connection.cursor(dictionary=True)
@@ -307,7 +307,7 @@ class UserPostModel(Database):
     cursor.close()
     connection.close()
   
-  @decorator
+  @exception_handling
   def unlikeUserPostComment(self, uid, upcid):
     connection = self.getConnection() 
     cursor = connection.cursor(dictionary=True)
@@ -317,7 +317,7 @@ class UserPostModel(Database):
     cursor.close()
     connection.close()
 
-  @decorator
+  @exception_handling
   def getUserPostCommentLikeNumber(self, upcid):
     connection = self.getConnection() 
     cursor = connection.cursor(dictionary=True)
@@ -328,7 +328,7 @@ class UserPostModel(Database):
     connection.close()
     return result
 
-  @decorator
+  @exception_handling
   def isCommentLiked(self, uid, upcid):
     connection = self.getConnection() 
     cursor = connection.cursor(dictionary=True)

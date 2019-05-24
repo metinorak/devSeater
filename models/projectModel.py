@@ -1,6 +1,7 @@
 from models.database import *
 
 class ProjectModel(Database):
+  @exception_handling
   def createProject(self, project, founder_uid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -15,6 +16,7 @@ class ProjectModel(Database):
     cursor.close()
     connection.close()
 
+  @exception_handling
   def getUserProjects(self, uid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -27,6 +29,7 @@ class ProjectModel(Database):
     connection.close()
     return result
   
+  @exception_handling
   def getProject(self, pid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -37,6 +40,7 @@ class ProjectModel(Database):
     connection.close()
     return result
 
+  @exception_handling
   def getProjectByProjectName(self, name):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -47,6 +51,7 @@ class ProjectModel(Database):
     connection.close()
     return result
   
+  @exception_handling
   def getMembers(self, pid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -58,6 +63,7 @@ class ProjectModel(Database):
     connection.close()
     return result
   
+  @exception_handling
   def getNumberOfMembers(self, pid):
     #By team member number
     connection = self.getConnection()
@@ -70,6 +76,7 @@ class ProjectModel(Database):
     connection.close()
     return count 
   
+  @exception_handling
   def getPopularProjects(self, number):
     #By team member number
     #THIS SHOULD BE TESTED
@@ -85,7 +92,7 @@ class ProjectModel(Database):
     connection.close()
     return result 
 
-
+  @exception_handling
   def updateProjectPhoto(self, pid, photo):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -95,6 +102,7 @@ class ProjectModel(Database):
     cursor.close()
     connection.close()
 
+  @exception_handling
   def updateProjectName(self, pid, name):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -104,6 +112,7 @@ class ProjectModel(Database):
     cursor.close()
     connection.close()
   
+  @exception_handling
   def updateShortDescription(self, pid, shortDescription):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -113,6 +122,7 @@ class ProjectModel(Database):
     cursor.close()
     connection.close()
   
+  @exception_handling
   def updateFullDescription(self, pid, fullDescription):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -122,7 +132,7 @@ class ProjectModel(Database):
     cursor.close()
     connection.close()
 
-
+  @exception_handling
   def searchProjects(self, keyword, number):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -134,6 +144,7 @@ class ProjectModel(Database):
     return result
 
   #PROJECT ADMINS
+  @exception_handling
   def getProjectAdmins(self, pid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -144,6 +155,7 @@ class ProjectModel(Database):
     connection.close()
     return result
   
+  @exception_handling
   def isProjectAdmin(self, uid, pid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -154,6 +166,7 @@ class ProjectModel(Database):
     connection.close()
     return (result != None)
 
+  @exception_handling
   def isProjectMember(self, uid, pid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -165,6 +178,7 @@ class ProjectModel(Database):
     connection.close()
     return (result != None)
   
+  @exception_handling
   def isThereThisProjectName(self, name):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -175,6 +189,7 @@ class ProjectModel(Database):
     connection.close()
     return (result != None)
   
+  @exception_handling
   def removeProjectAdmin(self, pid, uid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -184,8 +199,8 @@ class ProjectModel(Database):
     cursor.close()
     connection.close()
 
-
   #PROJECT LINKS
+  @exception_handling
   def getProjectLinks(self, pid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -196,6 +211,7 @@ class ProjectModel(Database):
     connection.close()
     return result
   
+  @exception_handling
   def getProjectLink(self, plid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -206,6 +222,7 @@ class ProjectModel(Database):
     connection.close()
     return result
 
+  @exception_handling
   def addProjectLink(self, pid, name, link):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -215,6 +232,7 @@ class ProjectModel(Database):
     cursor.close()
     connection.close()
   
+  @exception_handling
   def removeProjectLink(self, plid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -224,6 +242,7 @@ class ProjectModel(Database):
     cursor.close()
     connection.close()
 
+  @exception_handling
   def updateProjectLink(self, plid, name, link):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)

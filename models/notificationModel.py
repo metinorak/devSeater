@@ -1,6 +1,7 @@
 from models.database import *
 
 class NotificationModel(Database):
+  @exception_handling
   def getNotifications(self, uid, number):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -16,6 +17,7 @@ class NotificationModel(Database):
     connection.close()
     return result
 
+  @exception_handling
   def getNewNotifications(self, uid, number):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -32,6 +34,7 @@ class NotificationModel(Database):
     connection.close()
     return result
   
+  @exception_handling
   def getNewNotificationNumber(self, uid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)

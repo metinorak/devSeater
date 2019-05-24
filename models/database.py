@@ -3,7 +3,7 @@ from models.config import *
 from mysql.connector import pooling
 
 
-def decorator(f):
+def exception_handling(f):
   def decorated_function(*args, **kwargs):
       try:
         return f(*args, **kwargs)

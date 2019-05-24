@@ -1,7 +1,7 @@
 from models.database import *
 
 class SeaterModel(Database):
-
+  @exception_handling
   def getAllProjectSeaters(self, pid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -12,6 +12,7 @@ class SeaterModel(Database):
     connection.close()
     return result
 
+  @exception_handling
   def getEmptyProjectSeaters(self, pid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -22,6 +23,7 @@ class SeaterModel(Database):
     connection.close()
     return result
 
+  @exception_handling
   def getFilledProjectSeaters(self, pid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -32,6 +34,7 @@ class SeaterModel(Database):
     connection.close()
     return result
   
+  @exception_handling
   def getProjectSeaterNumber(self, pid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -43,6 +46,7 @@ class SeaterModel(Database):
     connection.close()
     return count
 
+  @exception_handling
   def getUserSeaters(self, uid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -53,6 +57,7 @@ class SeaterModel(Database):
     connection.close()
     return result
 
+  @exception_handling
   def getUserSeaterNumber(self, uid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -63,6 +68,7 @@ class SeaterModel(Database):
     connection.close()
     return result["number"]
   
+  @exception_handling
   def getSeater(self, sid, currentUser):
     isAspirated = self.isThereSeaterAspiration(currentUser, sid)
 
@@ -76,6 +82,7 @@ class SeaterModel(Database):
     connection.close()
     return result
 
+  @exception_handling
   def createSeater(self, pid, seater):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -85,6 +92,7 @@ class SeaterModel(Database):
     cursor.close()
     connection.close()
   
+  @exception_handling
   def removeSeater(self, sid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -94,6 +102,7 @@ class SeaterModel(Database):
     cursor.close()
     connection.close()
   
+  @exception_handling
   def dismissUser(self, sid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -103,7 +112,7 @@ class SeaterModel(Database):
     cursor.close()
     connection.close()
   
-  
+  @exception_handling
   def updateSeater(self, sid, title, description):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -113,6 +122,7 @@ class SeaterModel(Database):
     cursor.close()
     connection.close()
 
+  @exception_handling
   def assignUser(self, uid, sid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -122,6 +132,7 @@ class SeaterModel(Database):
     cursor.close()
     connection.close()
   
+  @exception_handling
   def unassignUser(self, sid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -131,6 +142,7 @@ class SeaterModel(Database):
     cursor.close()
     connection.close()
   
+  @exception_handling
   def aspireSeater(self, uid, sid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -140,6 +152,7 @@ class SeaterModel(Database):
     cursor.close()
     connection.close()
   
+  @exception_handling
   def cancelAspirationToSeater(self, uid, sid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -149,6 +162,7 @@ class SeaterModel(Database):
     cursor.close()
     connection.close()
 
+  @exception_handling
   def getSeaterAspirations(self, pid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -160,7 +174,7 @@ class SeaterModel(Database):
     connection.close()
     return result
   
-  
+  @exception_handling
   def isThereSeaterAspiration(self, uid, sid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -171,6 +185,7 @@ class SeaterModel(Database):
     connection.close()
     return (result != None)
 
+  @exception_handling
   def rejectSeaterAspiration(self, uid, sid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)

@@ -6,7 +6,6 @@ const searhResults = document.getElementById("search-results");
 const searchForm = document.getElementById("search-form");
 const timeInfos = document.querySelectorAll(".time");
 
-
 const ui = new UI();
 const devSeater = new DevSeater();
 

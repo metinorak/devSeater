@@ -333,14 +333,10 @@ class UI{
         </div>
 
     </div>
-
-    
-
       `;
       lastPost.insertAdjacentElement("afterend", postToAdd);
 
   }  
-
 
   removeUserPost(upid){
     upid = upid.trim();

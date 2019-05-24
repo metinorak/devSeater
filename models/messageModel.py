@@ -1,6 +1,7 @@
 from models.database import *
 
 class MessageModel(Database):
+  @exception_handling
   def sendMessage(self, senderId, receiverId, message):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -10,6 +11,7 @@ class MessageModel(Database):
     cursor.close()
     connection.close()
   
+  @exception_handling
   def isTheUserMessageOwner(self, uid, mid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -20,6 +22,7 @@ class MessageModel(Database):
     connection.close()
     return (result != None)
   
+  @exception_handling
   def deleteMessage(self, uid, mid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -36,6 +39,7 @@ class MessageModel(Database):
     cursor.close()
     connection.close()
 
+  @exception_handling
   def getNewMessageNumberInDialog(self, receiver_id, sender_id):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -46,6 +50,7 @@ class MessageModel(Database):
     connection.close()
     return result["number"]
   
+  @exception_handling
   def getNewMessageDialogNumber(self, uid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -57,6 +62,7 @@ class MessageModel(Database):
     connection.close()
     return count
   
+  @exception_handling
   def getDialogList(self, uid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -71,6 +77,7 @@ class MessageModel(Database):
     connection.close()
     return result
   
+  @exception_handling
   def getDialog(self, current_uid, other_uid, page, messageNumberPerPage):
     previousMessageNumber = (page - 1) * messageNumberPerPage
 

@@ -1,6 +1,7 @@
 from models.database import *
 
 class ProjectPostModel(Database):
+  @exception_handling
   def addProjectPost(self, uid, pid, post):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -10,6 +11,7 @@ class ProjectPostModel(Database):
     cursor.close()
     connection.close()
 
+  @exception_handling
   def getProjectPost(self, ppid, currentUser):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -24,6 +26,7 @@ class ProjectPostModel(Database):
     connection.close()
     return result
 
+  @exception_handling
   def getLastPosts(self, pid, number, currentUser):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -38,6 +41,7 @@ class ProjectPostModel(Database):
     connection.close()
     return result
 
+  @exception_handling
   def getNextPosts(self, pid, ppid, number, currentUser):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -52,6 +56,7 @@ class ProjectPostModel(Database):
     connection.close()
     return result
 
+  @exception_handling
   def removeProjectPost(self, ppid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -61,6 +66,7 @@ class ProjectPostModel(Database):
     cursor.close()
     connection.close()
   
+  @exception_handling
   def updateProjectPost(self, ppid, post):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -70,7 +76,7 @@ class ProjectPostModel(Database):
     cursor.close()
     connection.close()
 
-
+  @exception_handling
   def likeProjectPost(self, uid, ppid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -80,6 +86,7 @@ class ProjectPostModel(Database):
     cursor.close()
     connection.close()
   
+  @exception_handling
   def unlikeProjectPost(self, uid, ppid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -89,6 +96,7 @@ class ProjectPostModel(Database):
     cursor.close()
     connection.close()
 
+  @exception_handling
   def getProjectPostLikeNumber(self, ppid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -99,7 +107,7 @@ class ProjectPostModel(Database):
     connection.close()
     return result
 
-
+  @exception_handling
   def isPostLiked(uid, ppid):
     connection = self.getConnection() 
     cursor = connection.cursor(dictionary=True)
@@ -112,6 +120,7 @@ class ProjectPostModel(Database):
   
 
   #COMMENT OPERATIONS
+  @exception_handling
   def addProjectPostComment(self, uid, ppid, comment):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -121,6 +130,7 @@ class ProjectPostModel(Database):
     cursor.close()
     connection.close()
 
+  @exception_handling
   def removeProjectPostComment(self, ppcid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -130,6 +140,7 @@ class ProjectPostModel(Database):
     cursor.close()
     connection.close()
 
+  @exception_handling
   def updateProjectPostComment(self, ppcid, comment):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -139,6 +150,7 @@ class ProjectPostModel(Database):
     cursor.close()
     connection.close()
 
+  @exception_handling
   def getProjectPostComment(self, ppcid, currentUser):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -154,6 +166,7 @@ class ProjectPostModel(Database):
     connection.close()
     return result
 
+  @exception_handling
   def getLastProjectPostComments(self, ppid, number, currentUser):
 
     connection = self.getConnection()
@@ -170,7 +183,7 @@ class ProjectPostModel(Database):
     connection.close()
     return result
   
-
+  @exception_handling
   def getNextProjectPostComments(self, ppid, ppcid, number, currentUser):
 
     connection = self.getConnection()
@@ -187,7 +200,7 @@ class ProjectPostModel(Database):
     connection.close()
     return result
 
-
+  @exception_handling
   def likeProjectPostComment(self, uid, ppcid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -197,6 +210,7 @@ class ProjectPostModel(Database):
     cursor.close()
     connection.close()
   
+  @exception_handling
   def unlikeProjectPostComment(self, uid, ppcid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -206,7 +220,7 @@ class ProjectPostModel(Database):
     cursor.close()
     connection.close()
 
-
+  @exception_handling
   def getProjectPostCommentLikeNumber(self, ppid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -217,6 +231,7 @@ class ProjectPostModel(Database):
     connection.close()
     return result
 
+  @exception_handling
   def isCommentLiked(uid, ppcid):
     connection = self.getConnection() 
     cursor = connection.cursor(dictionary=True)
