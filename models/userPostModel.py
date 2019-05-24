@@ -53,10 +53,11 @@ class UserPostModel(Database):
     (SELECT COUNT(*) FROM userPostLikes WHERE upid = userPosts.upid) AS likeNumber,
     (SELECT COUNT(*) FROM userPostComments WHERE upid = userPosts.upid) AS commentNumber,
     userPosts.*, users.full_name, users.photo, users.username 
-    FROM userPosts INNER JOIN users ON users.uid = userPosts.uid  WHERE userPosts.uid = %s OR
-    userPosts.uid IN (SELECT flwdid FROM followers WHERE flwrid = %s) AND upid < %s ORDER BY time DESC LIMIT %s"""
-    cursor.execute(query, (currentUser, uid, uid, upid, number))
+    FROM userPosts INNER JOIN users ON users.uid = userPosts.uid  WHERE userPosts.uid = %s AND upid < %s 
+    ORDER BY time DESC LIMIT %s"""
+    cursor.execute(query, (currentUser, uid, upid, number))
     result = cursor.fetchall()
+    print(result)
     cursor.close()
     connection.close()
     return result

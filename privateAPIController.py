@@ -154,7 +154,7 @@ def userPosts():
         if uid == None:
             uid = getCurrentUid()
         
-        if upid != None:
+        if upid == None:
             posts = ModelObject["userPostModel"].getLastUserPosts(uid, 10, getCurrentUid())
         else:
             posts = ModelObject["userPostModel"].getPreviousUserPosts(uid, upid, 10, getCurrentUid())

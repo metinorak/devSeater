@@ -13,6 +13,14 @@ class DevSeater{
     return this.request.get(this.url + "messages/new-dialog-number");
   }
 
+  async lastUserPosts(uid){
+    return this.request.get(this.url + `user-posts?uid=${uid}`);
+  }
+
+  async previousUserPosts(uid, upid){
+    return this.request.get(this.url + `user-posts?uid=${uid}&upid=${upid}`);
+  }
+
   async newFollowingPostNumber(upid){
     return this.request.get(this.url + "new-following-post-number?upid=" + upid);
   }

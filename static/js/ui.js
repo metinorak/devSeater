@@ -222,6 +222,12 @@ class UI{
     });
   }
 
+  showPreviousUserPosts(posts, currentUser){
+    posts.forEach(post => {
+      this.addUserPostToTheBottom(post, currentUser);
+    });
+  }
+
   addUserPostToTheBottom(post, currentUser){
     let posts = document.querySelectorAll(".post");
     let lastPost = posts[posts.length - 1];
@@ -490,7 +496,7 @@ class UI{
       `
       <div class="comment row mt-2" upcid = ${comment["upcid"]}>
         <a href="/u/${comment["username"]}" class="col-sm-1">
-            <img width="30px" class="rounded-circle" src="/static/uploads/pp/${comment["photo"]}" alt="">
+            <img width="30px" class="rounded-circle" src="${comment["photo"]}" alt="">
         </a>
         <div class="col-sm-2">
             <a href="/u/${comment["username"]}" class="row small">${comment["full_name"]}</a>

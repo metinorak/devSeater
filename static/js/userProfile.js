@@ -39,13 +39,14 @@ function eventListeners(){
   });
 
 	//When touched the bottom
-	window.onscroll = function(ev) {
+	window.onscroll = function(e) {
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
 			// Load previous following posts
 			let lastPost = getTheLastPost();
-			let upid = lastPost.getAttribute("upid");
+      let upid = lastPost.getAttribute("upid");
+      let uid = userProfileCard.getAttribute("uid");
 
-			devSeater.previousFollowingPosts(upid)
+			devSeater.previousUserPosts(uid, upid)
 			.then(posts => {
 				//Render markdown
 				posts.forEach(post => {
