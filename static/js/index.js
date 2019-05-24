@@ -244,10 +244,6 @@ function eventListeners(){
 		}
 			
 
-		if (e.target != searhResults){
-			ui.hideGeneralSearchResults();
-		}
-
 		if(e.target.classList.contains("delete-post")){
 			let post = e.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement;
 			let upid = post.getAttribute("upid");

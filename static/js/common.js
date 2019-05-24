@@ -89,4 +89,10 @@ function eventListeners(){
 		e.preventDefault();
 	});
 
+	document.addEventListener("click", e => {
+		if (e.target != searhResults){
+			ui.hideGeneralSearchResults();
+		}
+	});
+
 }
