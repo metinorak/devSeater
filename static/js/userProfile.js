@@ -3,7 +3,10 @@ const messageButton = document.querySelector(".message-button");
 const userProfileCard = document.querySelector("#user-profile-card");
 
 //Tabs
-const postsButton = 
+const postsButton = document.getElementById("posts-button");
+const seatersButton = document.getElementById("seaters-button");
+const skillsButton = document.getElementById("skills-button");
+const aboutButton = document.getElementById("about-button");
 
 eventListeners();
 
@@ -35,6 +38,18 @@ function eventListeners(){
       }
 
     }
+
+  });
+
+  postsButton.addEventListener("click", e => {
+    let uid = userProfileCard.getAttribute("uid");
+
+    devSeater.lastUserPosts(uid)
+    .then(posts => {
+      ui.clearContentArea();
+      ui.showUserPosts(posts, Session.getCurrentUser());
+    })
+    .catch(err => console.error(err));
 
   });
 

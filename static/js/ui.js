@@ -228,7 +228,20 @@ class UI{
     });
   }
 
-  addUserPostToTheBottom(post, currentUser){
+  showUserPosts(posts, currentUser){
+    let contentArea = document.querySelector(".content-area");
+
+    posts.forEach(post => {
+      this.addUserPostToTheBottom(post, currentUser, contentArea);
+    });
+  }
+
+  clearContentArea(){
+    let contentArea = document.querySelector(".content-area");
+    contentArea.innerHTML = "";
+  }
+
+  addUserPostToTheBottom(post, currentUser, container = null){
     let posts = document.querySelectorAll(".post");
     let lastPost = posts[posts.length - 1];
 
@@ -340,7 +353,12 @@ class UI{
 
     </div>
       `;
-      lastPost.insertAdjacentElement("afterend", postToAdd);
+      if(container != null){
+        container.appendChild(postToAdd);
+      }
+      else{
+        lastPost.insertAdjacentElement("afterend", postToAdd);
+      }
 
   }  
 
