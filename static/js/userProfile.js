@@ -2,6 +2,8 @@
 const messageButton = document.querySelector(".message-button");
 const userProfileCard = document.querySelector("#user-profile-card");
 
+//Tabs
+const postsButton = 
 
 eventListeners();
 
@@ -35,4 +37,26 @@ function eventListeners(){
     }
 
   });
+
+	//When touched the bottom
+	window.onscroll = function(ev) {
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+			// Load previous following posts
+			let lastPost = getTheLastPost();
+			let upid = lastPost.getAttribute("upid");
+
+			devSeater.previousFollowingPosts(upid)
+			.then(posts => {
+				//Render markdown
+				posts.forEach(post => {
+					post["post"] = markDownConverter.makeHtml(post["post"]);
+				});
+
+				ui.showPreviousFollowingPosts(posts, Session.getCurrentUser());
+			})
+			.catch(err => console.error(err));
+
+    }
+	};
+  
 }

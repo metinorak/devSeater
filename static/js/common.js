@@ -96,3 +96,12 @@ function eventListeners(){
 	});
 
 }
+
+function getTheNewestPost(){
+	return document.querySelector(".post");
+}
+
+function getTheLastPost(){
+	let posts = document.querySelectorAll(".post");
+	return posts[posts.length - 1];
+}

@@ -115,10 +115,10 @@ class UI{
 
       //Specify photo
       if (post["photo"] === null){
-        var userPhoto = "static/img/empty-profile.png";
+        var userPhoto = "/static/img/empty-profile.png";
       }
       else{
-        var userPhoto = `static/uploads/users/up/${post['photo']}`;
+        var userPhoto = `/static/uploads/users/up/${post['photo']}`;
       }
 
       //Specify drop menu content
@@ -232,10 +232,10 @@ class UI{
 
     //Specify photo
     if (post["photo"] === null){
-      var userPhoto = "static/img/empty-profile.png";
+      var userPhoto = "/static/img/empty-profile.png";
     }
     else{
-      var userPhoto = `static/uploads/users/up/${post['photo']}`;
+      var userPhoto = `/static/uploads/users/up/${post['photo']}`;
     }
 
     //Specify drop menu content
@@ -490,7 +490,7 @@ class UI{
       `
       <div class="comment row mt-2" upcid = ${comment["upcid"]}>
         <a href="/u/${comment["username"]}" class="col-sm-1">
-            <img width="30px" class="rounded-circle" src="${comment["photo"]}" alt="">
+            <img width="30px" class="rounded-circle" src="/static/uploads/pp/${comment["photo"]}" alt="">
         </a>
         <div class="col-sm-2">
             <a href="/u/${comment["username"]}" class="row small">${comment["full_name"]}</a>

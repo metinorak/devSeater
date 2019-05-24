@@ -1,18 +1,14 @@
 {% extends "layout.html" %}
 
-
 {% block title %}{{user.full_name}}{% endblock %}
 
 {% block scripts %}
+    <script src="{{url_for('static', filename='js/userPosts.js')}}"></script>
     <script src="{{url_for('static', filename='js/userProfile.js')}}"></script>
 {% endblock %}
 
-
-
 {% block body %}
   <main class="container">
-
-
         <div class="row" id="profile-header-cols" >
                 <div class="col-lg-4 text-center">
                   <div id="user-profile-card" uid="{{user.uid}}">
@@ -21,9 +17,7 @@
                       {% else %}
                         <img id="profile-img" src="{{url_for('static', filename='img/empty-profile.png')}}" alt=""><br>
                       {% endif %}
-                      
-                      
-                      
+                           
                       <h1>{{user.full_name}}</h1>
                       <span class="text-muted">@{{user.username}}</span><br>
                       <span>
@@ -85,11 +79,11 @@
                 <div class="col-lg-8">
                   <div class="mb-3 bg-light" style="padding: 0;">
                     <div class="btn-group">
-                      <button type="button" class="btn btn-outline-secondary">Posts</button>
-                      <button type="button" class="btn btn-outline-secondary">Seaters</button>
-                      <button type="button" class="btn btn-outline-secondary">Skills</button>
-                      <button type="button" class="btn btn-outline-secondary">Projects</button>
-                      <button type="button" class="btn btn-outline-secondary">About</button>
+                      <button type="button" class="btn btn-outline-secondary" id="posts-button">Posts</button>
+                      <button type="button" class="btn btn-outline-secondary" id="seaters-button">Seaters</button>
+                      <button type="button" class="btn btn-outline-secondary" id="skills-button">Skills</button>
+                      <button type="button" class="btn btn-outline-secondary" id="project-button">Projects</button>
+                      <button type="button" class="btn btn-outline-secondary" id="about-button">About</button>
                     </div>
                   </div>
                   <div class="content-area">
