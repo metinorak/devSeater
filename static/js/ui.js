@@ -258,10 +258,10 @@ class UI{
     }
 
     if(post["commentNumber"] > 1){
-      var commentNumber = `<a href="#" class="comment-number">${post["commentNumber"]}</a>`;
+      var commentNumber = `<a href="#" class="comment-number">${post["commentNumber"]} comments</a>`;
     }
     else if(post["commentNumber"] == 1){
-      var commentNumber = `<a href="#" class="comment-number">${post["commentNumber"]} comments</a>`;
+      var commentNumber = `<a href="#" class="comment-number">1 comment</a>`;
     }
     else{
       var commentNumber = `<a href="#" class="comment-number"></a>`;
@@ -269,10 +269,10 @@ class UI{
 
 
     if(post["likeNumber"] > 1){
-      var likeNumber = `<a href="#" class="like-number">${post["likeNumber"]} </a>`;
+      var likeNumber = `<a href="#" class="like-number mr-2">${post["likeNumber"]} </a>`;
     }
     else if(post["likeNumber"] == 1){
-      var likeNumber = `<a href="#" class="like-number">1 like</a>`;
+      var likeNumber = `<a href="#" class="like-number mr-2">1 like</a>`;
     }
     else{
       var likeNumber = `<a href="#" class="like-number"></a>`;
