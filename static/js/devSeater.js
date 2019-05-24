@@ -86,4 +86,14 @@ class DevSeater{
   async deleteUserPostComment(upcid){
     return this.request.delete(this.url + `user-posts/no-matter/comments?upcid=${upcid}`);
   }
+
+
+  async follow(uid){
+    return this.request.get(this.url + `follow/${uid}`);
+  }
+
+  async unFollow(uid){
+    return this.request.get(this.url + `unfollow/${uid}`);
+  }
+
 }

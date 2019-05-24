@@ -96,7 +96,7 @@ def follow(uid):
 @app.route("/private-api/unfollow/<string:uid>")
 @login_required
 def unfollow(uid):
-    ModelObject["userModel"].unfollow(getCurrentUid(), uid)
+    ModelObject["userModel"].unFollow(getCurrentUid(), uid)
 
     return json.dumps({
         "result": "success"

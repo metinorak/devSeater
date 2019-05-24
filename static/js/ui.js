@@ -567,6 +567,16 @@ class UI{
       return Math.floor(interval) + " minutes";
     }
     return Math.floor(seconds) + " seconds";
-}
+  }
+
+  follow(followButton){
+    followButton.textContent = "Followed";
+    followButton.classList.add("followed");
+  }
+
+  unFollow(followButton){
+    followButton.textContent = "Follow";
+    followButton.classList.remove("followed");
+  }
 
 }

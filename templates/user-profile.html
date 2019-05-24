@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 
-{% block title %}user.full_name{% endblock %}
+{% block title %}{{user.full_name}}{% endblock %}
 
 {% block scripts %}
     <script src="{{url_for('static', filename='js/userProfile.js')}}"></script>
@@ -15,7 +15,7 @@
 
         <div class="row" id="profile-header-cols" >
                 <div class="col-lg-4 text-center">
-                  <div>
+                  <div id="user-profile-card" uid="{{user.uid}}">
                       {% if user.photo != None %}
                         <img id="profile-img" src="{{url_for('static', filename='uploads/users/up/' + user.photo)}}" alt=""><br>
                       {% else %}
@@ -39,7 +39,7 @@
                       {% endif %}
                       
                       
-                      <button class="btn btn-light">Message</button>
+                      <button class="btn btn-light message-button">Message</button>
                   </div>
       
                 </div>
