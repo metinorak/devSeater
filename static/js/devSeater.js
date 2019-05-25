@@ -104,4 +104,12 @@ class DevSeater{
     return this.request.get(this.url + `unfollow/${uid}`);
   }
 
+  async userSeaters(uid){
+    return this.request.get(this.url + `users/${uid}/seaters`);
+  }
+
+  async userSkills(uid){
+    return this.request.get(this.url + `user-skills?uid=${uid}`);
+  }
+
 }

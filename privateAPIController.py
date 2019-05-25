@@ -9,15 +9,9 @@ class DateTimeEncoder(json.JSONEncoder):
 
         return json.JSONEncoder.default(self, o)
 
-@app.route("/private-api/test", methods = ["POST"])
-@login_required
-def test():
-    print(request.args.get("id"))
-    print(json.loads(request.data))
-    return request.data
+
 
 #USER
-
 
 @app.route("/private-api/user")
 @login_required
@@ -275,7 +269,6 @@ def userPostComments(upid):
             comments = ModelObject["userPostModel"].getLastUserPostComments(upid, number, getCurrentUid())
         else:
             comments = ModelObject["userPostModel"].getPreviousUserPostComments(upid, upcid, number, getCurrentUid())
-            print(comments)
         return json.dumps(comments, cls=DateTimeEncoder)
 
     elif request.method == "POST":
@@ -457,7 +450,6 @@ def getSeater(sid):
 @app.route("/private-api/projects/<string:pid>/seaters", methods = ["POST"])
 @login_required
 def createSeater(pid):
-    print("1")
     if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), pid):
         seater = json.loads(request.data)
         seater["pid"] = pid

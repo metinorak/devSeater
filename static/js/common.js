@@ -105,3 +105,12 @@ function getTheLastPost(){
 	let posts = document.querySelectorAll(".post");
 	return posts[posts.length - 1];
 }
+
+function renderPosts(posts){
+	//Render markdown
+	posts.forEach(post => {
+		post["post"] = markDownConverter.makeHtml(post["post"]);
+	});
+
+	return posts;
+}

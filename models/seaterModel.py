@@ -50,7 +50,8 @@ class SeaterModel(Database):
   def getUserSeaters(self, uid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
-    query = "SELECT * FROM seaters WHERE uid = %s"
+    query = """SELECT seaters.*, projects.project_name 
+    FROM seaters INNER JOIN projects ON seaters.pid = projects.pid WHERE uid = %s"""
     cursor.execute(query, (uid,))
     result = cursor.fetchall()
     cursor.close()
@@ -74,7 +75,8 @@ class SeaterModel(Database):
 
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
-    query = "SELECT seaters.* FROM seaters WHERE sid = %s"
+    query = """SELECT seaters.*, projects.project_name 
+    FROM seaters INNER JOIN projects ON seaters.pid = projects.pid WHERE sid = %s"""
     cursor.execute(query, (sid,))
     result = cursor.fetchone()
     result["isAspirated"] = isAspirated

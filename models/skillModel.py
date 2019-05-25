@@ -5,7 +5,8 @@ class SkillModel(Database):
   def getUserSkills(self, uid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
-    query = "SELECT * FROM skills WHERE skid IN (SELECT skid FROM userSkills WHERE uid = %s)"
+    query = """SELECT * FROM userSkills
+    INNER JOIN skills ON skills.skid = userSkills.skid WHERE uid = %s"""
     result = cursor.execute(query, (uid,) )
     result = cursor.fetchall()
     cursor.close()
@@ -16,7 +17,8 @@ class SkillModel(Database):
   def getUserSkill(self, skid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
-    query = "SELECT * FROM userSkills WHERE skid = %s"
+    query = """SELECT * FROM userSkills
+    INNER JOIN skills ON skills.skid = userSkills.skid WHERE skid = %s"""
     result = cursor.execute(query, (skid,) )
     result = cursor.fetchone()
     cursor.close()
@@ -27,7 +29,8 @@ class SkillModel(Database):
   def getSeaterSkill(self, skid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
-    query = "SELECT * FROM seaterSkills WHERE skid = %s"
+    query = """SELECT * FROM seaterSkills
+    INNER JOIN skills ON skills.skid = seaterSkills.skid WHERE skid = %s"""
     result = cursor.execute(query, (skid,) )
     result = cursor.fetchone()
     cursor.close()
@@ -38,7 +41,8 @@ class SkillModel(Database):
   def getSeaterSkills(self, sid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
-    query = "SELECT * FROM skills WHERE skid IN (SELECT skid FROM seaterSkills WHERE sid = %s)"
+    query = """SELECT * FROM seaterSkills
+    INNER JOIN skills ON skills.skid = seaterSkills.skid WHERE uid = %s"""
     result = cursor.execute(query, (sid,) )
     result = cursor.fetchall()
     cursor.close()
@@ -46,11 +50,11 @@ class SkillModel(Database):
     return result
   
   @exception_handling
-  def getSkillByName(self, skill):
+  def getSkillByName(self, name):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
     query = "SELECT * FROM skills WHERE name = %s"
-    result = cursor.execute(query, (skill,) )
+    result = cursor.execute(query, (name,) )
     result = cursor.fetchone()
     cursor.close()
     connection.close()

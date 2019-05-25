@@ -6,11 +6,11 @@ const userProfileCard = document.querySelector("#user-profile-card");
 const postsButton = document.getElementById("posts-button");
 const seatersButton = document.getElementById("seaters-button");
 const skillsButton = document.getElementById("skills-button");
-const aboutButton = document.getElementById("about-button");
 
 eventListeners();
 
 function eventListeners(){
+
   userProfileCard.addEventListener("click", e => {
     
     if(e.target.classList.contains("follow-button")){
@@ -46,11 +46,35 @@ function eventListeners(){
 
     devSeater.lastUserPosts(uid)
     .then(posts => {
+      posts = renderPosts(posts);
+
       ui.clearContentArea();
       ui.showUserPosts(posts, Session.getCurrentUser());
     })
     .catch(err => console.error(err));
 
+  });
+
+  seatersButton.addEventListener("click", e => {
+    let uid = userProfileCard.getAttribute("uid");
+
+    devSeater.userSeaters(uid)
+    .then(seaters => {
+      ui.clearContentArea();
+      ui.showUserSeaters(seaters);
+    })
+    .catch(err => console.error(err));
+  });
+
+  skillsButton.addEventListener("click", e => {
+    let uid = userProfileCard.getAttribute("uid");
+
+    devSeater.userSkills(uid)
+    .then(skills => {
+      ui.clearContentArea();
+      ui.showUserSkills(skills);
+    })
+    .catch(err => console.error(err));
   });
 
 	//When touched the bottom
@@ -63,10 +87,7 @@ function eventListeners(){
 
 			devSeater.previousUserPosts(uid, upid)
 			.then(posts => {
-				//Render markdown
-				posts.forEach(post => {
-					post["post"] = markDownConverter.makeHtml(post["post"]);
-				});
+				posts = renderPosts(posts);
 
 				ui.showPreviousUserPosts(posts, Session.getCurrentUser());
 			})

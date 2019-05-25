@@ -218,13 +218,14 @@ class UI{
 
   showPreviousFollowingPosts(posts, currentUser){
     posts.forEach(post => {
-      this.addUserPostToTheBottom(post, currentUser);
+      this.addPostToTheBottom(post, currentUser);
     });
   }
 
   showPreviousUserPosts(posts, currentUser){
+    let contentArea = document.querySelector(".content-area");
     posts.forEach(post => {
-      this.addUserPostToTheBottom(post, currentUser);
+      this.addPostToTheBottom(post, currentUser);
     });
   }
 
@@ -232,7 +233,41 @@ class UI{
     let contentArea = document.querySelector(".content-area");
 
     posts.forEach(post => {
-      this.addUserPostToTheBottom(post, currentUser, contentArea);
+      this.addPostToTheBottom(post, currentUser, contentArea);
+    });
+  }
+
+  showUserSeaters(seaters){
+    let contentArea = document.querySelector(".content-area");
+
+    if(seaters.length == 0){
+      contentArea.textContent = "This user has no seater.";
+      return;
+    }
+
+    let innerContainer = document.createElement("div");
+    innerContainer.className = "d-flex flex-wrap";
+    contentArea.appendChild(innerContainer);
+
+    seaters.forEach(seater => {
+      this.addSeaterToTheBottom(seater, innerContainer);
+    });
+  }
+
+  showUserSkills(skills){
+    let contentArea = document.querySelector(".content-area");
+
+    if(skills.length == 0){
+      contentArea.textContent = "This user doesnt't have any seater.";
+      return;
+    }
+
+    let innerContainer = document.createElement("div");
+    innerContainer.className = "d-flex flex-wrap";
+    contentArea.appendChild(innerContainer);
+
+    skills.forEach(skill => {
+      this.addSkillToTheBottom(skill, innerContainer);
     });
   }
 
@@ -241,7 +276,40 @@ class UI{
     contentArea.innerHTML = "";
   }
 
-  addUserPostToTheBottom(post, currentUser, container = null){
+  addSeaterToTheBottom(seater, container){
+    if(seater["photo"] == null){
+      seater["photo"] = "/static/img/empty-project.png";
+    }
+    else{
+      seater["photo"] = "/static/uploads/projects/pp/" + seater["photo"];
+    }
+
+    let html = 
+    `
+    <div class="card seater m-2" sid="${seater["sid"]}" style="width: 18rem;">
+      <img class="card-img-top" src="${seater["photo"]}" alt="Project Photo">
+      <div class="card-body">
+        <h3 class="card-title">${seater["title"]}</h3>
+        <a href="/p/${seater["project_name"]}"><h4 class="card-title">${seater["project_name"]}</h4></a>
+        <p class="card-text">${seater["short_description"].substr(0, 100)}</p>
+        <a href="/p/${seater["project_name"]}/seaters/${seater["sid"]}" class="btn btn-primary">Browse</a>
+      </div>
+    </div>
+    `;
+
+    container.innerHTML += html;
+
+  }
+
+  addSkillToTheBottom(skill, container){
+    let skillSpan = document.createElement("span");
+    skillSpan.className = "skill";
+    skillSpan.innerText = skill["name"];
+
+    container.appendChild(skillSpan);
+  }
+
+  addPostToTheBottom(post, currentUser, container = null){
     let posts = document.querySelectorAll(".post");
     let lastPost = posts[posts.length - 1];
 
@@ -353,11 +421,11 @@ class UI{
 
     </div>
       `;
-      if(container != null){
-        container.appendChild(postToAdd);
+      if(container == null){
+        lastPost.insertAdjacentElement("afterend", postToAdd);
       }
       else{
-        lastPost.insertAdjacentElement("afterend", postToAdd);
+        container.appendChild(postToAdd);
       }
 
   }  

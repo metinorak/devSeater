@@ -81,6 +81,12 @@ header{
   height: 45px;
 }
 
+
+#profile-header-cols > div > div{
+  overflow-y: scroll;
+  max-height: 300px;
+}
+
 @media (max-width: 1000px) {
   /* mobile devices*/
   header{
@@ -90,6 +96,7 @@ header{
   #profile-header-cols > div{
     margin-bottom: 15px;
   }
+
 }
 
 #seaters{
@@ -104,6 +111,24 @@ header{
   min-width: 200px;
   max-width: 200px;
   margin-right: 5px;
+}
+
+
+.content-area .seater{
+  max-width: 195px !important;
+  height: 320px;
+}
+
+.content-area .skill{
+  border-radius: 5px;
+  background: #dde19cad;
+  padding: 5px;
+  margin: 5px;
+  font-weight: bold;
+}
+
+.content-area .skill:hover{
+  background: #529f8244;
 }
 
 
@@ -123,12 +148,11 @@ header{
   height: 100%;
 }
 
-.content-area > div{
+.content-area > div.post{
   background: white;
   padding: 10px;
   margin-bottom: 20px;
 }
-
 
 .right-area > div{
   background: white;
