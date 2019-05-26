@@ -8,12 +8,7 @@ const timeInfos = document.querySelectorAll(".time");
 
 const ui = new UI();
 const devSeater = new DevSeater();
-
-//RENDER MARKDOWN
 const markDownConverter = new showdown.Converter({extensions: ['prettify']});
-document.querySelectorAll(".post-body").forEach(post => {
-	post.innerHTML = markDownConverter.makeHtml(post.textContent.trim());
-});
 
 // Time info type changing
 ui.changeTimeFormats(timeInfos);
@@ -23,6 +18,11 @@ eventListeners();
 function eventListeners(){
 
 	document.addEventListener("DOMContentLoaded", e => {
+
+		//RENDER MARKDOWN
+		document.querySelectorAll(".post-body").forEach(post => {
+			post.innerHTML = markDownConverter.makeHtml(post.textContent.trim());
+		});
 
 		//CREATE SESSION
 		devSeater.currentUser()

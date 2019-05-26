@@ -70,7 +70,6 @@ function eventListeners(){
 
 							devSeater.userPostLikeNumber(upid)
 							.then(response => {
-								console.log(response);
 								ui.updateUserPostLikeNumber(upid, response["number"]);
 							})
 							.catch(err => console.error(err));

@@ -179,8 +179,7 @@ class UI{
       </div>
 
       <div class="post-body mb-2">
-      <?prettify?>
-      <p>${post['post']}</p>
+        <p>${post['post']}</p>
       </div>
 
       <div class="post-footer">
@@ -393,7 +392,6 @@ class UI{
     </div>
 
     <div class="post-body mb-2">
-    <?prettify?>
     <p>${post['post']}</p>
     </div>
 
@@ -471,12 +469,15 @@ class UI{
 
     if(number > 1){
       likeNumber.textContent = `${number} likes`;
+      likeNumber.classList.add("mr-2");
     }
     else if(number == 1){
       likeNumber.textContent = `${number} like`;
+      likeNumber.classList.add("mr-2");
     }
     else{
       likeNumber.textContent = "";
+      likeNumber.classList.remove("mr-2");
     }
   }
 

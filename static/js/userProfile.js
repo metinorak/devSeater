@@ -89,7 +89,8 @@ function eventListeners(){
 			.then(posts => {
 				posts = renderPosts(posts);
 
-				ui.showPreviousUserPosts(posts, Session.getCurrentUser());
+        ui.showPreviousUserPosts(posts, Session.getCurrentUser());
+        PR.prettyPrint();
 			})
 			.catch(err => console.error(err));
     }

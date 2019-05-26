@@ -4,8 +4,6 @@ const postButton = document.getElementById("post-button");
 const fullDescriptionInput = document.getElementsByName("full-description")[0];
 const newFollowingPostNumberButton = document.getElementById("new-following-post-number");
 
-
-
 //SIMPLEMDE textarea control
 
 if(postTextArea != null){
@@ -55,11 +53,10 @@ function eventListeners(){
 			.then(posts => {
 
 				//Render markdown
-				posts.forEach(post => {
-					post["post"] = markDownConverter.makeHtml(post["post"]);
-				});
+				posts = renderPosts(posts);
 
 				ui.showNewFollowingPosts(posts, Session.getCurrentUser());
+				PR.prettyPrint();
 			})
 			.catch(err => console.error(err));
 		});
@@ -67,7 +64,7 @@ function eventListeners(){
 	
 	if(postButton != null){
 		postButton.addEventListener('click', e => {
-			devSeater.sendUserPost(simplemde.value())
+			devSeater.sendUserPost(simplemde.value().trim())
 			.then(response => {
 				if (response["result"] == "success"){
 					ui.showUserPostAlert("success");
@@ -92,6 +89,7 @@ function eventListeners(){
 				});
 
 				ui.showPreviousFollowingPosts(posts, Session.getCurrentUser());
+				PR.prettyPrint();
 			})
 			.catch(err => console.error(err));
 

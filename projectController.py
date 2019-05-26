@@ -1,7 +1,6 @@
 from common import *
 
 @app.route("/create-a-project", methods = ["GET", "POST"])
-@login_required
 def createAProject():
   if request.method == "POST":
     projectName = request.form.get("project-name")
