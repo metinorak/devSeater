@@ -56,7 +56,7 @@ function eventListeners(){
 				posts = renderPosts(posts);
 
 				ui.showNewFollowingPosts(posts, Session.getCurrentUser());
-				PR.prettyPrint();
+				PR.prettyPrint();	
 			})
 			.catch(err => console.error(err));
 		});

@@ -50,6 +50,7 @@ function eventListeners(){
 
       ui.clearContentArea();
       ui.showUserPosts(posts, Session.getCurrentUser());
+      PR.prettyPrint();
     })
     .catch(err => console.error(err));
 
