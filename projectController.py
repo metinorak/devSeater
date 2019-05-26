@@ -41,3 +41,22 @@ def createAProject():
 
   else:
     return render_template("create-a-project.html", currentUser = getCurrentUser())
+
+
+@app.route("/p/<string:projectName>")
+def projectPage(projectName):
+  currentUser = getCurrentUser()
+  project = ModelObject["projectModel"].getProjectByProjectName(projectName)
+  print(project)
+  projectLinks = ModelObject["projectModel"].getProjectLinks(project["pid"])
+  print(projectLinks)
+  lastProjectPosts = ModelObject["projectPostModel"].getLastProjectPosts(project["pid"], 10, getCurrentUid())
+  print(lastProjectPosts)
+
+  return render_template(
+    "project-page.html",
+    currentUser = currentUser,
+    project = project,
+    projectLinks = projectLinks,
+    lastProjectPosts = lastProjectPosts
+    )

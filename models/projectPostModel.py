@@ -18,8 +18,10 @@ class ProjectPostModel(Database):
     query = """SELECT 
     (SELECT COUNT(*) FROM projectPostLikes WHERE ppid = projectPosts.ppid AND uid = %s) AS isLiked, 
     (SELECT COUNT(*) FROM projectPostLikes WHERE ppid = projectPosts.ppid) AS likeNumber,
-    (SELECT COUNT(*) FROM projectPostComments WHERE ppid = projectPosts.ppid) AS commentNumber,  
-    projectPosts.* FROM projectPosts WHERE pid = %s"""
+    (SELECT COUNT(*) FROM projectPostComments WHERE ppid = projectPosts.ppid) AS commentNumber, 
+    projectPosts.* FROM projectPosts 
+    INNER JOIN users ON users.uid = projectPosts.uid
+    WHERE ppid = %s"""
     cursor.execute(query, (currentUser, ppid) )
     result = cursor.fetchone()
     cursor.close()
@@ -27,14 +29,16 @@ class ProjectPostModel(Database):
     return result
 
   @exception_handling
-  def getLastPosts(self, pid, number, currentUser):
+  def getLastProjectPosts(self, pid, number, currentUser):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
     query = """SELECT 
-    (SELECT COUNT(*) FROM projectPostLikes WHERE ppid = projectPosts.ppid AND uid = %s) AS isLiked, 
+    (SELECT COUNT(*) FROM projectPostLikes WHERE ppid = projectPosts.ppid AND uid = %s) AS isLiked,
     (SELECT COUNT(*) FROM projectPostLikes WHERE ppid = projectPosts.ppid) AS likeNumber,
-    (SELECT COUNT(*) FROM projectPostComments WHERE ppid = projectPosts.ppid AND uid = %s) AS commentNumber,
-    projectPosts.* FROM projectPosts WHERE pid = %s ORDER BY time DESC LIMIT %s"""
+    (SELECT COUNT(*) FROM userPostComments WHERE ppid = projectPosts.ppid) AS commentNumber,
+    projectPosts.*, users.full_name, users.photo, users.username 
+    FROM projectPosts INNER JOIN users ON users.uid = projectPosts.uid  WHERE projectPosts.pid = %s 
+    ORDER BY time DESC LIMIT %s"""
     cursor.execute(query, (currentUser, pid, number))
     result = cursor.fetchall()
     cursor.close()
@@ -42,14 +46,16 @@ class ProjectPostModel(Database):
     return result
 
   @exception_handling
-  def getNextPosts(self, pid, ppid, number, currentUser):
+  def getPreviousPosts(self, pid, ppid, number, currentUser):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
     query = """SELECT 
     (SELECT COUNT(*) FROM projectPostCommentLikes WHERE ppid = projectPosts.ppid AND uid = %s) AS isLiked, 
     (SELECT COUNT(*) FROM projectPostLikes WHERE ppid = projectPosts.ppid) AS likeNumber,
     (SELECT COUNT(*) FROM projectPostComments WHERE ppid = projectPosts.ppid AND uid = %s) AS commentNumber,
-    projectPosts.* FROM projectPosts WHERE pid = %s AND ppid < %s ORDER BY time DESC LIMIT %s"""
+    projectPosts.* FROM projectPosts 
+    INNER JOIN users ON users.uid = projectPosts.uid
+    WHERE pid = %s AND ppid < %s ORDER BY time DESC LIMIT %s"""
     cursor.execute(query, (currentUser, pid, ppid, number))
     result = cursor.fetchall()
     cursor.close()
@@ -101,6 +107,17 @@ class ProjectPostModel(Database):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
     query = "SELECT COUNT(*) AS number FROM projectPostLikes WHERE ppid = %s"
+    cursor.execute(query, (ppid,) )
+    result = cursor.fetchone()["number"]
+    cursor.close()
+    connection.close()
+    return result
+
+  @exception_handling
+  def getProjectPostCommentNumber(self, ppid):
+    connection = self.getConnection()
+    cursor = connection.cursor(dictionary=True)
+    query = "SELECT COUNT(*) AS number FROM projectPostComments WHERE ppid = %s"
     cursor.execute(query, (ppid,) )
     result = cursor.fetchone()["number"]
     cursor.close()
@@ -184,7 +201,7 @@ class ProjectPostModel(Database):
     return result
   
   @exception_handling
-  def getNextProjectPostComments(self, ppid, ppcid, number, currentUser):
+  def getPreviousProjectPostComments(self, ppid, ppcid, number, currentUser):
 
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -193,7 +210,7 @@ class ProjectPostModel(Database):
     (SELECT COUNT(*) FROM projectPostCommentLikes WHERE ppcid = projecPostComments.ppcid) AS likeNumber,
     projectPostComments.* 
     INNER JOIN users ON users.uid = ppcid.uid
-    FROM projectPostComments WHERE ppid = %s AND ppcid = %s ORDER BY time DESC LIMIT %s"""
+    FROM projectPostComments WHERE ppid = %s AND ppcid < %s ORDER BY time DESC LIMIT %s"""
     cursor.execute(query, (currentUser, ppid, ppcid, number))
     result = cursor.fetchall()
     cursor.close()

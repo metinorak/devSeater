@@ -14,8 +14,6 @@ def userProfile(username):
   user.pop("password")
   user.pop("email")
 
-  print(userLinks)
-
   return render_template(
     "user-profile.html",
     currentUser = currentUser,

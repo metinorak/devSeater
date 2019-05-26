@@ -9,10 +9,7 @@ class DateTimeEncoder(json.JSONEncoder):
 
         return json.JSONEncoder.default(self, o)
 
-
-
 #USER
-
 @app.route("/private-api/user")
 @login_required
 def getUser():
@@ -692,8 +689,6 @@ def getProjectAdmins(pid):
 
 
 #PROJECT POST CONTROLLER
-
-
 @app.route("/private-api/projects/<string:pid>/posts", methods = ["GET", "POST", "PUT", "DELETE"])
 @login_required
 def projectPosts(pid):
@@ -713,7 +708,7 @@ def projectPosts(pid):
 
         #Add project post
         data = json.loads(request.data)
-        ModelObject["projectPostModel"].addPost(getCurrentUid(), pid, data["post"])
+        ModelObject["projectPostModel"].addProjectPost(getCurrentUid(), pid, data["post"])
         return json.dumps({"result" : "success"})
 
     elif request.method == "PUT":
@@ -733,14 +728,12 @@ def projectPosts(pid):
             return render_template("private-api/forbidden-request.html")
 
     else:
-        #Delete a user post
-
+        #Delete a project post
         ppid = request.args.get("ppid")
-
-        post = ModelObject["projectPostModel"].getProjectPost(ppid)
+        post = ModelObject["projectPostModel"].getProjectPost(ppid, getCurrentUid())
 
         if post["uid"] == getCurrentUid():
-            ModelObject["userModel"].removeUserPost(ppid)
+            ModelObject["projectPostModel"].removeProjectPost(ppid)
             return '{"result" : "success"}'
         else:
             return render_template("private-api/forbidden-request.html")
@@ -758,11 +751,19 @@ def unlikeProjectPost(ppid):
     ModelObject["projectPostModel"].unlikeProjectPost(getCurrentUid(), upid)
     return json.dumps({"result" : "success"})
 
-@app.route("/private-api/project-posts/<string:ppid>/like-number")
+@app.route("/private-api/project-posts/<string:ppid>/likes/number")
 @login_required
 def projectPostLikeNumber(ppid):
     number = ModelObject["projectPostModel"].getProjectPostLikeNumber(ppid)
     return json.dumps({"number" : number})
+
+
+@app.route("/private-api/project-posts/<string:ppid>/comments/number")
+@login_required
+def projectPostCommentNumber(ppid):
+    number = ModelObject["projectPostModel"].getProjectPostCommentNumber(ppid)
+    return json.dumps({"number" : number})
+
 
 
 @app.route("/private-api/project-posts/<string:ppid>/comments", methods = ["GET", "POST", "PUT", "DELETE"])
@@ -771,10 +772,16 @@ def projectPostComments(ppid):
     if request.method == "GET":
         #Get last post comments
         ppcid = request.args.get("ppcid")
+        number = request.args.get("number")
+        try:
+            number = int(number)
+        except:
+            number = 2
+
         if ppcid == None:
-            comments = ModelObject["projectPostModel"].getLastProjectPostComments(ppid, 5, getCurrentUid())
+            comments = ModelObject["projectPostModel"].getLastProjectPostComments(ppid, number, getCurrentUid())
         else:
-            comments = ModelObject["projectPostModel"].getNextProjectPostComments(ppid, ppcid, 5, getCurrentUid())
+            comments = ModelObject["projectPostModel"].getPreviousProjectPostComments(ppid, ppcid, number, getCurrentUid())
         return json.dumps(comments, cls=DateTimeEncoder)
     elif request.method == "POST":
         #Add a new user post comment
@@ -828,9 +835,7 @@ def projectPostCommentLikeNumber(upcid):
     return json.dumps({"number": number})
 
 
-
 #NOTIFICATION CONTROLLER
-
 @app.route("/private-api/notifications/new")
 @login_required
 def getNewNotifications():
@@ -844,7 +849,6 @@ def getNewNotificationNumber():
     return json.dumps({
         "number" : number
     })
-
 
 @app.route("/private-api/notifications/last")
 @login_required

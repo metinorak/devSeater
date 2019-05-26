@@ -55,9 +55,14 @@ class ProjectModel(Database):
   def getMembers(self, pid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
-    query = """SELECT * FROM users WHERE uid IN 
-    (SELECT uid FROM seaters JOIN projects ON(projects.pid = seaters.pid) WHERE uid IS NOT NULL AND pid = %s)"""
-    cursor.execute(query, (pid,) )
+    query = """
+    (SELECT * FROM users WHERE uid IN 
+    (SELECT uid FROM seaters JOIN projects ON(projects.pid = seaters.pid) WHERE uid IS NOT NULL AND projects.pid = %s))
+    UNION
+    (SELECT * FROM users WHERE uid IN 
+    (SELECT uid FROM projectAdmins JOIN projects ON(projects.pid = projectAdmins.pid) WHERE projects.pid = %s))
+    """
+    cursor.execute(query, (pid, pid) )
     result = cursor.fetchone()
     cursor.close()
     connection.close()
@@ -170,9 +175,13 @@ class ProjectModel(Database):
   def isProjectMember(self, uid, pid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
-    query = """SELECT * FROM users WHERE uid IN 
-    (SELECT uid FROM seaters JOIN projects ON(projects.pid = seaters.pid) WHERE uid = %s AND pid = %s)"""
-    cursor.execute(query, (uid, pid) )
+    query = """
+    (SELECT * FROM users WHERE uid IN 
+    (SELECT uid FROM seaters JOIN projects ON(projects.pid = seaters.pid) WHERE uid = %s AND projects.pid = %s))
+    UNION
+    (SELECT * FROM users WHERE uid IN 
+    (SELECT uid FROM projectAdmins JOIN projects ON(projects.pid = projectAdmins.pid) WHERE uid = %s AND projects.pid = %s))"""
+    cursor.execute(query, (uid, pid, uid, pid) )
     result = cursor.fetchone()
     cursor.close()
     connection.close()

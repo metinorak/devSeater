@@ -261,6 +261,11 @@ header{
   border-radius: 500px;
 }
 
+#project-img{
+  width: 100%;
+  height: 120px;
+}
+
 .link-list > a{
   display: block;
   margin-bottom: 10px;
@@ -336,3 +341,8 @@ li.L5, li.L6, li.L7, li.L8, li.L9 {
   font-style: italic;
 }
 
+.post-textarea-card{
+  background: white;
+  padding: 5px;
+  margin-bottom: 10px;
+}

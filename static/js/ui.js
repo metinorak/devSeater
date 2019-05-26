@@ -68,7 +68,7 @@ class UI{
 
   }
 
-  showUserPostAlert(type){
+  showPostAlert(type){
     let alert = document.createElement("p");
     if(type == "success"){
       alert.setAttribute("style", "color: #89bda5; font-weight: bold; float:right;");

@@ -13,6 +13,7 @@ class DevSeater{
     return this.request.get(this.url + "messages/new-dialog-number");
   }
 
+  //USER POSTS
   async lastUserPosts(uid){
     return this.request.get(this.url + `user-posts?uid=${uid}`);
   }
@@ -39,6 +40,10 @@ class DevSeater{
 
   async sendUserPost(post){
     return this.request.post(this.url + "user-posts", {post: post});
+  }
+
+  async updateUserPost(upid, post){
+    return this.request.put(this.url + `user-posts?upid=${upid}`, post);
   }
 
   async currentUser(){
@@ -110,6 +115,71 @@ class DevSeater{
 
   async userSkills(uid){
     return this.request.get(this.url + `user-skills?uid=${uid}`);
+  }
+
+  //PROJECT POSTS
+  async sendProjectPost(pid, post){
+    return this.request.post(this.url + `projects/${pid}/posts`, {post: post});
+  }
+
+  async deleteProjectPost(ppid){
+    return this.request.delete(this.url + `projects/no-matter/posts?ppid=${ppid}`);
+  }
+
+  async updateProjectPost(ppid, post){
+    return this.request.put(this.url + `projects/no-matter/posts?ppid=${ppid}`, post);
+  }
+
+  async lastProjectPosts(pid){
+    return this.request.get(this.url + `projects/${pid}/posts`);
+  }
+
+  async previousProjectPosts(pid, ppid){
+    return this.request.get(this.url + `projects/${pid}/posts?ppid=${ppid}`);
+  }
+
+  async likeProjectPost(ppid){
+    return this.request.get(this.url + `projects/no-matter/posts/${ppid}/like`);
+  }
+
+  async unlikeProjectPost(ppid){
+    return this.request.get(this.url + `projects/no-matter/posts/${ppid}/unlike`);
+  }
+
+  async projectPostLikeNumber(ppid){
+    return this.request.get(this.url + `projects/no-matter/posts/${ppid}/likes/number`);
+  }
+
+  async projectPostCommentNumber(upid){
+    return this.request.get(this.url + `projects/no-matter/posts/${ppid}/comments/number`);
+  }
+
+  async projectPostComments(ppid, number = 2){
+    return this.request.get(this.url + `projects/no-matter/posts/${ppid}/comments?number=${number}`);
+  }
+
+  async previousProjectPostComments(ppid, ppcid, number = 2){
+    return this.request.get(this.url + `projects/no-matter/posts/${ppid}/comments?ppcid=${ppcid}&number=${number}`);
+  }
+
+  async likeProjectPostComment(ppcid){
+    return this.request.get(this.url + `project-posts/comments/${ppcid}/like`);
+  }
+
+  async unlikeProjectPostComment(ppcid){
+    return this.request.get(this.url + `project-posts/comments/${ppcid}/unlike`);
+  }
+
+  async projectPostCommentLikeNumber(ppcid){
+    return this.request.get(this.url + `project-posts/comments/${ppcid}/like-number`);
+  }
+
+  async sendProjectPostComment(ppid, comment){
+    return this.request.post(this.url + `project-posts/${ppid}/comments`, {comment: comment});
+  }
+
+  async deleteProjectPostComment(ppcid){
+    return this.request.delete(this.url + `project-posts/${ppcid}/comments`);
   }
 
 }

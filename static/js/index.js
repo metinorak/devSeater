@@ -67,7 +67,7 @@ function eventListeners(){
 			devSeater.sendUserPost(simplemde.value().trim())
 			.then(response => {
 				if (response["result"] == "success"){
-					ui.showUserPostAlert("success");
+					ui.showPostAlert("success");
 					simplemde.value("");
 				}
 			})
