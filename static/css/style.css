@@ -347,3 +347,17 @@ li.L5, li.L6, li.L7, li.L8, li.L9 {
   padding: 5px;
   margin-bottom: 10px;
 }
+
+.info-1{
+  font-size: 24px;
+  font-weight: bold;
+  display: block;
+  color: #dde19c !important;
+}
+
+.info-2{
+  font-size: 20px;
+  font-weight: bold;
+  display: block;
+  color: #89bda59b !important;
+}

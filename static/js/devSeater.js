@@ -189,4 +189,12 @@ class DevSeater{
   async projectFilledSeaters(pid){
     return this.request.get(this.url + `projects/${pid}/seaters/filled`);
   }
+
+  async isProjectMember(pid, uid){
+    return this.request.get(this.url + `projects/${pid}/members/check/${uid}`)
+  }
+
+  async isProjectAdmin(pid, uid){
+    return this.request.get(this.url + `projects/${pid}/admins/check/${uid}`)
+  }
 }

@@ -25,6 +25,16 @@ if(postTextArea != null){
 eventListeners();
 
 function eventListeners(){
+
+	document.addEventListener("DOMContentLoaded", e => {
+		devSeater.isProjectMember(pid, Session.getCurrentUser()["uid"])
+		.then(response => {
+			if(response["result"]){
+				ui.showPostTextAreaCard();
+			}
+		})
+		.catch(err => console.error(err));
+	});
   
   if(postButton != null){
 		postButton.addEventListener('click', e => {

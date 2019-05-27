@@ -1,5 +1,6 @@
 //Selecting elements
 const messageButton = document.querySelector(".message-button");
+const followButton = document.querySelector(".follow-button");
 const userProfileCard = document.querySelector("#user-profile-card");
 
 //Tabs
@@ -10,6 +11,13 @@ const skillsButton = document.getElementById("skills-button");
 eventListeners();
 
 function eventListeners(){
+  document.addEventListener("DOMContentLoaded", e => {
+    let uid = userProfileCard.getAttribute("uid");
+    if(Session.getCurrentUser()["uid"] == uid){
+      messageButton.style.display = "none";
+      followButton.style.display = "none";
+    }
+  });
 
   userProfileCard.addEventListener("click", e => {
     

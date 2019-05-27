@@ -738,6 +738,18 @@ def projectPosts(pid):
         else:
             return render_template("private-api/forbidden-request.html")
 
+@app.route("/private-api/projects/<string:pid>/members/check/<string:uid>")
+@login_required
+def isProjectMember(pid, uid):
+    result = ModelObject["projectModel"].isProjectMember(uid, pid)
+    return json.dumps({"result": result})
+
+@app.route("/private-api/projects/<string:pid>/admins/check/<string:uid>")
+@login_required
+def isProjectAdmin(pid, uid):
+    result = ModelObject["projectModel"].isProjectAdmin(uid, pid)
+    return json.dumps({"result": result})
+
 @app.route("/private-api/project-posts/<string:ppid>/like")
 @login_required
 def likeProjectPost(ppid):

@@ -49,11 +49,16 @@ def projectPage(projectName):
   project = ModelObject["projectModel"].getProjectByProjectName(projectName)
   projectLinks = ModelObject["projectModel"].getProjectLinks(project["pid"])
   lastProjectPosts = ModelObject["projectPostModel"].getLastProjectPosts(project["pid"], 10, getCurrentUid())
+  numberOfMembers = ModelObject["projectModel"].getNumberOfMembers(project["pid"])
+  numberOfEmptySeaters = ModelObject["seaterModel"].getProjectEmptySeaterNumber(project["pid"])
+
 
   return render_template(
     "project-page.html",
     currentUser = currentUser,
     project = project,
     projectLinks = projectLinks,
-    lastProjectPosts = lastProjectPosts
+    lastProjectPosts = lastProjectPosts,
+    numberOfMembers = numberOfMembers,
+    numberOfEmptySeaters = numberOfEmptySeaters
     )

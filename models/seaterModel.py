@@ -51,6 +51,28 @@ class SeaterModel(Database):
     return count
 
   @exception_handling
+  def getProjectEmptySeaterNumber(self, pid):
+    connection = self.getConnection()
+    cursor = connection.cursor(dictionary=True)
+    query = "SELECT COUNT(*) AS number FROM seaters WHERE pid = %s AND uid IS NULL"
+    cursor.execute(query, (pid,))
+    number = cursor.fetchone()["number"]
+    cursor.close()
+    connection.close()
+    return number
+
+  @exception_handling
+  def getProjectFilledSeaterNumber(self, pid):
+    connection = self.getConnection()
+    cursor = connection.cursor(dictionary=True)
+    query = "SELECT COUNT(*) AS number FROM seaters WHERE pid = %s AND uid IS NOT NULL"
+    cursor.execute(query, (pid,))
+    number = cursor.fetchone()["number"]
+    cursor.close()
+    connection.close()
+    return number
+
+  @exception_handling
   def getUserSeaters(self, uid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)

@@ -73,8 +73,14 @@ class ProjectModel(Database):
     #By team member number
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
-    query = "SELECT * FROM projects JOIN seaters ON(projects.pid = seaters.pid) WHERE uid IS NOT NULL "
-    cursor.execute(query, (uid, pid) )
+    query = """
+    (SELECT * FROM users WHERE uid IN 
+    (SELECT uid FROM seaters JOIN projects ON(projects.pid = seaters.pid) WHERE uid IS NOT NULL AND projects.pid = %s))
+    UNION
+    (SELECT * FROM users WHERE uid IN 
+    (SELECT uid FROM projectAdmins JOIN projects ON(projects.pid = projectAdmins.pid) WHERE projects.pid = %s))
+    """
+    cursor.execute(query, (pid, pid) )
     cursor.fetchall()
     count = cursor.rowcount
     cursor.close()
