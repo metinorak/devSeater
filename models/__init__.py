@@ -5,14 +5,6 @@ moduleNames = [ basename(f)[:-3] for f in modules if isfile(f) and f.endswith('M
 
 import importlib
 
-# import sys
-# sys.path.append("..")
-
-# databaseModule = importlib.import_module("devseater.database")
-# Database = getattr(databaseModule, "Database")
-
-
-#Import all modules and create Objects list
 Objects = dict()
 
 def upperFirst(s):

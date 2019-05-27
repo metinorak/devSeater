@@ -1,5 +1,6 @@
 // Selecting elements
 const addAnotherLinkButton = document.getElementById("add-another-link-button");
+const fullDescriptionInput = document.getElementsByName("full-description")[0];
 
 //SIMPLEMDE textarea control
 

@@ -1,7 +1,6 @@
 //Selecting elements
 const postTextArea = document.getElementById("post-textarea");
 const postButton = document.getElementById("post-button");
-const fullDescriptionInput = document.getElementsByName("full-description")[0];
 const newFollowingPostNumberButton = document.getElementById("new-following-post-number");
 
 //SIMPLEMDE textarea control
