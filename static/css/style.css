@@ -1,5 +1,6 @@
 *{
   word-break: break-all;
+  font-size: 14px;
 }
 
 body{
@@ -10,11 +11,6 @@ body{
 .container{
   max-width: 1000px;
 }
-
-*{
-  font-size: 14px;
-}
-
 
 #search-input{
   color: #89bda5;

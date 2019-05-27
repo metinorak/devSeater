@@ -888,7 +888,7 @@ class UI{
     `
       <a href="/u/${member["username"]}">
         <img class="profile-img" src="${imgAddress}" alt=""><br>
-        <h1>${member["full_name"]}</h1>    
+        <h2>${member["full_name"]}</h2>
         <span class="text-muted">@${member["username"]}</span><br>
       </a>
       <span>
@@ -1025,6 +1025,24 @@ class UI{
     seaters.forEach(seater => {
       this.appendSeater(seater, innerContainer);
     });
+  }
+
+  showAboutText(text){
+    let contentArea = document.querySelector(".content-area");
+
+    if(text.trim().length == 0){
+      text = "This project has no full description.";
+    }
+
+    contentArea.innerHTML = 
+    `
+    <div class="card border-dark mb-3">
+      <div class="card-header">About The Project</div>
+      <div class="card-body text-dark">
+        <p class="card-text">${text.trim()}</p>
+      </div>
+    </div>
+    `;
   }
 
 }

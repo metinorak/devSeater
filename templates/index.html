@@ -149,7 +149,7 @@
                 <a href="{{url_for('createAProject')}}" class="btn btn-primary">Create a New Project</a>
 
                 {% for project in userProjects %}
-                    <li class="list-group-item"><a href="#">{{ project.project_name }}</a></li>
+                    <li class="list-group-item"><a href="/p/{{ project.project_name }}">{{ project.project_name }}</a></li>
                 {% endfor %}
                 
                 
@@ -169,7 +169,7 @@
                                     {% endif %}
                                     
                                     <div class="card-body">
-                                    <h3 class="card-title"><a href="#">{{project.project_name}}</a></h3>
+                                    <h3 class="card-title"><a href="/p/{{ project.project_name }}">{{project.project_name}}</a></h3>
                                     <p class="card-text">{{project.short_description}}</p>
                                     </div>
                                 </div>

@@ -141,8 +141,12 @@ function getTheLastPost(){
 function renderPosts(posts){
 	//Render markdown
 	posts.forEach(post => {
-		post["post"] = markDownConverter.makeHtml(post["post"]);
+		post["post"] = renderText(post["post"]);
 	});
 
 	return posts;
+}
+
+function renderText(text){
+	return markDownConverter.makeHtml(text);
 }

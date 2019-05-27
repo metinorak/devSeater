@@ -89,6 +89,17 @@ function eventListeners(){
 		.catch(err => console.error(err));
 	});
 
+	aboutButton.addEventListener("click", e => {
+		devSeater.project(pid)
+		.then(pr => {
+			let text = renderText(pr["full_description"]);
+			ui.clearContentArea();
+			ui.hidePostTextAreaCard();
+			ui.showAboutText(text);
+		})
+		.catch(err => console.error(err));
+	});
+
 	document.addEventListener("click", e => {
 		if(e.target.id == "empty-seaters"){
 			devSeater.projectEmptySeaters(pid)
@@ -113,7 +124,6 @@ function eventListeners(){
 
 			e.preventDefault();
 		}
-
 
 	});
 

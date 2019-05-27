@@ -182,6 +182,11 @@ class DevSeater{
     return this.request.delete(this.url + `project-posts/no-matter/comments?ppcid=${ppcid}`);
   }
 
+  //PROJECTS
+  async project(pid){
+    return this.request.get(this.url + `projects/${pid}`);
+  }
+
   async projectEmptySeaters(pid){
     return this.request.get(this.url + `projects/${pid}/seaters/empty`);
   }

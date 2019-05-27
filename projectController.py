@@ -32,7 +32,7 @@ def createAProject():
         for link, name in zip(links, linkNames):
           ModelObject["projectModel"].addProjectLink(pid, name, link)
 
-      return url_for("projectPage", projectName = projectName)
+      return redirect(url_for("projectPage", projectName = projectName))
     else:
       return render_template("create-a-project.html", 
       currentUser = getCurrentUser(), 
