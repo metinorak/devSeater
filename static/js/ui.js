@@ -884,7 +884,76 @@ class UI{
 
   hidePostTextAreaCard(){
     let card = document.querySelector(".post-textarea-card");
-    card.style.display = "block";
+    card.style.display = "none";
+  }
+
+
+  showEmptySeaters(seaters){
+    let contentArea = document.querySelector(".content-area");
+    let tabsHtml = 
+    `
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a id="empty-seaters" class="nav-link active" href="#">Empty Seaters</a>
+        </li>
+        <li class="nav-item">
+          <a id="filled-seaters" class="nav-link" href="#">Filled Seaters</a>
+        </li>
+      </ul>
+    `;
+    let tabsElement = document.createElement("div");
+    tabsElement.innerHTML = tabsHtml;
+    contentArea.appendChild(tabsElement);
+
+    if(seaters.length == 0){
+      let messageText = document.createElement("p");
+      messageText.textContent = "This project has no empty seaters.";
+      messageText.className = "mt-3";
+      contentArea.appendChild(messageText);
+      return;
+    }
+
+    let innerContainer = document.createElement("div");
+    innerContainer.className = "d-flex flex-wrap";
+
+    contentArea.appendChild(innerContainer);
+
+    seaters.forEach(seater => {
+      this.addSeaterToTheBottom(seater, innerContainer);
+    });
+  }
+
+  showFilledSeaters(seaters){
+    let contentArea = document.querySelector(".content-area");
+    let tabsHtml = 
+    `
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a id="empty-seaters" class="nav-link" href="#">Empty Seaters</a>
+        </li>
+        <li class="nav-item">
+          <a id="filled-seaters" class="nav-link active" href="#">Filled Seaters</a>
+        </li>
+      </ul>
+    `;
+    let tabsElement = document.createElement("div");
+    tabsElement.innerHTML = tabsHtml;
+    contentArea.appendChild(tabsElement);
+
+    if(seaters.length == 0){
+      let messageText = document.createElement("p");
+      messageText.textContent = "This project has no filled seaters.";
+      messageText.className = "mt-3";
+      contentArea.appendChild(messageText);
+      return;
+    }
+    
+    let innerContainer = document.createElement("div");
+    innerContainer.className = "d-flex flex-wrap";
+    contentArea.appendChild(innerContainer);
+    seaters.forEach(seater => {
+      this.addSeaterToTheBottom(seater, innerContainer);
+    });
   }
 
 }

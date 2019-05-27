@@ -5,7 +5,8 @@ class SeaterModel(Database):
   def getAllProjectSeaters(self, pid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
-    query = "SELECT * FROM seaters WHERE pid = %s"
+    query = """SELECT seaters.*, projects.project_name 
+    FROM seaters INNER JOIN projects ON seaters.pid = projects.pid WHERE projects.pid = %s"""
     cursor.execute(query, (pid,))
     result = cursor.fetchall()
     cursor.close()
@@ -16,7 +17,8 @@ class SeaterModel(Database):
   def getEmptyProjectSeaters(self, pid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
-    query = "SELECT * FROM seaters WHERE pid = %s AND uid = NULL"
+    query = """SELECT seaters.*, projects.project_name 
+    FROM seaters INNER JOIN projects ON seaters.pid = projects.pid WHERE projects.pid = %s AND uid IS NULL"""
     cursor.execute(query, (pid,))
     result = cursor.fetchall()
     cursor.close()
@@ -27,7 +29,8 @@ class SeaterModel(Database):
   def getFilledProjectSeaters(self, pid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
-    query = "SELECT * FROM seaters WHERE pid = %s AND uid IS NOT NULL"
+    query = """SELECT seaters.*, projects.project_name 
+    FROM seaters INNER JOIN projects ON seaters.pid = projects.pid WHERE projects.pid = %s AND uid IS NOT NULL"""
     cursor.execute(query, (pid,))
     result = cursor.fetchall()
     cursor.close()

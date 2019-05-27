@@ -10,6 +10,7 @@ const seatersButton = document.getElementById("seaters-button");
 const membersButton = document.getElementById("members-button");
 const aboutButton = document.getElementById("about-button");
 
+
 //SIMPLEMDE textarea control
 if(postTextArea != null){
 	var simplemde = new SimpleMDE({
@@ -46,4 +47,43 @@ function eventListeners(){
 		})
 		.catch(err => console.error(err));
 	});
+
+	seatersButton.addEventListener("click", e => {
+		devSeater.projectEmptySeaters(pid)
+		.then(seaters => {
+			ui.clearContentArea();
+			ui.hidePostTextAreaCard();
+			ui.showEmptySeaters(seaters);
+		})
+		.catch(err => console.error(err));
+	});
+
+	document.addEventListener("click", e => {
+		if(e.target.id == "empty-seaters"){
+			devSeater.projectEmptySeaters(pid)
+			.then(seaters => {
+				ui.clearContentArea();
+				ui.hidePostTextAreaCard();
+				ui.showEmptySeaters(seaters);
+			})
+			.catch(err => console.error(err));
+
+			e.preventDefault();
+		}
+
+		if(e.target.id == "filled-seaters"){
+			devSeater.projectFilledSeaters(pid)
+			.then(seaters => {
+				ui.clearContentArea();
+				ui.hidePostTextAreaCard();
+				ui.showFilledSeaters(seaters);
+			})
+			.catch(err => console.error(err));
+
+			e.preventDefault();
+		}
+
+
+	});
+
 }
