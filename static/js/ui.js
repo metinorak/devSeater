@@ -282,6 +282,13 @@ class UI{
       seater["photo"] = "/static/uploads/projects/pp/" + seater["photo"];
     }
 
+    if(seater["username"] == undefined){
+      var usernameCode = "";
+    }
+    else{
+      var usernameCode = `<p class="card-text"><a href="/u/${seater["username"]}"><b>@${seater["username"]}</b></a></p>`;
+    }
+
     let html = 
     `
     <div class="card seater m-2" sid="${seater["sid"]}" style="width: 18rem;">
@@ -290,6 +297,7 @@ class UI{
         <h3 class="card-title">${seater["title"]}</h3>
         <a href="/p/${seater["project_name"]}"><h4 class="card-title">${seater["project_name"]}</h4></a>
         <p class="card-text">${seater["short_description"].substr(0, 100)}</p>
+        ${usernameCode}
         <a href="/p/${seater["project_name"]}/seaters/${seater["sid"]}" class="btn btn-primary">Browse</a>
       </div>
     </div>

@@ -29,7 +29,8 @@ class SeaterModel(Database):
   def getFilledProjectSeaters(self, pid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
-    query = """SELECT seaters.*, projects.project_name 
+    query = """SELECT seaters.*, projects.project_name,
+    (SELECT username FROM users WHERE uid = seaters.uid) AS username  
     FROM seaters INNER JOIN projects ON seaters.pid = projects.pid WHERE projects.pid = %s AND uid IS NOT NULL"""
     cursor.execute(query, (pid,))
     result = cursor.fetchall()
