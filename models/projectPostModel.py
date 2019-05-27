@@ -35,7 +35,7 @@ class ProjectPostModel(Database):
     query = """SELECT 
     (SELECT COUNT(*) FROM projectPostLikes WHERE ppid = projectPosts.ppid AND uid = %s) AS isLiked,
     (SELECT COUNT(*) FROM projectPostLikes WHERE ppid = projectPosts.ppid) AS likeNumber,
-    (SELECT COUNT(*) FROM userPostComments WHERE ppid = projectPosts.ppid) AS commentNumber,
+    (SELECT COUNT(*) FROM projectPostComments WHERE ppid = projectPosts.ppid) AS commentNumber,
     projectPosts.*, users.full_name, users.photo, users.username 
     FROM projectPosts INNER JOIN users ON users.uid = projectPosts.uid  WHERE projectPosts.pid = %s 
     ORDER BY time DESC LIMIT %s"""
@@ -172,13 +172,14 @@ class ProjectPostModel(Database):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
     query = """SELECT 
-    (SELECT COUNT(*) FROM projectPostCommentLikes WHERE ppcid = projecPostComments.ppcid AND uid = %s) AS isLiked,
-    (SELECT COUNT(*) FROM projectPostCommentLikes WHERE ppcid = projecPostComments.ppcid) AS likeNumber,
-    projectPostComments.* 
-    INNER JOIN users ON users.uid = ppcid.uid
-    FROM projectPostComments WHERE ppcid = %s"""
+    (SELECT COUNT(*) FROM projectPostCommentLikes WHERE ppcid = PPC.ppcid AND uid = %s) AS isLiked,
+    (SELECT COUNT(*) FROM projectPostCommentLikes WHERE ppcid = PPC.ppcid) AS likeNumber,
+    PPC.* 
+    FROM projectPostComments PPC
+    INNER JOIN users ON users.uid = PPC.uid
+    WHERE ppcid = %s"""
     cursor.execute(query, (currentUser, ppcid) )
-    result = cursor.fetchall()
+    result = cursor.fetchone()
     cursor.close()
     connection.close()
     return result
@@ -189,11 +190,12 @@ class ProjectPostModel(Database):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
     query = """SELECT 
-    (SELECT COUNT(*) FROM projectPostCommentLikes WHERE ppcid = projecPostComments.ppcid AND uid = %s) AS isLiked,
-    (SELECT COUNT(*) FROM projectPostCommentLikes WHERE ppcid = projecPostComments.ppcid) AS likeNumber,
-    projectPostComments.* 
-    INNER JOIN users ON users.uid = ppcid.uid
-    FROM projectPostComments WHERE ppid = %s ORDER BY time DESC LIMIT %s"""
+    (SELECT COUNT(*) FROM projectPostCommentLikes WHERE ppcid = PPC.ppcid AND uid = %s) AS isLiked,
+    (SELECT COUNT(*) FROM projectPostCommentLikes WHERE ppcid = PPC.ppcid) AS likeNumber,
+    PPC.*, users.username, users.full_name 
+    FROM projectPostComments PPC 
+    INNER JOIN users ON users.uid = PPC.uid 
+    WHERE ppid = %s ORDER BY time DESC LIMIT %s"""
     cursor.execute(query, (currentUser, ppid, number))
     result = cursor.fetchall()
     cursor.close()
@@ -206,11 +208,12 @@ class ProjectPostModel(Database):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
     query = """SELECT 
-    (SELECT COUNT(*) FROM projectPostCommentLikes WHERE ppcid = projecPostComments.ppcid AND uid = %s) AS isLiked,
-    (SELECT COUNT(*) FROM projectPostCommentLikes WHERE ppcid = projecPostComments.ppcid) AS likeNumber,
-    projectPostComments.* 
-    INNER JOIN users ON users.uid = ppcid.uid
-    FROM projectPostComments WHERE ppid = %s AND ppcid < %s ORDER BY time DESC LIMIT %s"""
+    (SELECT COUNT(*) FROM projectPostCommentLikes WHERE ppcid = PPC.ppcid AND uid = %s) AS isLiked,
+    (SELECT COUNT(*) FROM projectPostCommentLikes WHERE ppcid = PPC.ppcid) AS likeNumber,
+    PPC.*, users.username, users.full_name 
+    FROM projectPostComments PPC 
+    INNER JOIN users ON users.uid = PPC.uid 
+    WHERE ppid = %s AND ppcid < %s ORDER BY time DESC LIMIT %s"""
     cursor.execute(query, (currentUser, ppid, ppcid, number))
     result = cursor.fetchall()
     cursor.close()

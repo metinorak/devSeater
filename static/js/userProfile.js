@@ -49,7 +49,7 @@ function eventListeners(){
       posts = renderPosts(posts);
 
       ui.clearContentArea();
-      ui.showUserPosts(posts, Session.getCurrentUser());
+      ui.showPosts(posts, Session.getCurrentUser());
       PR.prettyPrint();
     })
     .catch(err => console.error(err));
@@ -62,7 +62,7 @@ function eventListeners(){
     devSeater.userSeaters(uid)
     .then(seaters => {
       ui.clearContentArea();
-      ui.showUserSeaters(seaters);
+      ui.showSeaters(seaters);
     })
     .catch(err => console.error(err));
   });
@@ -90,7 +90,7 @@ function eventListeners(){
 			.then(posts => {
 				posts = renderPosts(posts);
 
-        ui.showPreviousUserPosts(posts, Session.getCurrentUser());
+        ui.showPreviousPosts(posts, Session.getCurrentUser());
         PR.prettyPrint();
 			})
 			.catch(err => console.error(err));

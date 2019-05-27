@@ -139,27 +139,27 @@ class DevSeater{
   }
 
   async likeProjectPost(ppid){
-    return this.request.get(this.url + `projects/no-matter/posts/${ppid}/like`);
+    return this.request.get(this.url + `project-posts/${ppid}/like`);
   }
 
   async unlikeProjectPost(ppid){
-    return this.request.get(this.url + `projects/no-matter/posts/${ppid}/unlike`);
+    return this.request.get(this.url + `project-posts/${ppid}/unlike`);
   }
 
   async projectPostLikeNumber(ppid){
-    return this.request.get(this.url + `projects/no-matter/posts/${ppid}/likes/number`);
+    return this.request.get(this.url + `project-posts/${ppid}/likes/number`);
   }
 
-  async projectPostCommentNumber(upid){
-    return this.request.get(this.url + `projects/no-matter/posts/${ppid}/comments/number`);
+  async projectPostCommentNumber(ppid){
+    return this.request.get(this.url + `project-posts/${ppid}/comments/number`);
   }
 
   async projectPostComments(ppid, number = 2){
-    return this.request.get(this.url + `projects/no-matter/posts/${ppid}/comments?number=${number}`);
+    return this.request.get(this.url + `project-posts/${ppid}/comments?number=${number}`);
   }
 
   async previousProjectPostComments(ppid, ppcid, number = 2){
-    return this.request.get(this.url + `projects/no-matter/posts/${ppid}/comments?ppcid=${ppcid}&number=${number}`);
+    return this.request.get(this.url + `project-posts/${ppid}/comments?ppcid=${ppcid}&number=${number}`);
   }
 
   async likeProjectPostComment(ppcid){
@@ -171,7 +171,7 @@ class DevSeater{
   }
 
   async projectPostCommentLikeNumber(ppcid){
-    return this.request.get(this.url + `project-posts/comments/${ppcid}/like-number`);
+    return this.request.get(this.url + `project-posts/comments/${ppcid}/likes/number`);
   }
 
   async sendProjectPostComment(ppid, comment){
@@ -179,7 +179,7 @@ class DevSeater{
   }
 
   async deleteProjectPostComment(ppcid){
-    return this.request.delete(this.url + `project-posts/${ppcid}/comments`);
+    return this.request.delete(this.url + `project-posts/no-matter/comments?ppcid=${ppcid}`);
   }
 
 }

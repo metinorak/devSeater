@@ -47,11 +47,8 @@ def createAProject():
 def projectPage(projectName):
   currentUser = getCurrentUser()
   project = ModelObject["projectModel"].getProjectByProjectName(projectName)
-  print(project)
   projectLinks = ModelObject["projectModel"].getProjectLinks(project["pid"])
-  print(projectLinks)
   lastProjectPosts = ModelObject["projectPostModel"].getLastProjectPosts(project["pid"], 10, getCurrentUid())
-  print(lastProjectPosts)
 
   return render_template(
     "project-page.html",

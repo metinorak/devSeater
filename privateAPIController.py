@@ -748,7 +748,7 @@ def likeProjectPost(ppid):
 @app.route("/private-api/project-posts/<string:ppid>/unlike")
 @login_required
 def unlikeProjectPost(ppid):
-    ModelObject["projectPostModel"].unlikeProjectPost(getCurrentUid(), upid)
+    ModelObject["projectPostModel"].unlikeProjectPost(getCurrentUid(), ppid)
     return json.dumps({"result" : "success"})
 
 @app.route("/private-api/project-posts/<string:ppid>/likes/number")
@@ -793,7 +793,7 @@ def projectPostComments(ppid):
         #Update user post comment
         data = json.loads(request.data)
         ppcid = request.args.get("ppcid")
-        comment = ModelObject["projectPostModel"].getProjectPostComment(ppcid)
+        comment = ModelObject["projectPostModel"].getProjectPostComment(ppcid, getCurrentUid())
 
         if comment["uid"] == getCurrentUid():
             ModelObject["projectPostModel"].updateProjectPostComment(ppcid, data["comment"])
@@ -804,10 +804,10 @@ def projectPostComments(ppid):
     else:
         #Delete a user post comment
         ppcid = request.args.get("ppcid")
-        comment = ModelObject["projectPostModel"].getProjectPostComment(ppcid)
+        comment = ModelObject["projectPostModel"].getProjectPostComment(ppcid, getCurrentUid())
 
         if comment["uid"] == getCurrentUid():
-            ModelObject["userPostModel"].removeProjectPostComment(ppcid)
+            ModelObject["projectPostModel"].removeProjectPostComment(ppcid)
             return '{"result" : "success"}'
         
         return render_template("private-api/forbidden-request.html")
@@ -824,11 +824,11 @@ def likeProjectPostComment(ppcid):
 
 @app.route("/private-api/project-posts/comments/<string:ppcid>/unlike")
 @login_required
-def unlikeProjectPostComment(upcid):
+def unlikeProjectPostComment(ppcid):
     ModelObject["projectPostModel"].unlikeProjectPostComment(getCurrentUid(), ppcid)
     return '{"result" : "success"}'
 
-@app.route("/private-api/project-posts/comments/<string:ppcid>/like-number")
+@app.route("/private-api/project-posts/comments/<string:ppcid>/likes/number")
 @login_required
 def projectPostCommentLikeNumber(upcid):
     number = ModelObject["projectPostModel"].getProjectPostCommentLikeNumber(ppcid)

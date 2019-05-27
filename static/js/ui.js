@@ -221,14 +221,13 @@ class UI{
     });
   }
 
-  showPreviousUserPosts(posts, currentUser){
-    let contentArea = document.querySelector(".content-area");
+  showPreviousPosts(posts, currentUser){
     posts.forEach(post => {
       this.addPostToTheBottom(post, currentUser);
     });
   }
 
-  showUserPosts(posts, currentUser){
+  showPosts(posts, currentUser){
     let contentArea = document.querySelector(".content-area");
 
     posts.forEach(post => {
@@ -236,7 +235,7 @@ class UI{
     });
   }
 
-  showUserSeaters(seaters){
+  showSeaters(seaters){
     let contentArea = document.querySelector(".content-area");
 
     if(seaters.length == 0){
@@ -314,7 +313,12 @@ class UI{
 
     let postToAdd = document.createElement("div");
     postToAdd.setAttribute("class", "post");
-    postToAdd.setAttribute("upid", post["upid"]);
+    if(post["upid"] != undefined){
+      postToAdd.setAttribute("upid", post["upid"]);
+    }
+    else if(post["ppid"] != undefined){
+      postToAdd.setAttribute("ppid", post["ppid"]);
+    }
 
     //Specify photo
     if (post["photo"] === null){
@@ -363,8 +367,6 @@ class UI{
     else{
       var likeNumber = `<a href="#" class="like-number"></a>`;
     } 
-
-
 
     //Render markdown
 
@@ -625,6 +627,209 @@ class UI{
     let comment = document.querySelector(`.comment[upcid="${upcid}"]`);
     comment.remove();
   }
+
+
+  //PROJECT POSTS
+
+
+  removeProjectPost(ppid){
+    ppid = ppid.trim();
+    let post = document.querySelector(`.post[ppid="${ppid}"]`);
+    post.remove();
+  }
+
+  likeProjectPost(ppid){
+    let post = document.querySelector(`.post[ppid="${ppid}"]`);
+    let likeButton = post.querySelector(".like-button");
+    likeButton.classList.add("liked");
+    likeButton.textContent = "Liked";
+  }
+
+  unlikeProjectPost(ppid){
+    let post = document.querySelector(`.post[ppid="${ppid}"]`);
+    let likeButton = post.querySelector(".like-button");
+    likeButton.classList.remove("liked");
+    likeButton.textContent = "Like";
+  }
+
+
+  likeProjectPostComment(ppcid){
+    let comment = document.querySelector(`.comment[ppcid="${ppcid}"]`);
+    let commentLikeButton = comment.querySelector(".comment-like-button");
+    commentLikeButton.classList.add("liked");
+    commentLikeButton.textContent = "Liked";
+  }
+
+  unlikeProjectPostComment(ppcid){
+    let comment = document.querySelector(`.comment[ppcid="${ppcid}"]`);
+    let commentLikeButton = comment.querySelector(".comment-like-button");
+    commentLikeButton.classList.remove("liked");
+    commentLikeButton.textContent = "Like";
+  }
+
+  updateProjectPostLikeNumber(ppid, number){
+    let post = document.querySelector(`.post[ppid="${ppid}"]`);
+    let likeNumber = post.querySelector(".like-number");
+
+    if(number > 1){
+      likeNumber.textContent = `${number} likes`;
+      likeNumber.classList.add("mr-2");
+    }
+    else if(number == 1){
+      likeNumber.textContent = `${number} like`;
+      likeNumber.classList.add("mr-2");
+    }
+    else{
+      likeNumber.textContent = "";
+      likeNumber.classList.remove("mr-2");
+    }
+  }
+
+  updateProjectPostCommentNumber(ppid, number){
+    let post = document.querySelector(`.post[ppid="${ppid}"]`);
+    let commentNumber = post.querySelector(".comment-number");
+    
+    if(number > 1){
+      if(!commentNumber.classList.contains("ml-3")){
+        commentNumber.classList.add("ml-3");
+      }
+      commentNumber.textContent = `${number} comments`;
+    }
+    else if(number == 1){
+      if(!commentNumber.classList.contains("ml-3")){
+        commentNumber.classList.add("ml-3");
+      }
+      commentNumber.textContent = `${number} comment`;
+    }
+    else{
+      if(commentNumber.classList.contains("ml-3")){
+        commentNumber.classList.remove("ml-3");
+      }
+      commentNumber.textContent = "";
+    }
+  }
+
+
+  updateProjectPostCommentLikeNumber(ppcid, number){
+    let comment = document.querySelector(`.comment[upcid="${ppcid}"]`);
+    let likeNumber = comment.querySelector(".like-number");
+
+    if(number > 1){
+      if(!likeNumber.classList.contains("mr-2")){
+        likeNumber.classList.add("mr-2");
+      }
+
+      likeNumber.textContent = `(${number} likes)`;
+    }
+    else if(number == 1){
+      if(!likeNumber.classList.contains("mr-2")){
+        likeNumber.classList.add("mr-2");
+      }
+
+      likeNumber.textContent = `(1 like)`;
+    }
+    else{
+      if(likeNumber.classList.contains("mr-2")){
+        likeNumber.classList.remove("mr-2");
+      }
+
+      likeNumber.textContent = "";
+    }
+  }
+
+  showProjectPostCommentBox(ppid){
+    let post = document.querySelector(`.post[ppid="${ppid}"]`);
+    let commentForm = post.querySelector(".comment-form");
+    commentForm.focus();
+    post.querySelector(".comment-box").style.display = "block";
+  }
+
+  closeProjectPostCommentBox(ppid){
+    let post = document.querySelector(`.post[ppid="${ppid}"]`);
+    post.querySelector(".comment-box").style.display = "none";
+  }
+
+  addProjectPostComments(ppid, comments, currentUser){
+    let post = document.querySelector(`.post[ppid="${ppid}"]`);
+    let commentsArea = post.querySelector(".comments");
+
+    comments.forEach(comment => {
+
+      if(comment["photo"] == null){
+        comment["photo"] = "/static/img/empty-profile.png";
+      }
+
+      if(comment["isLiked"] == 1){
+        var likeButton = `<button class="comment-like-button mr-2 liked">Liked</button>`;
+      }
+      else{
+        var likeButton = `<button class="comment-like-button mr-2">Like</button>`;
+      }
+
+      if(comment["uid"] = currentUser["uid"]){
+        var deleteButton = `<button class="comment-delete-button mr-2">Delete</button>`;
+      }
+      else{
+        var deleteButton = "";
+      }
+
+      if(comment["likeNumber"] == 1){
+        var likeNumber = `<span class="small mr-2 like-number">(1 like)</span>`;
+      }
+      else if(comment["likeNumber"] > 1){
+        var likeNumber = `<span class="small mr-2 like-number">(${comment["likeNumber"]} likes)</span>`;
+      }
+      else{
+        var likeNumber = `<span class="small like-number"></span>`;
+      }
+
+      let html = 
+      `
+      <div class="comment row mt-2" ppcid = ${comment["ppcid"]}>
+        <a href="/u/${comment["username"]}" class="col-sm-1">
+            <img width="30px" class="rounded-circle" src="${comment["photo"]}" alt="">
+        </a>
+        <div class="col-sm-2">
+            <a href="/u/${comment["username"]}" class="row small">${comment["full_name"]}</a>
+            <a href="/u/${comment["username"]}" class="row text-muted small">@${comment["username"]}</a>
+
+        </div>
+        <div class="col-sm-9">
+          <span class="comment-text row">${comment["comment"]}</span>
+          <span class="row">
+            ${likeButton}
+            ${deleteButton}
+            ${likeNumber}
+            <span class="time small text-muted text-italic">${this.timeSince(comment["time"])} ago</span>
+          </span>
+        </div>
+      </div>
+      `;
+
+      commentsArea.innerHTML = (html + commentsArea.innerHTML);
+
+    });
+  }
+
+  clearProjectPostComments(ppid){
+    let post = document.querySelector(`.post[ppid="${ppid}"]`);
+    let commentsArea = post.querySelector(".comments");
+    
+    commentsArea.textContent = "";
+  }
+
+  clearProjectPostCommentInput(ppid){
+    let post = document.querySelector(`.post[ppid="${ppid}"]`);
+    let commentForm = post.querySelector(".comment-form");
+    commentForm.querySelector("textarea").value = "";
+
+  }
+
+  removeProjectPostComment(ppcid){
+    let comment = document.querySelector(`.comment[ppcid="${ppcid}"]`);
+    comment.remove();
+  }
+
 
   changeTimeFormats(timeInfos){
     timeInfos.forEach(info => {
