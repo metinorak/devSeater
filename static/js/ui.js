@@ -877,4 +877,14 @@ class UI{
     followButton.classList.remove("followed");
   }
 
+  showPostTextAreaCard(){
+    let card = document.querySelector(".post-textarea-card");
+    card.style.display = "block";
+  }
+
+  hidePostTextAreaCard(){
+    let card = document.querySelector(".post-textarea-card");
+    card.style.display = "block";
+  }
+
 }

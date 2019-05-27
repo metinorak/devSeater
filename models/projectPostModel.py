@@ -46,7 +46,7 @@ class ProjectPostModel(Database):
     return result
 
   @exception_handling
-  def getPreviousPosts(self, pid, ppid, number, currentUser):
+  def getPreviousProjectPosts(self, pid, ppid, number, currentUser):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
     query = """SELECT 

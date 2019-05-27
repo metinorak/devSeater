@@ -696,9 +696,9 @@ def projectPosts(pid):
         #Get last posts
         ppid = request.args.get("ppid")
         if ppid == None:
-            ModelObject["projectPostModel"].getLastPosts(pid, 10, getCurrentUid())
+            posts = ModelObject["projectPostModel"].getLastProjectPosts(pid, 10, getCurrentUid())
         else:
-            ModelObject["projectPostModel"].getPreviousPosts(pid, ppid, 10, getCurrentUid())
+            posts = ModelObject["projectPostModel"].getPreviousProjectPosts(pid, ppid, 10, getCurrentUid())
 
         return json.dumps(posts, cls=DateTimeEncoder)
 
