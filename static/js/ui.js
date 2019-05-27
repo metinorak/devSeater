@@ -248,7 +248,7 @@ class UI{
     contentArea.appendChild(innerContainer);
 
     seaters.forEach(seater => {
-      this.addSeaterToTheBottom(seater, innerContainer);
+      this.appendSeater(seater, innerContainer);
     });
   }
 
@@ -256,7 +256,7 @@ class UI{
     let contentArea = document.querySelector(".content-area");
 
     if(skills.length == 0){
-      contentArea.textContent = "This user doesnt't have any seater.";
+      contentArea.textContent = "This user has no skills.";
       return;
     }
 
@@ -274,7 +274,7 @@ class UI{
     contentArea.innerHTML = "";
   }
 
-  addSeaterToTheBottom(seater, container){
+  appendSeater(seater, container){
     if(seater["photo"] == null){
       seater["photo"] = "/static/img/empty-project.png";
     }
@@ -743,6 +743,7 @@ class UI{
 
       likeNumber.textContent = "";
     }
+
   }
 
   showProjectPostCommentBox(ppid){
@@ -838,6 +839,68 @@ class UI{
     comment.remove();
   }
 
+  showProjectMembers(members, currentUser){
+    let contentArea = document.querySelector(".content-area");
+
+    if(members.length == 0){
+      contentArea.textContent = "This user has no seater.";
+      return;
+    }
+
+    let container = document.createElement("div");
+    container.className = "d-flex flex-wrap";
+    contentArea.appendChild(container);
+
+    members.forEach(member => {
+      this.appendMember(member, currentUser, container);
+    });
+
+    contentArea.append(container);
+  }
+
+  appendMember(member, currentUser, container){
+    let memberCard = document.createElement("div");
+    memberCard.className = "member-card";
+    memberCard.setAttribute("uid", member["uid"]);
+
+    if(member["photo"] == null){
+      var imgAddress = "/static/img/empty-profile.png";
+    }
+    else{
+      var imgAddress = `/static/uploads/users/up/${member["photo"]}`;
+    }
+
+    if(currentUser["uid"] == member["uid"]){
+      var followButton = "";
+    }
+    else if(!member["isFollowed"]){
+      var followButton = `<button class="btn btn-light follow-button followed">Followed</button>`;
+    }
+    else{
+      var followButton = `<button class="btn btn-light follow-button">Follow</button>`;
+    }
+    
+    if(member["bio"] == null){
+      member["bio"] = "";
+    }
+    
+    let html = 
+    `
+      <a href="/u/${member["username"]}">
+        <img class="profile-img" src="${imgAddress}" alt=""><br>
+        <h1>${member["full_name"]}</h1>    
+        <span class="text-muted">@${member["username"]}</span><br>
+      </a>
+      <span>
+        ${member["bio"]}
+      </span><br>
+      ${followButton}
+    `;
+
+    memberCard.innerHTML = html;
+    container.appendChild(memberCard);
+
+  }
 
   changeTimeFormats(timeInfos){
     timeInfos.forEach(info => {
@@ -927,7 +990,7 @@ class UI{
     contentArea.appendChild(innerContainer);
 
     seaters.forEach(seater => {
-      this.addSeaterToTheBottom(seater, innerContainer);
+      this.appendSeater(seater, innerContainer);
     });
   }
 
@@ -960,7 +1023,7 @@ class UI{
     innerContainer.className = "d-flex flex-wrap";
     contentArea.appendChild(innerContainer);
     seaters.forEach(seater => {
-      this.addSeaterToTheBottom(seater, innerContainer);
+      this.appendSeater(seater, innerContainer);
     });
   }
 

@@ -13,9 +13,9 @@
                 <div class="col-lg-4 text-center">
                   <div id="user-profile-card" uid="{{user.uid}}">
                       {% if user.photo != None %}
-                        <img id="profile-img" src="{{url_for('static', filename='uploads/users/up/' + user.photo)}}" alt=""><br>
+                        <img class="profile-img" src="{{url_for('static', filename='uploads/users/up/' + user.photo)}}" alt=""><br>
                       {% else %}
-                        <img id="profile-img" src="{{url_for('static', filename='img/empty-profile.png')}}" alt=""><br>
+                        <img class="profile-img" src="{{url_for('static', filename='img/empty-profile.png')}}" alt=""><br>
                       {% endif %}
                            
                       <h1>{{user.full_name}}</h1>

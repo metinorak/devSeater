@@ -9,6 +9,7 @@ const postsButton = document.getElementById("posts-button");
 const seatersButton = document.getElementById("seaters-button");
 const membersButton = document.getElementById("members-button");
 const aboutButton = document.getElementById("about-button");
+const membersLink = document.getElementById("members-link");
 
 
 //SIMPLEMDE textarea control
@@ -32,6 +33,26 @@ function eventListeners(){
 			if(response["result"]){
 				ui.showPostTextAreaCard();
 			}
+		})
+		.catch(err => console.error(err));
+	});
+
+	membersButton.addEventListener("click", e=>{
+		devSeater.projectMembers(pid)
+		.then(members => {
+			ui.hidePostTextAreaCard();
+			ui.clearContentArea();
+			ui.showProjectMembers(members, Session.getCurrentUser());
+		})
+		.catch(err => console.error(err));
+	});
+
+	membersLink.addEventListener("click", e => {
+		devSeater.projectMembers(pid)
+		.then(members => {
+			ui.hidePostTextAreaCard();
+			ui.clearContentArea();
+			ui.showProjectMembers(members, Session.getCurrentUser());
 		})
 		.catch(err => console.error(err));
 	});

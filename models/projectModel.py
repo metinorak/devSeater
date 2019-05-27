@@ -52,18 +52,22 @@ class ProjectModel(Database):
     return result
   
   @exception_handling
-  def getMembers(self, pid):
+  def getMembers(self, pid, currentUser):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
     query = """
-    (SELECT * FROM users WHERE uid IN 
+    (SELECT users.*, 
+    (SELECT COUNT(*) FROM followers WHERE flwrid = %s AND flwdid = users.uid) AS isFollowed
+    FROM users WHERE uid IN 
     (SELECT uid FROM seaters JOIN projects ON(projects.pid = seaters.pid) WHERE uid IS NOT NULL AND projects.pid = %s))
     UNION
-    (SELECT * FROM users WHERE uid IN 
+    (SELECT users.*, 
+    (SELECT COUNT(*) FROM followers WHERE flwrid = %s AND flwdid = users.uid) AS isFollowed
+    FROM users WHERE uid IN 
     (SELECT uid FROM projectAdmins JOIN projects ON(projects.pid = projectAdmins.pid) WHERE projects.pid = %s))
     """
-    cursor.execute(query, (pid, pid) )
-    result = cursor.fetchone()
+    cursor.execute(query, (currentUser, pid, currentUser, pid) )
+    result = cursor.fetchall()
     cursor.close()
     connection.close()
     return result

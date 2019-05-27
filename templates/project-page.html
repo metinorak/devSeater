@@ -13,9 +13,9 @@
                 <div class="col-lg-4 text-center">
                   <div id="project-profile-card" pid="{{project.pid}}">
                       {% if project.photo != None %}
-                        <img id="project-img" src="{{url_for('static', filename='uploads/projects/pp/' + project.photo)}}" alt=""><br>
+                        <img class="project-img" src="{{url_for('static', filename='uploads/projects/pp/' + project.photo)}}" alt=""><br>
                       {% else %}
-                        <img id="project-img" src="{{url_for('static', filename='img/empty-project.png')}}" alt=""><br>
+                        <img class="project-img" src="{{url_for('static', filename='img/empty-project.png')}}" alt=""><br>
                       {% endif %}
                            
                       <h1>{{project.project_name}}</h1>
@@ -46,7 +46,7 @@
                 <div class="col-lg-4 text-center" >
                   <div>
                     <h1 class="text-muted">Team</h1>
-                    <a class="info-1" href="#" id="members">{{numberOfMembers}} member(s)</a>
+                    <a class="info-1" href="#" id="members-link">{{numberOfMembers}} member(s)</a>
                     <a class="info-2" href="#" id="empty-seaters">{{numberOfEmptySeaters}} empty seater(s)</a>
                   </div>
       

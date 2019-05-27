@@ -582,7 +582,7 @@ def getProject(pid):
 @app.route("/private-api/projects/<string:pid>/members")
 @login_required
 def getProjectMembers(pid):
-    members = ModelObject["projectModel"].getMembers(pid)
+    members = ModelObject["projectModel"].getMembers(pid, getCurrentUid())
 
     return json.dumps(members, cls=DateTimeEncoder)
 
