@@ -368,3 +368,17 @@ li.L5, li.L6, li.L7, li.L8, li.L9 {
   display: block;
   color: #89bda59b !important;
 }
+
+.profile-settings-button{
+  border: none;
+  background: none no-repeat;
+  background-image: url("/static/img/profile-settings.png");
+  background-size: 32px;
+  background-position-x: center;
+  min-width: 64px;
+  height: 32px;
+}
+
+.profile-settings-button:hover{
+  background-color: #dde19c59;
+}

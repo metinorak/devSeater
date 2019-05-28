@@ -10,4 +10,8 @@ class Session{
   static destroySession(){
     sessionStorage.removeItem("currentUser");
   }
+
+  static isLoggedIn(){
+    return (sessionStorage.getItem("currentUser") != null)
+  }
 }

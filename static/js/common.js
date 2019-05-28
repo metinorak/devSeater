@@ -13,9 +13,8 @@ const markDownConverter = new showdown.Converter({extensions: ['prettify']});
 // Time info type changing
 ui.changeTimeFormats(timeInfos);
 
+
 eventListeners();
-
-
 
 function eventListeners(){
 

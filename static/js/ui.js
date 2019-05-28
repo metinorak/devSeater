@@ -8,7 +8,8 @@ class UI{
     this.newFollowingPostNumberButton = document.getElementById("new-following-post-number");
     this.theNewestPost = document.querySelector(".post");
     this.postTextarea = document.getElementById("post-textarea");
-
+    this.contentArea = document.querySelector(".content-area");
+    this.navbar = document.querySelector("navbar");
   }
 
   showGeneralResults(results){
@@ -228,24 +229,24 @@ class UI{
   }
 
   showPosts(posts, currentUser){
-    let contentArea = document.querySelector(".content-area");
+    
 
     posts.forEach(post => {
-      this.addPostToTheBottom(post, currentUser, contentArea);
+      this.addPostToTheBottom(post, currentUser, this.contentArea);
     });
   }
 
   showSeaters(seaters){
-    let contentArea = document.querySelector(".content-area");
+    
 
     if(seaters.length == 0){
-      contentArea.textContent = "This user has no seater.";
+      this.contentArea.textContent = "This user has no seater.";
       return;
     }
 
     let innerContainer = document.createElement("div");
     innerContainer.className = "d-flex flex-wrap";
-    contentArea.appendChild(innerContainer);
+    this.contentArea.appendChild(innerContainer);
 
     seaters.forEach(seater => {
       this.appendSeater(seater, innerContainer);
@@ -253,16 +254,16 @@ class UI{
   }
 
   showUserSkills(skills){
-    let contentArea = document.querySelector(".content-area");
+    
 
     if(skills.length == 0){
-      contentArea.textContent = "This user has no skills.";
+      this.contentArea.textContent = "This user has no skills.";
       return;
     }
 
     let innerContainer = document.createElement("div");
     innerContainer.className = "d-flex flex-wrap";
-    contentArea.appendChild(innerContainer);
+    this.contentArea.appendChild(innerContainer);
 
     skills.forEach(skill => {
       this.addSkillToTheBottom(skill, innerContainer);
@@ -270,8 +271,7 @@ class UI{
   }
 
   clearContentArea(){
-    let contentArea = document.querySelector(".content-area");
-    contentArea.innerHTML = "";
+    this.contentArea.innerHTML = "";
   }
 
   appendSeater(seater, container){
@@ -367,7 +367,7 @@ class UI{
 
 
     if(post["likeNumber"] > 1){
-      var likeNumber = `<a href="#" class="like-number mr-2">${post["likeNumber"]} </a>`;
+      var likeNumber = `<a href="#" class="like-number mr-2">${post["likeNumber"]} likes</a>`;
     }
     else if(post["likeNumber"] == 1){
       var likeNumber = `<a href="#" class="like-number mr-2">1 like</a>`;
@@ -840,22 +840,22 @@ class UI{
   }
 
   showProjectMembers(members, currentUser){
-    let contentArea = document.querySelector(".content-area");
+    
 
     if(members.length == 0){
-      contentArea.textContent = "This user has no seater.";
+      this.contentArea.textContent = "This user has no seater.";
       return;
     }
 
     let container = document.createElement("div");
     container.className = "d-flex flex-wrap";
-    contentArea.appendChild(container);
+    this.contentArea.appendChild(container);
 
     members.forEach(member => {
       this.appendMember(member, currentUser, container);
     });
 
-    contentArea.append(container);
+    this.contentArea.append(container);
   }
 
   appendMember(member, currentUser, container){
@@ -960,7 +960,7 @@ class UI{
 
 
   showEmptySeaters(seaters){
-    let contentArea = document.querySelector(".content-area");
+    
     let tabsHtml = 
     `
       <ul class="nav nav-tabs">
@@ -974,20 +974,20 @@ class UI{
     `;
     let tabsElement = document.createElement("div");
     tabsElement.innerHTML = tabsHtml;
-    contentArea.appendChild(tabsElement);
+    this.contentArea.appendChild(tabsElement);
 
     if(seaters.length == 0){
       let messageText = document.createElement("p");
       messageText.textContent = "This project has no empty seaters.";
       messageText.className = "mt-3";
-      contentArea.appendChild(messageText);
+      this.contentArea.appendChild(messageText);
       return;
     }
 
     let innerContainer = document.createElement("div");
     innerContainer.className = "d-flex flex-wrap";
 
-    contentArea.appendChild(innerContainer);
+    this.contentArea.appendChild(innerContainer);
 
     seaters.forEach(seater => {
       this.appendSeater(seater, innerContainer);
@@ -995,7 +995,7 @@ class UI{
   }
 
   showFilledSeaters(seaters){
-    let contentArea = document.querySelector(".content-area");
+    
     let tabsHtml = 
     `
       <ul class="nav nav-tabs">
@@ -1009,32 +1009,32 @@ class UI{
     `;
     let tabsElement = document.createElement("div");
     tabsElement.innerHTML = tabsHtml;
-    contentArea.appendChild(tabsElement);
+    this.contentArea.appendChild(tabsElement);
 
     if(seaters.length == 0){
       let messageText = document.createElement("p");
       messageText.textContent = "This project has no filled seaters.";
       messageText.className = "mt-3";
-      contentArea.appendChild(messageText);
+      this.contentArea.appendChild(messageText);
       return;
     }
     
     let innerContainer = document.createElement("div");
     innerContainer.className = "d-flex flex-wrap";
-    contentArea.appendChild(innerContainer);
+    this.contentArea.appendChild(innerContainer);
     seaters.forEach(seater => {
       this.appendSeater(seater, innerContainer);
     });
   }
 
   showAboutText(text){
-    let contentArea = document.querySelector(".content-area");
+    
 
     if(text.trim().length == 0){
       text = "This project has no full description.";
     }
 
-    contentArea.innerHTML = 
+    this.contentArea.innerHTML = 
     `
     <div class="card border-dark mb-3">
       <div class="card-header">About The Project</div>
@@ -1044,5 +1044,4 @@ class UI{
     </div>
     `;
   }
-
 }

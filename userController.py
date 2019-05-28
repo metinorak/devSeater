@@ -5,7 +5,7 @@ from common import *
 @app.route("/u/<string:username>")
 def userProfile(username):
   currentUser = getCurrentUser()
-  user = ModelObject["userModel"].getUserByUsername(username, session["uid"])
+  user = ModelObject["userModel"].getUserByUsername(username, getCurrentUid())
   userLinks = ModelObject["userModel"].getUserLinks(user["uid"])
   userProjects = ModelObject["projectModel"].getUserProjects(user["uid"])
   lastUserPosts = ModelObject["userPostModel"].getLastUserPosts(user["uid"], 10, getCurrentUid())
