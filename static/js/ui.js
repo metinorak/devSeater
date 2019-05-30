@@ -907,6 +907,11 @@ class UI{
       info.textContent = this.timeSince(info.textContent) + " ago";
     });
   }
+  
+
+  showEditProfileModal(){
+    $("#user-profile-modal").modal("show");
+  }
 
 
   timeSince(date) {
@@ -1043,5 +1048,9 @@ class UI{
       </div>
     </div>
     `;
+  }
+
+  showUserProfileSetting(){
+    
   }
 }

@@ -83,6 +83,21 @@ header{
   max-height: 280px;
 }
 
+.profile-settings-button{
+  border: none;
+  background: none no-repeat;
+  background-image: url("/static/img/profile-settings.png");
+  background-size: 32px;
+  background-position-x: center;
+  min-width: 64px;
+  height: 32px;
+}
+
+.profile-settings-button:hover{
+  background-color: #dde19c59;
+}
+
+
 
 @media (max-width: 1000px) {
   /* mobile devices*/
