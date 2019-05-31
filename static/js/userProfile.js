@@ -155,7 +155,7 @@ function eventListeners(){
   contentArea.addEventListener("click", e => {
 
     if(e.target.id == "add-new-link"){
-
+      
     }
     else if(e.target.classList.contains("delete-user-link")){
 

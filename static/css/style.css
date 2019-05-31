@@ -188,18 +188,22 @@ header{
   border: none;
 }
 
-.btn-secondary{
-  background: #dde19c55;
-  color: #648d7d;
-  font-weight: bold;
-}
-
 .btn-primary:hover{
   background-color: #e1470591;
 }
 
 .btn-primary:target{
   background-color: #e14705;
+}
+
+.btn-secondary{
+  background: #dde19c55;
+  color: #648d7d;
+  font-weight: bold;
+}
+
+.btn-danger{
+  background: #ec1414a8;
 }
 
 .btn-img{

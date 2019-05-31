@@ -5,6 +5,8 @@ from passlib.hash import sha256_crypt
 import hashlib
 from functools import wraps
 from models.config import *
+import random
+import string
 
 #Mail Libs
 import smtplib
@@ -78,4 +80,7 @@ def getCurrentUid():
     return session["uid"]
   return None
 
-
+def generateCode(length=6):
+  chars = string.ascii_letters + string.digits
+  code = ''.join(random.choice(chars) for i in range(length))
+  return code

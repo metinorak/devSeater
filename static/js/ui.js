@@ -1069,29 +1069,28 @@ class UI{
   showUserProfileSettings(currentUser, links, skills){
   
     let linkList = document.createElement("ul");
-    linkList.className = "list-group list-group-flush";
+    linkList.className = "list-group";
     links.forEach(l => {
-      let element = document.createElement("span");
+      let element = document.createElement("li");
       element.setAttribute("ulid", l["ulid"]);
+      element.className = "list-group-item";
       element.innerHTML = 
-      `<li class="list-group-item">
-        <a href="${l["link"]}">${l["name"]}</a>
-        <a href="#" class="float-right delete-user-link">Delete</a>
-      </li>`;
+      `<a href="${l["link"]}">${l["name"]}</a>
+       <a href="#" class="btn btn-danger float-right delete-user-link">Delete</a>
+       `;
 
       linkList.appendChild(element);
     });
 
     let skillList = document.createElement("ul");
-    skillList.className = "list-group list-group-flush";
+    skillList.className = "list-group";
     skills.forEach(s => {
-      let element = document.createElement("span");
+      let element = document.createElement("li");
+      element.className = "list-group-item";
       element.setAttribute("skid", s["skid"]);
       element.innerHTML = 
-      `<li class="list-group-item">
-        <a href="${s["link"]}">${s["name"]}</a>
-        <a href="#" class="float-right delete-user-skill">Delete</a>
-      </li>`;
+      `<a href="${s["link"]}">${s["name"]}</a>
+       <a href="#" class="btn btn-danger float-right delete-user-skill">Delete</a>`;
 
       skillList.appendChild(element);
     });
@@ -1133,11 +1132,11 @@ class UI{
 
           </div>
           <div class="tab-pane fade" id="links-tab-content" role="tabpanel" aria-labelledby="links-tab">
-          <div>${linkList.innerHTML}</div>
+          <div>${linkList.outerHTML}</div>
           <a href="#" id="add-new-link" class="btn btn-primary mt-2">Add new link</a>
           </div>
           <div class="tab-pane fade" id="skills-tab-content" role="tabpanel" aria-labelledby="skills-tab">
-          <div>${skillList.innerHTML}</div>
+          <div>${skillList.outerHTML}</div>
           <a href="#" id="add-new-skill" class="btn btn-primary mt-2">Add new skill</a>
           </div>
         </div>

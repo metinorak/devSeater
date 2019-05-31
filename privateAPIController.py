@@ -1,6 +1,7 @@
 from common import *
 from datetime import datetime
 import json
+import os
 
 class DateTimeEncoder(json.JSONEncoder):
     def default(self, o):
@@ -331,6 +332,8 @@ def userPhoto(uid):
         uid = int(uid)
     except ValueError:
         uid = getCurrentUid()
+    
+    user = ModelObject["userModel"].getUser(uid)
 
     if request.method == "POST":
         size = len(request.data) / 1000000
@@ -339,14 +342,18 @@ def userPhoto(uid):
                 "result": "fail",
                 "msg": "File can not be more than 2 MB"
                 })
+        #Delete old uploaded file
+        if user["photo"] != None:
+            os.remove(UPLOAD_FOLDER + "/users/up/" + user["photo"])
 
-        with open(UPLOAD_FOLDER + "/users/up/" + str(uid) + ".jpg", "wb") as fh:
+        newFileName = str(uid) + "_" + generateCode(10) + ".jpg"
+
+        with open(UPLOAD_FOLDER + "/users/up/" + newFileName, "wb") as fh:
             fh.write(request.data)
-            ModelObject["userModel"].updateProfilePhoto(getCurrentUid(), str(uid) + ".jpg")
+            ModelObject["userModel"].updateProfilePhoto(getCurrentUid(), newFileName)
             return json.dumps({"result": "success"})
     return json.dumps({"result": "fail"})
     
-
 #USER FULL NAME
 @app.route("/private-api/users/full-name", methods = ["PUT"])
 @login_required
