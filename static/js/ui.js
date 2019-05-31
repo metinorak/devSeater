@@ -580,6 +580,9 @@ class UI{
       if(comment["photo"] == null){
         comment["photo"] = "/static/img/empty-profile.png";
       }
+      else{
+        comment["photo"] = "/static/uploads/users/up/" + comment["photo"];
+      }
 
       if(comment["isLiked"] == 1){
         var likeButton = `<button class="comment-like-button mr-2 liked">Liked</button>`;
@@ -782,6 +785,9 @@ class UI{
 
       if(comment["photo"] == null){
         comment["photo"] = "/static/img/empty-profile.png";
+      }
+      else{
+        comment["photo"] = "/static/uploads/users/up/" + comment["photo"];
       }
 
       if(comment["isLiked"] == 1){

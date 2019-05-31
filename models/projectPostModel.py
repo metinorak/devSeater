@@ -174,9 +174,9 @@ class ProjectPostModel(Database):
     query = """SELECT 
     (SELECT COUNT(*) FROM projectPostCommentLikes WHERE ppcid = PPC.ppcid AND uid = %s) AS isLiked,
     (SELECT COUNT(*) FROM projectPostCommentLikes WHERE ppcid = PPC.ppcid) AS likeNumber,
-    PPC.* 
-    FROM projectPostComments PPC
-    INNER JOIN users ON users.uid = PPC.uid
+    PPC.*, users.username, users.full_name, users.photo
+    FROM projectPostComments PPC 
+    INNER JOIN users ON users.uid = PPC.uid 
     WHERE ppcid = %s"""
     cursor.execute(query, (currentUser, ppcid) )
     result = cursor.fetchone()
@@ -192,7 +192,7 @@ class ProjectPostModel(Database):
     query = """SELECT 
     (SELECT COUNT(*) FROM projectPostCommentLikes WHERE ppcid = PPC.ppcid AND uid = %s) AS isLiked,
     (SELECT COUNT(*) FROM projectPostCommentLikes WHERE ppcid = PPC.ppcid) AS likeNumber,
-    PPC.*, users.username, users.full_name 
+    PPC.*, users.username, users.full_name, users.photo
     FROM projectPostComments PPC 
     INNER JOIN users ON users.uid = PPC.uid 
     WHERE ppid = %s ORDER BY time DESC LIMIT %s"""
