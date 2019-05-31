@@ -18,9 +18,9 @@
                         <img class="profile-img" src="{{url_for('static', filename='img/empty-profile.png')}}" alt=""><br>
                       {% endif %}
                            
-                      <h1>{{user.full_name}}</h1>
+                      <h1 class="user-full-name-info">{{user.full_name}}</h1>
                       <span class="text-muted">@{{user.username}}</span><br>
-                      <span>
+                      <span class="user-bio-info">
                           {% if user.bio != None %}
                                   {{user.bio}}
                           {% endif %}

@@ -1128,7 +1128,7 @@ class UI{
             <div class="form-group">
               <label>Bio (max 100 chars)</label>
               <textarea class="form-control" id="user-bio" rows="3" maxlength="100">${currentUser["bio"]}</textarea>
-              <span></span>
+              <span class="char-number"></span>
             </div>
 
           </div>
@@ -1149,7 +1149,7 @@ class UI{
     this.contentArea.innerHTML = card;
 
     document.querySelector("#user-bio").addEventListener("input", e => {
-      e.target.nextElementSibling.textContent = "char number: " + e.target.value.length;
+      document.querySelector(".char-number").textContent = `char number: ${e.target.value.length}`;
     });
   }
 

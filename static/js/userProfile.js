@@ -3,6 +3,8 @@ const messageButton = document.querySelector(".message-button");
 const followButton = document.querySelector(".follow-button");
 const userProfileCard = document.querySelector("#user-profile-card");
 const contentArea = document.querySelector(".content-area");
+const userFullNameInfo = document.querySelector(".user-full-name-info");
+const userBioInfo = document.querySelector(".user-bio-info");
 
 //Tabs
 const postsButton = document.getElementById("posts-button");
@@ -127,6 +129,7 @@ function eventListeners(){
       .then(response => {
         if(response["result"] == "success"){
           ui.showMessageAfterElement(e.target, "Full name updated!", "success");
+          userFullNameInfo.textContent = e.target.value;
         }
         else{
           ui.showMessageAfterElement(e.target, "Full name couldn't be updated!", "fail");
@@ -139,6 +142,7 @@ function eventListeners(){
       .then(response => {
         if(response["result"] == "success"){
           ui.showMessageAfterElement(e.target, "Bio updated!", "success");
+          userBioInfo.textContent = e.target.value;
         }
         else{
           ui.showMessageAfterElement(e.target, "Bio couldn't be updated!", "fail");
