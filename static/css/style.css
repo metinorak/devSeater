@@ -1,5 +1,5 @@
 *{
-  word-break: break-word;
+  line-break: auto;
   overflow-wrap: break-word;
   font-size: 14px;
 }

@@ -621,8 +621,8 @@ class UI{
 
         </div>
         <div class="col-sm-9">
-          <span class="comment-text row">${comment["comment"]}</span>
-          <span class="row">
+          <p class="comment-text">${comment["comment"]}</p>
+          <span >
             ${likeButton}
             ${deleteButton}
             ${likeNumber}
@@ -827,8 +827,8 @@ class UI{
 
         </div>
         <div class="col-sm-9">
-          <span class="comment-text row">${comment["comment"]}</span>
-          <span class="row">
+          <p class="comment-text">${comment["comment"]}</p>
+          <span >
             ${likeButton}
             ${deleteButton}
             ${likeNumber}
