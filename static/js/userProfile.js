@@ -62,10 +62,10 @@ function eventListeners(){
 
   editProfileButton.addEventListener("click", e => {
 
-    Promise.all([devSeater.userLinks(), devSeater.userSkills()])
+    Promise.all([devSeater.currentUser(), devSeater.userLinks(), devSeater.userSkills()])
     .then(values => {
       ui.clearContentArea();
-      ui.showUserProfileSettings(Session.getCurrentUser(), values[0], values[1]);
+      ui.showUserProfileSettings(...values);
     })
     .catch(err => console.error(err));
   });
