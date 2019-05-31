@@ -14,7 +14,7 @@ MAIL_PASS = "DZxj73W7"
 SITE_ADDR = "http://localhost:5000"
 
 #FILE UPLOAD PATH
-UPLOAD_FOLDER = "/uploads"
+UPLOAD_FOLDER = "static/uploads"
 
 #ALLOWED EXTENSIONS
 ALLOWED_PHOTO_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif']

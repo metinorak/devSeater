@@ -44,5 +44,18 @@ class Request{
     return responseData;
   }
 
+  async upload(url, file){
+    const response =  await fetch(url, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "image/*"
+      },
+      body: file
+    });
+    
+    const responseData = await response.json();
+    return responseData;
+  }
+
 
 }

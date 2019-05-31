@@ -101,6 +101,22 @@ class UI{
     window.scrollTo(0,document.body.scrollHeight);
   }
 
+  addAnotherLinkInput(container, url="", name=""){
+    let newInput = document.createElement("div");
+    newInput.setAttribute("class", "form-row");
+
+    newInput.innerHTML = `
+    <div class="col-md-8 mt-2">
+    <input type="text" class="form-control" name="links[]" placeholder="http://" value="${url}">
+    </div>
+    <div class="col-md-4 mt-2">
+      <input type="text" class="form-control" name="link-names[]" placeholder="link name" value="${name}">
+    </div>
+    `;
+
+    container.appendChild(newInput);
+  }
+
   showNewFollowingPostNumber(number){
     if(Number(number) > 0){
       this.newFollowingPostNumberButton.style.display = "block";
@@ -908,12 +924,6 @@ class UI{
     });
   }
   
-
-  showEditProfileModal(){
-    $("#user-profile-modal").modal("show");
-  }
-
-
   timeSince(date) {
     date = new Date(date);
 
@@ -1049,8 +1059,115 @@ class UI{
     </div>
     `;
   }
+  
+  showUserProfileSettings(currentUser, links, skills){
+  
+    let linkList = document.createElement("ul");
+    linkList.className = "list-group list-group-flush";
+    links.forEach(l => {
+      let element = document.createElement("span");
+      element.setAttribute("ulid", l["ulid"]);
+      element.innerHTML = 
+      `<li class="list-group-item">
+        <a href="${l["link"]}">${l["name"]}</a>
+        <a href="#" class="float-right delete-user-link">Delete</a>
+      </li>`;
 
-  showUserProfileSetting(){
-    
+      linkList.appendChild(element);
+    });
+
+    let skillList = document.createElement("ul");
+    skillList.className = "list-group list-group-flush";
+    skills.forEach(s => {
+      let element = document.createElement("span");
+      element.setAttribute("skid", s["skid"]);
+      element.innerHTML = 
+      `<li class="list-group-item">
+        <a href="${s["link"]}">${s["name"]}</a>
+        <a href="#" class="float-right delete-user-skill">Delete</a>
+      </li>`;
+
+      skillList.appendChild(element);
+    });
+
+    let card = 
+    `
+    <div class="card">
+      <h5 class="card-header">Profile Settings</h5>
+      <div class="card-body">
+        <ul class="nav nav-tabs" id="user-setting-tabs" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="user-tab" data-toggle="tab" href="#user-tab-content" role="tab" aria-controls="home" aria-selected="true">User</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="links-tab" data-toggle="tab" href="#links-tab-content" role="tab" aria-controls="profile" aria-selected="false">Links</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="skills-tab" data-toggle="tab" href="#skills-tab-content" role="tab" aria-controls="contact" aria-selected="false">Skills</a>
+          </li>
+        </ul>
+        <div class="tab-content mt-2">
+          <div class="tab-pane fade show active" id="user-tab-content" role="tabpanel" aria-labelledby="user-tab">
+            <form>
+              <div class="form-group">
+                <label>Profile Photo (1:1 ratio)</label>
+                <input type="file" accept="image" class="form-control" id="profile-photo" >
+              </div>
+            </form>
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" class="form-control" id="user-full-name" placeholder="Full Name" value="${currentUser["full_name"]}">
+            </div>
+
+            <div class="form-group">
+              <label>Bio (max 100 chars)</label>
+              <textarea class="form-control" id="user-bio" rows="3" maxlength="100">${currentUser["bio"]}</textarea>
+              <span></span>
+            </div>
+
+          </div>
+          <div class="tab-pane fade" id="links-tab-content" role="tabpanel" aria-labelledby="links-tab">
+          <div>${linkList.innerHTML}</div>
+          <a href="#" id="add-new-link" class="btn btn-primary mt-2">Add new link</a>
+          </div>
+          <div class="tab-pane fade" id="skills-tab-content" role="tabpanel" aria-labelledby="skills-tab">
+          <div>${skillList.innerHTML}</div>
+          <a href="#" id="add-new-skill" class="btn btn-primary mt-2">Add new skill</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    `;
+
+    this.contentArea.innerHTML = card;
+
+    document.querySelector("#user-bio").addEventListener("input", e => {
+      e.target.nextElementSibling.textContent = "char number: " + e.target.value.length;
+    });
+  }
+
+  showMessageAfterElement(element, message, type){
+    let messageElement = document.createElement("span");
+    messageElement.className = "mt-3 user-msg";
+    if(type == "info"){
+      messageElement.style.color = "gray";
+    }
+    else if(type == "success"){
+      messageElement.style.color = "lightgreen";
+    }
+    else if(type == "fail"){
+      messageElement.style.color = "red";
+    }
+    messageElement.textContent = message;
+
+    if(element.nextElementSibling != null && element.nextElementSibling.classList.contains("user-msg")){
+      element.nextElementSibling.remove();
+    }
+    element.insertAdjacentElement("afterend", messageElement);
+  }
+
+  showProjectPageSettings(project, links){
+
   }
 }

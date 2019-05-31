@@ -97,8 +97,11 @@ def unfollow(uid):
 @login_required
 def userLinks():
     if request.method == "GET":
+        uid = request.args.get("uid")
+        if uid == None:
+            uid = getCurrentUid()
         #Getting all user's links
-        links = ModelObject["userModel"].getUserLinks(getCurrentUid())
+        links = ModelObject["userModel"].getUserLinks(uid)
         return json.dumps(links, cls=DateTimeEncoder)
     elif request.method == "POST":
         #Adding new user link
@@ -320,6 +323,56 @@ def userPostCommentLikeNumber(upcid):
     return json.dumps({"number" : number})
 
 
+#USER PROFILE PHOTO
+@app.route("/private-api/users/<string:uid>/photo", methods = ["POST", "DELETE"])
+@login_required
+def userPhoto(uid):
+    try:
+        uid = int(uid)
+    except ValueError:
+        uid = getCurrentUid()
+
+    if request.method == "POST":
+        size = len(request.data) / 1000000
+        if size > 2:
+            return json.dumps({
+                "result": "fail",
+                "msg": "File can not be more than 2 MB"
+                })
+
+        with open(UPLOAD_FOLDER + "/users/up/" + str(uid) + ".jpg", "wb") as fh:
+            fh.write(request.data)
+            ModelObject["userModel"].updateProfilePhoto(getCurrentUid(), str(uid) + ".jpg")
+            return json.dumps({"result": "success"})
+    return json.dumps({"result": "fail"})
+    
+
+#USER FULL NAME
+@app.route("/private-api/users/full-name", methods = ["PUT"])
+@login_required
+def userFullName():
+    fullname = request.args.get("full-name")
+    if fullname != None:
+        fullname.strip()
+        if fullname != "":
+            ModelObject["userModel"].updateFullname(getCurrentUid(), fullname)
+            return json.dumps({"result": "success"})
+    else:
+        return json.dumps({"result": "fail"})
+
+#USER BIO
+@app.route("/private-api/users/bio", methods = ["PUT"])
+@login_required
+def userBio():
+    bio = json.loads(request.data)["bio"]
+    bio.strip()
+    if bio != "":
+        ModelObject["userModel"].updateBio(getCurrentUid(), bio)
+        return json.dumps({"result": "success"})
+    else:
+        return json.dumps({"result": "fail"})
+
+
 
 #USER SKILLS
 @app.route("/private-api/user-skills", methods = ["GET", "POST", "DELETE"])
@@ -329,7 +382,7 @@ def userSkills():
         uid = request.args.get("uid")
 
         if uid == None:
-            uid == getCurrentUid()
+            uid = getCurrentUid()
         
         skills = ModelObject["skillModel"].getUserSkills(uid)
 

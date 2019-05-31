@@ -46,6 +46,18 @@ class DevSeater{
     return this.request.put(this.url + `user-posts?upid=${upid}`, post);
   }
 
+  async updateUserPhoto(uid, file){
+    return this.request.upload(this.url + `users/${uid}/photo`, file);
+  }
+
+  async updateUserFullName(name){
+    return this.request.put(this.url + `users/full-name?full-name=${name}`)
+  }
+
+  async updateUserBio(bio){
+    return this.request.put(this.url + `users/bio`, {bio: bio});
+  }
+
   async currentUser(){
     return this.request.get(this.url + "current-user");
   }
@@ -73,7 +85,6 @@ class DevSeater{
   async userPostComments(upid, number = 2){
     return this.request.get(this.url + `user-posts/${upid}/comments?number=${number}`);
   }
-
 
   
   async likeUserPostComment(upcid){
@@ -109,12 +120,27 @@ class DevSeater{
     return this.request.get(this.url + `unfollow/${uid}`);
   }
 
-  async userSeaters(uid){
+  async userSeaters(uid=null){
     return this.request.get(this.url + `users/${uid}/seaters`);
   }
 
-  async userSkills(uid){
-    return this.request.get(this.url + `user-skills?uid=${uid}`);
+  async userSkills(uid=null){
+    if(uid == null){
+      return this.request.get(this.url + `user-skills`);
+    }
+    else{
+      return this.request.get(this.url + `user-skills?uid=${uid}`);
+    }
+  }
+
+
+  async userLinks(uid=null){
+    if(uid == null){
+      return this.request.get(this.url + `user-links`);
+    }
+    else{
+      return this.request.get(this.url + `user-links?uid=${uid}`);
+    }
   }
 
   //PROJECT POSTS
