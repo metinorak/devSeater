@@ -107,8 +107,11 @@ def userLinks():
     elif request.method == "POST":
         #Adding new user link
         data = json.loads(request.data)
-        ModelObject["userModel"].addUserLink(getCurrentUid(), data["name"], data["link"])
-        return json.dumps({"result" : "success"})
+        ulid = ModelObject["userModel"].addUserLink(getCurrentUid(), data["name"], data["link"])
+        return json.dumps({
+            "result" : "success",
+            "ulid": ulid 
+        })
         
     elif request.method == "PUT":
         #Updating a user link

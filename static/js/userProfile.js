@@ -155,13 +155,31 @@ function eventListeners(){
   contentArea.addEventListener("click", e => {
 
     if(e.target.id == "add-new-link"){
-      
+      ui.getNewLinkFromUser()
+      .then(link => {
+        let linkList = e.target.previousElementSibling.firstElementChild;
+        devSeater.addUserLink(link)
+        .then(response => {
+          if(response["result"] == "success"){
+            link["ulid"] = response["ulid"];
+            ui.addLinkListItem(link, linkList);
+          }
+        })
+        .catch(err => console.log(err));
+      })
+      .catch(err => console.error(err));
+
+      e.preventDefault();
     }
     else if(e.target.classList.contains("delete-user-link")){
+      e.target.parentElement.remove();
 
+      e.preventDefault();
     }
     else if(e.target.classList.contains("delete-user-skill")){
+      e.target.parentElement.remove();
 
+      e.preventDefault();
     }
     else if(e.target.id == "add-new-skill"){
 

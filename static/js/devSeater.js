@@ -143,6 +143,10 @@ class DevSeater{
     }
   }
 
+  async addUserLink(link){
+    return this.request.post(this.url + `user-links`, link);
+  }
+
   //PROJECT POSTS
   async sendProjectPost(pid, post){
     return this.request.post(this.url + `projects/${pid}/posts`, {post: post});

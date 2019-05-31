@@ -10,6 +10,7 @@ class UI{
     this.postTextarea = document.getElementById("post-textarea");
     this.contentArea = document.querySelector(".content-area");
     this.navbar = document.querySelector("navbar");
+    this.generalModal = document.querySelector("#general-modal");
   }
 
   showGeneralResults(results){
@@ -895,7 +896,7 @@ class UI{
     if(currentUser["uid"] == member["uid"]){
       var followButton = "";
     }
-    else if(!member["isFollowed"]){
+    else if(member["isFollowed"]){
       var followButton = `<button class="btn btn-light follow-button followed">Followed</button>`;
     }
     else{
@@ -1170,6 +1171,63 @@ class UI{
       element.nextElementSibling.remove();
     }
     element.insertAdjacentElement("afterend", messageElement);
+  }
+  
+  async getNewLinkFromUser(){
+    return new Promise((resolve, reject) => {
+      //Set General Modal
+      let modalBody = document.createElement("div");
+      let urlInput = document.createElement("input");
+      urlInput.className = "form-control";
+      urlInput.setAttribute("id", "url-input");
+      urlInput.setAttribute("type", "text");
+      urlInput.setAttribute("placeholder", "http://");
+
+      let nameInput = document.createElement("input");
+      nameInput.className = "form-control mt-2";
+      nameInput.setAttribute("id", "name-input");
+      nameInput.setAttribute("type", "text");
+      nameInput.setAttribute("placeholder", "link name: (ex: Blog, Github, Twitter)");
+
+      modalBody.appendChild(urlInput);
+      modalBody.appendChild(nameInput);
+
+      this.setModal(this.generalModal, "Add New Link", modalBody);
+
+      let saveButton = this.generalModal.querySelector("#save-general-modal-changes");
+      
+      //Retrieve inputs
+      saveButton.addEventListener("click", e => {
+        let link = this.generalModal.querySelector("#url-input").value;
+        let name = this.generalModal.querySelector("#name-input").value;
+        $("#general-modal").modal("hide");
+        resolve({link: link, name: name});
+      });
+
+      $("#general-modal").modal("show");
+
+    });
+  }
+
+  addLinkListItem(link, container){
+    let element = document.createElement("li");
+    element.setAttribute("ulid", link["ulid"]);
+    element.className = "list-group-item";
+    element.innerHTML = 
+    `<a href="${link["link"]}">${link["name"]}</a>
+     <a href="#" class="btn btn-danger float-right delete-user-link">Delete</a>
+     `;
+
+    container.appendChild(element);
+  }
+
+  
+  setModal(modal, title, body){
+    let modalTitle = modal.querySelector(".modal-title");
+    let modalBody = modal.querySelector(".modal-body");
+
+    modalTitle.innerText = title;
+    modalBody.innerHTML = body.outerHTML;
   }
 
   showProjectPageSettings(project, links){

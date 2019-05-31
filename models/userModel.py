@@ -247,9 +247,11 @@ class UserModel(Database):
     cursor = connection.cursor(dictionary=True)
     query = "INSERT INTO userLinks(uid, name, link) VALUES(%s, %s, %s)"
     cursor.execute(query, (uid, name, link))
+    ulid = cursor.lastrowid
     connection.commit()
     cursor.close()
     connection.close()
+    return ulid
   
   @exception_handling
   def removeUserLink(self, ulid):
