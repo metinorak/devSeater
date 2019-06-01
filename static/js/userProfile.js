@@ -172,24 +172,52 @@ function eventListeners(){
       e.preventDefault();
     }
     else if(e.target.classList.contains("delete-user-link")){
-      e.target.parentElement.remove();
+      if (confirm("Are you sure to delete this link?")){
+        let ulid = e.target.parentElement.getAttribute("ulid");
+
+        devSeater.deleteUserLink(ulid)
+        .then(response => {
+          e.target.parentElement.remove();
+        })
+        .catch(err => console.error(err));
+      }
+      
 
       e.preventDefault();
     }
     else if(e.target.classList.contains("delete-user-skill")){
-      e.target.parentElement.remove();
+      let skid = e.target.parentElement.getAttribute("skid");
 
+      if(confirm("Are you sure to delete this skill?")){
+        devSeater.deleteUserSkill(skid)
+        .then(response => {
+          if(response["ok"]){
+            e.target.parentElement.remove();
+          }
+        })
+        .catch(err => console.log(err));
+      }
       e.preventDefault();
     }
     else if(e.target.id == "add-new-skill"){
+      ui.getNewSkillFromUser()
+      .then(skill => {
+        let skillList = e.target.previousElementSibling.firstElementChild;
+        devSeater.addUserSkill(skill)
+        .then(response => {
+          if(response["result"] == "success"){
+            let skid = response["skid"];
+            let skillElement = {name: skill, skid: skid};
+            ui.addSkillListItem(skillElement, skillList);
+          }
+        })
+        .catch(err => console.log(err));
+      })
+      .catch(err => console.log(err));
 
+      e.preventDefault();
     }
 
   });
   
-}
-
-function addNewLinkInput(e){
-  ui.addAnotherLinkInput(e.target.previousElementSibling);
-  e.preventDefault();
 }

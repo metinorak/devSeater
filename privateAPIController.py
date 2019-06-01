@@ -105,13 +105,18 @@ def userLinks():
         links = ModelObject["userModel"].getUserLinks(uid)
         return json.dumps(links, cls=DateTimeEncoder)
     elif request.method == "POST":
-        #Adding new user link
+        #Stripping
         data = json.loads(request.data)
-        ulid = ModelObject["userModel"].addUserLink(getCurrentUid(), data["name"], data["link"])
-        return json.dumps({
-            "result" : "success",
-            "ulid": ulid 
-        })
+        data["name"] = data["name"].strip()
+        data["link"] = data["link"].strip()
+
+        #Adding new user link
+        if data["name"] != "" and data["link"] != "":
+            ulid = ModelObject["userModel"].addUserLink(getCurrentUid(), data["name"], data["link"])
+            return json.dumps({
+                "result" : "success",
+                "ulid": ulid 
+            })
         
     elif request.method == "PUT":
         #Updating a user link
@@ -137,6 +142,7 @@ def userLinks():
             return json.dumps({"result" : "success"})
         else:
             return render_template("private-api/forbidden-request.html")
+    return render_template("private-api/unknown-request.html")
 
 
 
@@ -162,27 +168,44 @@ def userPosts():
     elif request.method == "POST":
         #Add user post
         data = json.loads(request.data)
-        ModelObject["userPostModel"].addUserPost(getCurrentUid(), data["post"])
-        return json.dumps({"result" : "success"})
+        data["post"] = data["post"].strip()
+
+        if data["post"] != "":
+            ModelObject["userPostModel"].addUserPost(getCurrentUid(), data["post"])
+            return json.dumps({"result" : "success"})
+        else:
+            return json.dumps({
+                "result" : "fail",
+                "msg": "The post cannot be empty!"
+                })
 
     elif request.method == "PUT":
-        #Update user post
-        data = json.loads(request.data)
+        #Get user post id
         upid = request.args.get("upid")
 
-        post = ModelObject["userPostModel"].getUserPost(upid)
+        #Update user post
+        data = json.loads(request.data)
+        
+        #Stripping
+        data["post"] = data["post"].strip()
+
+        if upid == "" or upid == None or data["post"] == "":
+            return json.dumps({
+                "result": "fail",
+                "msg": "upid and post cannot be empty"
+            })
+
+        post = ModelObject["userPostModel"].getUserPost(["upid"])
 
         if post["uid"] == getCurrentUid():
-            ModelObject["userPostModel"].updateUserPost(data["upid"], data["post"])
+            ModelObject["userPostModel"].updateUserPost(upid, data["post"])
             return json.dumps({"result" : "success"})
         else:
             return render_template("private-api/forbidden-request.html")
 
     else:
         #Delete a user post
-
         upid = request.args.get("upid")
-
         post = ModelObject["userPostModel"].getUserPost(upid)
 
         if post["uid"] == getCurrentUid():
@@ -190,6 +213,7 @@ def userPosts():
             return '{"result" : "success"}'
         else:
             return render_template("private-api/forbidden-request.html")
+    return render_template("private-api/unknown-request.html")
 
 @app.route("/private-api/previous-following-posts")
 @login_required
@@ -401,22 +425,20 @@ def userSkills():
     elif request.method == "POST":
         skill = request.args.get("skill")
         if skill != None:
-            ModelObject["skillModel"].addUserSkill(getCurrentUid(), skill)
-            return '{"result" : "success"}'
+            skid = ModelObject["skillModel"].addUserSkill(getCurrentUid(), skill)
+            return json.dumps({
+                "result": "success",
+                "skid": skid
+            })
 
     else:
         #Delete a user skill
         skid = request.args.get("skid")
 
         if skid != None:
-            skill = ModelObject["skillModel"].getUserSkill(skid)
-
-            if skill["uid"] == getCurrentUid():
-                ModelObject["skillModel"].removeUserSkill(skid)
-                return '{"result" : "success"}'
-            else:
-                return render_template("private-api/forbidden-request.html")
-        
+            ModelObject["skillModel"].removeUserSkill(getCurrentUid(), skid)
+            return json.dumps({"result": "success"})
+    
     return render_template("private-api/unknown-request.html")
 
 #SEATER SKILLS
@@ -769,23 +791,42 @@ def projectPosts(pid):
         if not ModelObject["projectModel"].isProjectMember(getCurrentUid(), pid):
             return render_template("private-api/forbidden-request.html")
 
-        #Add project post
+        #Stripping
         data = json.loads(request.data)
-        ModelObject["projectPostModel"].addProjectPost(getCurrentUid(), pid, data["post"])
-        return json.dumps({"result" : "success"})
+        data["post"] = data["post"].strip()
+
+        if data["post"] != "":
+            #Add project post
+            ModelObject["projectPostModel"].addProjectPost(getCurrentUid(), pid, data["post"])
+            return json.dumps({"result" : "success"})
+        else:
+            return json.dumps({
+                "result": "fail",
+                "msg": "post cannot be empty"
+            })
 
     elif request.method == "PUT":
         if not ModelObject["projectModel"].isProjectMember(getCurrentUid(), pid):
             return render_template("private-api/forbidden-request.html")
 
-        #Update project post
+        #Stripping
         data = json.loads(request.data)
+        data["post"] = data["post"].strip()
+
+        #Update project post
         ppid = request.args.get("ppid")
+
+        #Validate
+        if data["post"] == "" or ppid == None:
+            return json.dumps({
+                "result": "fail",
+                "msg": "ppid and post cannot be empty"
+            })
 
         post = ModelObject["projectPostModel"].getProjectPost(ppid)
 
         if post["uid"] == getCurrentUid():
-            ModelObject["projectPostModel"].updateProjectPost(data["ppid"], data["post"])
+            ModelObject["projectPostModel"].updateProjectPost(ppid, data["post"])
             return json.dumps({"result" : "success"})
         else:
             return render_template("private-api/forbidden-request.html")
@@ -800,6 +841,7 @@ def projectPosts(pid):
             return '{"result" : "success"}'
         else:
             return render_template("private-api/forbidden-request.html")
+    return render_template("private-api/unknown-request.html")
 
 @app.route("/private-api/projects/<string:pid>/members/check/<string:uid>")
 @login_required
@@ -838,7 +880,6 @@ def projectPostLikeNumber(ppid):
 def projectPostCommentNumber(ppid):
     number = ModelObject["projectPostModel"].getProjectPostCommentNumber(ppid)
     return json.dumps({"number" : number})
-
 
 
 @app.route("/private-api/project-posts/<string:ppid>/comments", methods = ["GET", "POST", "PUT", "DELETE"])

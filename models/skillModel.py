@@ -66,8 +66,8 @@ class SkillModel(Database):
     cursor = connection.cursor(dictionary=True)
 
     if self.isThereThisSkill(skill):
-      skid = self.getSkillByName(skill)
-      
+      skid = self.getSkillByName(skill)["skid"]
+    
     else:
       #Adding skill to the skills table
       query = "INSERT INTO skills(name) VALUES(%s)"
@@ -83,6 +83,7 @@ class SkillModel(Database):
     connection.commit()
     cursor.close()
     connection.close()
+    return skid
 
   @exception_handling
   def addSeaterSkill(self, sid, skill):
@@ -90,7 +91,7 @@ class SkillModel(Database):
     cursor = connection.cursor(dictionary=True)
 
     if self.isThereThisSkill(skill):
-      skid = self.getSkillByName(skill)
+      skid = self.getSkillByName(skill)["skid"]
     
     else:
       #Adding skill to the skills table
@@ -101,30 +102,31 @@ class SkillModel(Database):
       skid = cursor.lastrowid
 
     #Adding user skill
-    query = "INSERT INTO seaterSkills(uid, skid) VALUES(%s, %s)"
-    cursor.execute(query, (uid, skid) )
+    query = "INSERT INTO seaterSkills(sid, skid) VALUES(%s, %s)"
+    cursor.execute(query, (sid, skid) )
 
     connection.commit()
     cursor.close()
     connection.close()
+    return skid
 
   @exception_handling
-  def removeUserSkill(self, skid):
+  def removeUserSkill(self, uid, skid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
-    query = "DELETE FROM userSkills WHERE skid = %s"
-    cursor.execute(query, (skid,) )
+    query = "DELETE FROM userSkills WHERE uid = %s AND skid = %s"
+    cursor.execute(query, (uid, skid) )
     connection.commit()
 
     cursor.close()
     connection.close()
   
   @exception_handling
-  def removeSeaterSkill(self, skid):
+  def removeSeaterSkill(self, sid, skid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
-    query = "DELETE FROM seaterSkills WHERE skid = %s"
-    cursor.execute(query, (skid,) )
+    query = "DELETE FROM seaterSkills WHERE sid = %s AND skid = %s"
+    cursor.execute(query, (sid, skid) )
     connection.commit()
     cursor.close()
     connection.close()
@@ -144,7 +146,7 @@ class SkillModel(Database):
   def isThereThisSkill(self, skillName):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
-    query = "SELECT * FROM skills WHERE skill = %s"
+    query = "SELECT * FROM skills WHERE name = %s"
     result = cursor.execute(query, (skillName,) )
     result = cursor.fetchone()
     cursor.close()

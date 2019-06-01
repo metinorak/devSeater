@@ -1090,7 +1090,7 @@ class UI{
       element.className = "list-group-item";
       element.setAttribute("skid", s["skid"]);
       element.innerHTML = 
-      `<a href="${s["link"]}">${s["name"]}</a>
+      `<span>${s["name"]}</span>
        <a href="#" class="btn btn-danger float-right delete-user-skill">Delete</a>`;
 
       skillList.appendChild(element);
@@ -1209,6 +1209,34 @@ class UI{
     });
   }
 
+  async getNewSkillFromUser(){
+    return new Promise((resolve, reject) => {
+      //Set General Modal
+      let modalBody = document.createElement("div");
+      let skillInput = document.createElement("input");
+      skillInput.className = "form-control";
+      skillInput.setAttribute("id", "skill-input");
+      skillInput.setAttribute("type", "text");
+      skillInput.setAttribute("placeholder", "ex: Java, C++, OOP, Machine Learning");
+
+      modalBody.appendChild(skillInput);
+
+      this.setModal(this.generalModal, "Add New Skill", modalBody);
+
+      let saveButton = this.generalModal.querySelector("#save-general-modal-changes");
+      
+      //Retrieve inputs
+      saveButton.addEventListener("click", e => {
+        let skill = this.generalModal.querySelector("#skill-input").value;
+        $("#general-modal").modal("hide");
+        resolve(skill);
+      });
+
+      $("#general-modal").modal("show");
+
+    });
+  }
+  
   addLinkListItem(link, container){
     let element = document.createElement("li");
     element.setAttribute("ulid", link["ulid"]);
@@ -1221,7 +1249,17 @@ class UI{
     container.appendChild(element);
   }
 
-  
+  addSkillListItem(skill, container){
+    let element = document.createElement("li");
+    element.className = "list-group-item";
+    element.setAttribute("skid", skill["skid"]);
+    element.innerHTML = 
+    `<span>${skill["name"]}</span>
+     <a href="#" class="btn btn-danger float-right delete-user-skill">Delete</a>`;
+
+    container.appendChild(element);
+  }  
+
   setModal(modal, title, body){
     let modalTitle = modal.querySelector(".modal-title");
     let modalBody = modal.querySelector(".modal-body");

@@ -133,6 +133,13 @@ class DevSeater{
     }
   }
 
+  async addUserSkill(skill){
+    return this.request.post(this.url + `user-skills?skill=${skill}`);
+  }
+
+  async deleteUserSkill(skid){
+    return this.request.delete(this.url + `user-skills?skid=${skid}`);
+  }
 
   async userLinks(uid=null){
     if(uid == null){
@@ -145,6 +152,10 @@ class DevSeater{
 
   async addUserLink(link){
     return this.request.post(this.url + `user-links`, link);
+  }
+
+  async deleteUserLink(ulid){
+    return this.request.delete(this.url + `user-links?ulid=${ulid}`);
   }
 
   //PROJECT POSTS
