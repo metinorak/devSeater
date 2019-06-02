@@ -38,6 +38,16 @@ function eventListeners(){
 			}
 		})
 		.catch(err => console.error(err));
+
+		devSeater.isProjectAdmin(pid, Session.getCurrentUser()["uid"])
+		.then(response => {
+			console.log(response);
+			if(response["result"]){
+				editProjectButton.style.display = "inline";
+			}
+		})
+		.catch(err => console.error(err));
+
 	});
 
 	membersButton.addEventListener("click", e=>{

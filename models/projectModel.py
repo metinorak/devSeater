@@ -174,9 +174,9 @@ class ProjectModel(Database):
   def isProjectAdmin(self, uid, pid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
-    query = "SELECT * FROM users WHERE uid IN (SELECT uid FROM projectAdmins WHERE pid = %s)"
-    result = cursor.execute(query, (pid,) )
-    result = cursor.fetchall()
+    query = "SELECT * FROM projectAdmins WHERE uid = %s AND pid = %s"
+    result = cursor.execute(query, (uid, pid) )
+    result = cursor.fetchone()
     cursor.close()
     connection.close()
     return (result != None)

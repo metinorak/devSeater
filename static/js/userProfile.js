@@ -2,6 +2,7 @@
 const messageButton = document.querySelector(".message-button");
 const followButton = document.querySelector(".follow-button");
 const userProfileCard = document.querySelector("#user-profile-card");
+const uid = userProfileCard.getAttribute("uid");
 const contentArea = document.querySelector(".content-area");
 const userFullNameInfo = document.querySelector(".user-full-name-info");
 const userBioInfo = document.querySelector(".user-bio-info");
@@ -20,6 +21,10 @@ function eventListeners(){
     if(Session.getCurrentUser()["uid"] == uid){
       messageButton.style.display = "none";
       followButton.style.display = "none";
+    }
+
+    if(uid == Session.getCurrentUser()["uid"]){
+      editProfileButton.style.display = "inline";
     }
   });
 
