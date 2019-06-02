@@ -23,7 +23,7 @@ function eventListeners(){
     if(e.target.classList.contains("follow-button")){
       let uid = e.target.parentElement.getAttribute("uid");
 
-      if(e.target.classList.contains("followed")){
+      if(e.target.classList.contains("following")){
         //Unfollow the user
         devSeater.unFollow(uid)
         .then(response => {

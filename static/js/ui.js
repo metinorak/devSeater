@@ -897,7 +897,7 @@ class UI{
       var followButton = "";
     }
     else if(member["isFollowed"]){
-      var followButton = `<button class="btn btn-light follow-button followed">Followed</button>`;
+      var followButton = `<button class="btn btn-light follow-button following">Following</button>`;
     }
     else{
       var followButton = `<button class="btn btn-light follow-button">Follow</button>`;
@@ -961,13 +961,13 @@ class UI{
   }
 
   follow(followButton){
-    followButton.textContent = "Followed";
-    followButton.classList.add("followed");
+    followButton.textContent = "Following";
+    followButton.classList.add("following");
   }
 
   unFollow(followButton){
     followButton.textContent = "Follow";
-    followButton.classList.remove("followed");
+    followButton.classList.remove("following");
   }
 
   showPostTextAreaCard(){
