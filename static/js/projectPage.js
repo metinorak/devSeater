@@ -237,7 +237,13 @@ function eventListeners(){
 		if(e.target.id == "create-a-new-seater"){
 			ui.getSeaterFromUser()
 			.then(seater => {
-				console.log(seater);
+				devSeater.createSeater(pid, seater)
+				.then(response => {
+					if(response["result"] == "success"){
+						redirect(`/p/${projectNameInfo.textContent}/seaters/${response["sid"]}`);
+					}
+				})	
+				.catch(err => console.error(err));
 			})
 			.catch(err => console.error(err));
 		}

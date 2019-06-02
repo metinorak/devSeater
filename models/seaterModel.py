@@ -114,8 +114,8 @@ class SeaterModel(Database):
   def createSeater(self, pid, seater):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
-    query = "INSERT INTO seaters(pid, title, description) VALUES(%s, %s, %s)"
-    cursor.execute(query, (seater["pid"], seater["title"], seater["description"]) )
+    query = "INSERT INTO seaters(pid, title, short_description, full_description) VALUES(%s, %s, %s, %s)"
+    cursor.execute(query, (seater["pid"], seater["title"], seater["short_description"], seater["full_description"]) )
     sid = cursor.lastrowid
     connection.commit()
     cursor.close()

@@ -63,6 +63,9 @@ def projectPage(projectName):
     numberOfEmptySeaters = numberOfEmptySeaters
     )
   
-@app.route("/p/<string:projectName>/<string:sid>")
+@app.route("/p/<string:projectName>/seaters/<string:sid>")
 def seaterPage(projectName, sid):
-  pass
+  return render_template(
+    "seater-page.html",
+    currentUser= getCurrentUser()
+  )

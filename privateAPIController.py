@@ -524,9 +524,9 @@ def userSeaterNumber(uid):
     return json.dumps({"number" : number})
 
 @app.route("/private-api/seaters/<string:sid>")
-@login_required
 def getSeater(sid):
     seater = ModelObject["seaterModel"].getSeater(sid)
+    seater["skills"] = ModelObject["skillModel"].getSeaterSkills(sid)
     return json.dumps(seater, cls=DateTimeEncoder)
 
 @app.route("/private-api/projects/<string:pid>/seaters", methods = ["POST"])
@@ -534,6 +534,7 @@ def getSeater(sid):
 def createSeater(pid):
     if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), pid):
         seater = json.loads(request.data)
+        seater["pid"] = pid
         sid = ModelObject["seaterModel"].createSeater(pid, seater)
 
         #Add skills

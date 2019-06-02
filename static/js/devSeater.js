@@ -244,7 +244,7 @@ class DevSeater{
     return this.request.put(this.url + `projects/${pid}/full-description`, {description: description});
   }
 
-  async createSeater(pid){
+  async createSeater(pid, seater){
     return this.request.post(this.url + `projects/${pid}/seaters`, seater)
   }
 

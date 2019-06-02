@@ -1299,8 +1299,8 @@ class UI{
         $("#general-modal").modal("hide");
         resolve({
           title: title,
-          shortDescription: shortDescription,
-          fullDescription: fullDescription,
+          short_description: shortDescription,
+          full_description: fullDescription,
           skills: skills
         });
       });

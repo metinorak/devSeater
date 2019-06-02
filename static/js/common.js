@@ -149,3 +149,7 @@ function renderPosts(posts){
 function renderText(text){
 	return markDownConverter.makeHtml(text);
 }
+
+function redirect(url){
+	location.href = url;
+}
