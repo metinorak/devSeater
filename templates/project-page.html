@@ -18,8 +18,8 @@
                         <img class="project-img" src="{{url_for('static', filename='img/empty-project.png')}}" alt=""><br>
                       {% endif %}
                            
-                      <h1>{{project.project_name}}</h1>
-                      <span>
+                      <h1 id="project-name-info">{{project.project_name}}</h1>
+                      <span id="project-short-description-info">
                           {% if project.short_description != None %}
                                   {{project.short_description}}
                           {% endif %}
@@ -62,7 +62,7 @@
                       <button type="button" class="btn btn-outline-secondary" id="members-button">Members</button>
                       <button type="button" class="btn btn-outline-secondary" id="about-button">About</button>
                     </div>
-                    <button type="button" title="edit profile" class="btn profile-settings-button float-right" id="edit-profile-button"></button>
+                    <button type="button" title="edit project" class="btn profile-settings-button float-right" id="edit-project-button"></button>
                   </div>
 
                 <div class="post-textarea-card" style="display: none;">

@@ -228,6 +228,22 @@ class DevSeater{
     return this.request.get(this.url + `projects/${pid}`);
   }
 
+  async updateProjectPhoto(pid, file){
+    return this.request.upload(this.url + `projects/${pid}/photo`, file);
+  }
+
+  async updateProjectName(pid, name){
+    return this.request.put(this.url + `projects/${pid}/name/${name}`);
+  }
+
+  async updateProjectShortDescription(description){
+    return this.request.put(this.url + `projects/${pid}/short-description`, {description: description});
+  }
+
+  async updateProjectFullDescription(description){
+    return this.request.put(this.url + `projects/${pid}/full-description`, {description: description});
+  }
+
   async projectEmptySeaters(pid){
     return this.request.get(this.url + `projects/${pid}/seaters/empty`);
   }
@@ -247,4 +263,17 @@ class DevSeater{
   async isProjectAdmin(pid, uid){
     return this.request.get(this.url + `projects/${pid}/admins/check/${uid}`)
   }
+
+  async projectLinks(pid){
+    return this.request.get(this.url + `projects/${pid}/links`);
+  }
+
+  async addProjectLink(pid, link){
+    return this.request.post(this.url + `projects/${pid}/links`, link);
+  }
+
+  async deleteProjectLink(plid){
+    return this.request.delete(this.url + `projects/no-matters/links?plid=${plid}`);
+  }
+
 }

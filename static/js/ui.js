@@ -1259,6 +1259,85 @@ class UI{
 
     container.appendChild(element);
   }  
+  
+  showProjectPageSettings(project, links, mdeCallBack){
+    let linkList = document.createElement("ul");
+    linkList.className = "list-group";
+    links.forEach(l => {
+      let element = document.createElement("li");
+      element.setAttribute("plid", l["plid"]);
+      element.className = "list-group-item";
+      element.innerHTML = 
+      `<a href="${l["link"]}">${l["name"]}</a>
+       <a href="#" class="btn btn-danger float-right" id="delete-project-link">Delete</a>
+       `;
+
+      linkList.appendChild(element);
+    });
+
+    let card = 
+    `
+    <div class="card">
+      <h5 class="card-header">Project Settings</h5>
+      <div class="card-body">
+        <ul class="nav nav-tabs" id="project-setting-tabs" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="project-tab" data-toggle="tab" href="#project-tab-content" role="tab" aria-controls="home" aria-selected="true">Project</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="links-tab" data-toggle="tab" href="#links-tab-content" role="tab" aria-controls="profile" aria-selected="false">Links</a>
+          </li>
+        </ul>
+        <div class="tab-content mt-2">
+          <div class="tab-pane fade show active" id="project-tab-content" role="tabpanel" aria-labelledby="project-tab">
+            <form>
+              <div class="form-group">
+                <label>Project Photo (16:9 ratio)</label>
+                <input type="file" accept="image" class="form-control" id="project-photo" >
+              </div>
+            </form>
+            <div class="form-group">
+              <label>Project Name</label>
+              <input type="text" class="form-control" id="project-name" placeholder="Project Name" value="${project["project_name"]}">
+            </div>
+
+            <div class="form-group">
+              <label>Short Description (max 100 chars)</label>
+              <textarea class="form-control" id="project-short-description" rows="3" maxlength="100">${project["short_description"]}</textarea>
+              <span class="char-number"></span>
+            </div>
+
+            <div class="form-group">
+              <label>Full Description (markdown)</label>
+              <textarea class="form-control" id="project-full-description">${project["full_description"]}</textarea>
+              <span class="char-number"></span>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="links-tab-content" role="tabpanel" aria-labelledby="links-tab">
+          <div>${linkList.outerHTML}</div>
+          <a href="#" id="add-new-link" class="btn btn-primary mt-2">Add new link</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    `;
+
+    this.contentArea.innerHTML = card;
+
+    var simplemde = new SimpleMDE({
+      element: this.contentArea.querySelector("#project-full-description"),
+      showIcons: ["code"],
+      hideIcons: ["side-by-side", "fullscreen"],
+      spellChecker: false
+    
+    });
+
+    mdeCallBack(simplemde);
+
+    document.querySelector("#project-short-description").addEventListener("input", e => {
+      document.querySelector(".char-number").textContent = `char number: ${e.target.value.length}`;
+    });
+  }
 
   setModal(modal, title, body){
     let modalTitle = modal.querySelector(".modal-title");
@@ -1266,9 +1345,5 @@ class UI{
 
     modalTitle.innerText = title;
     modalBody.innerHTML = body.outerHTML;
-  }
-
-  showProjectPageSettings(project, links){
-
   }
 }

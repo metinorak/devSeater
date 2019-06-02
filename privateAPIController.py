@@ -699,34 +699,31 @@ def isThereThisProjectName(name):
     })
     
 
-@app.route("/private-api/projects/<string:pid>/photo", methods = ["PUT", "DELETE"])
+@app.route("/private-api/projects/<string:pid>/photo", methods = ["POST", "DELETE"])
 @login_required
 def projectPhoto(pid):
+    project = ModelObject["projectModel"].getProject(pid)
     if not ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), pid):
         return render_template("private-api/forbidden-request.html")
 
-    if request.method == "PUT":
-        # check if the post request has the file part
-        if 'photo' not in request.files:
-            return '{result : "fail"}'
-        file = request.files['file']
-        # if user does not select file, browser also
-        # submit a empty part without filename
-        if file.filename == '':
-            flash('No selected file')
+    if request.method == "POST":
+        size = len(request.data) / 1000000
+        if size > 2:
             return json.dumps({
-                "result" : "fail",
-                "msg" : "Please choose a photo"
-            })
-        if file and isAnAllowedPhotoFile(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(UPLOAD_FOLDER + "/projects/pp", filename))
-            ModelObject["projectModel"].updateProjectPhoto(pid, filename)
-            return '{"result" : "success"}'
-    else:
-        #Delete Project Photo
-        ModelObject["projectModel"].updateProjectPhoto(pid, NULL)
-        return '{"result" : "success"}'
+                "result": "fail",
+                "msg": "File can not be more than 2 MB"
+                })
+        #Delete old uploaded file
+        if project["photo"] != None:
+            os.remove(UPLOAD_FOLDER + "/projects/pp/" + project["photo"])
+
+        newFileName = str(pid) + "_" + generateCode(10) + ".jpg"
+
+        with open(UPLOAD_FOLDER + "/projects/pp/" + newFileName, "wb") as fh:
+            fh.write(request.data)
+            ModelObject["projectModel"].updateProjectPhoto(pid, newFileName)
+            return json.dumps({"result": "success"})
+    return json.dumps({"result": "fail"})
 
 @app.route("/private-api/projects/<string:pid>/name/<string:newName>", methods = ["PUT"])
 @login_required
@@ -752,7 +749,7 @@ def updateProjectShortDescription(pid):
     description = json.loads(request.data)["description"]
 
     ModelObject["projectModel"].updateShortDescription(pid, description)
-    return '{"result" : "success"}'
+    return json.dumps({"result": "success"})
 
 @app.route("/private-api/projects/<string:pid>/full-description", methods = ["PUT"])
 @login_required
@@ -763,13 +760,61 @@ def updateProjectFullDescription(pid):
     description = json.loads(request.data)["description"]
 
     ModelObject["projectModel"].updateFullDescription(pid, description)
-    return '{"result" : "success"}'
+    return json.dumps({"result": "success"})
 
 @app.route("/private-api/projects/<string:pid>/admins")
 @login_required
 def getProjectAdmins(pid):
     admins = ModelObject["projectModel"].getProjectAdmins(pid)
     return json.dumps(admins, cls=DateTimeEncoder)
+
+@app.route("/private-api/projects/<string:pid>/links", methods = ["GET", "POST", "PUT", "DELETE"])
+@login_required
+def projectLinks(pid):
+    if request.method == "GET":
+        #Getting all project's links
+        links = ModelObject["projectModel"].getProjectLinks(pid)
+        return json.dumps(links, cls=DateTimeEncoder)
+    elif request.method == "POST":
+        #Stripping
+        print(request.data)
+        data = json.loads(request.data)
+        data["name"] = data["name"].strip()
+        data["link"] = data["link"].strip()
+
+        #Adding new project link
+        if data["name"] != "" and data["link"] != "":
+            plid = ModelObject["projectModel"].addProjectLink(pid, data["name"], data["link"])
+            return json.dumps({
+                "result" : "success",
+                "plid": plid 
+            })
+        
+    elif request.method == "PUT":
+        #Updating a user link
+        data = json.loads(request.data)
+        plid = request.args.get("plid")
+        link = ModelObject["projectModel"].getProjectLink(plid)
+
+        if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), pid):
+            ModelObject["projectModel"].updateProjectLink(plid, data["name"], data["link"])
+            return json.dumps({"result" : "success"})
+        else:
+            return render_template("private-api/forbidden-request.html")
+
+    else:
+        #Delete a user link
+        #DELETE request
+
+        plid = request.args.get("plid")
+        link = ModelObject["projectModel"].getProjectLink(plid)
+
+        if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), link["pid"]):
+            ModelObject["projectModel"].removeProjectLink(plid)
+            return json.dumps({"result" : "success"})
+        else:
+            return render_template("private-api/forbidden-request.html")
+    return render_template("private-api/unknown-request.html")
 
 
 

@@ -3,6 +3,9 @@ const postTextArea = document.getElementById("post-textarea");
 const postButton = document.getElementById("post-button");
 const projectProfileCard = document.getElementById("project-profile-card");
 const pid = projectProfileCard.getAttribute("pid");
+const contentArea = document.querySelector(".content-area");
+const projectNameInfo = document.querySelector("#project-name-info");
+const projectShortDescriptionInfo = document.querySelector("#project-short-description-info");
 
 // Selecting tab buttons
 const postsButton = document.getElementById("posts-button");
@@ -10,7 +13,7 @@ const seatersButton = document.getElementById("seaters-button");
 const membersButton = document.getElementById("members-button");
 const aboutButton = document.getElementById("about-button");
 const membersLink = document.getElementById("members-link");
-
+const editProjectButton = document.querySelector("#edit-project-button");
 
 //SIMPLEMDE textarea control
 if(postTextArea != null){
@@ -100,6 +103,36 @@ function eventListeners(){
 		.catch(err => console.error(err));
 	});
 
+	editProjectButton.addEventListener("click", e => {
+
+    Promise.all([devSeater.project(pid), devSeater.projectLinks(pid)])
+    .then(values => {
+			ui.clearContentArea();
+			ui.hidePostTextAreaCard();
+      ui.showProjectPageSettings(...values, mde => {
+				var fullDescriptionInput = mde;
+
+				//Add event to the fullDescriptionInput
+				fullDescriptionInput.codemirror.on("blur", e => {
+					let element = fullDescriptionInput.element;
+					devSeater.updateProjectFullDescription(fullDescriptionInput.value())
+					.then(response => {
+						if(response["result"] == "success"){
+							ui.showMessageAfterElement(element, "Full description updated!", "success");
+						}
+						else{
+							ui.showMessageAfterElement(element, "Full description couldn't be updated!", "fail");
+						}
+					})
+					.catch(err => console.error(err));
+
+				});
+			
+			});
+    })
+    .catch(err => console.error(err));
+  });
+
 	document.addEventListener("click", e => {
 		if(e.target.id == "empty-seaters"){
 			devSeater.projectEmptySeaters(pid)
@@ -127,4 +160,101 @@ function eventListeners(){
 
 	});
 
+  //Project page settings events
+  contentArea.addEventListener("change", e => {
+    if(e.target.id == "project-photo"){
+      let file, img;
+
+      if ((file = e.target.files[0])) {
+          img = new Image();
+          img.onload = function() {
+              let ratio = this.width / this.height;
+              if(ratio == (16/9)){
+                ui.showMessageAfterElement(e.target, "File is uploading...", "info");
+                devSeater.updateProjectPhoto(pid, file)
+                .then(response => {
+									console.log(response);
+									if(response["result"] == "success")
+                    ui.showMessageAfterElement(e.target, "File uploaded!", "success");
+                  else
+                    ui.showMessageAfterElement(e.target, response["msg"], "fail");
+                })
+                .catch(err => console.error(err));
+              }
+              else{
+                alert("The file is not in the desired ratio! (16:9)");
+              }
+          };
+          img.onerror = function() {
+              alert( "not a valid file: " + file.type);
+          };
+          img.src = URL.createObjectURL(file);
+      }
+  
+    }
+
+  });
+
+  contentArea.addEventListener("focusout", e => {
+    if(e.target.id == "project-name"){
+      devSeater.updateProjectName(e.target.value)
+      .then(response => {
+        if(response["result"] == "success"){
+          ui.showMessageAfterElement(e.target, "Full name updated!", "success");
+          projectNameInfo.textContent = e.target.value;
+        }
+        else{
+          ui.showMessageAfterElement(e.target, "Full name couldn't be updated!", "fail");
+        }
+      })
+      .catch(err => console.error(err));
+    }
+    else if(e.target.id == "project-short-description"){
+      devSeater.updateProjectShortDescription(e.target.value)
+      .then(response => {
+        if(response["result"] == "success"){
+          ui.showMessageAfterElement(e.target, "Short description updated!", "success");
+          projectShortDescriptionInfo.textContent = e.target.value;
+        }
+        else{
+          ui.showMessageAfterElement(e.target, "Short description couldn't be updated!", "fail");
+        }
+      })
+      .catch(err => console.error(err));
+		}
+	});
+	
+  contentArea.addEventListener("click", e => {
+
+    if(e.target.id == "add-new-link"){
+      ui.getNewLinkFromUser()
+      .then(link => {
+				let linkList = e.target.previousElementSibling.firstElementChild;
+        devSeater.addProjectLink(pid, link)
+        .then(response => {
+          if(response["result"] == "success"){
+            link["plid"] = response["plid"];
+            ui.addLinkListItem(link, linkList);
+          }
+        })
+        .catch(err => console.log(err));
+      })
+      .catch(err => console.error(err));
+
+      e.preventDefault();
+    }
+    else if(e.target.id == "delete-project-link"){
+      if (confirm("Are you sure to delete this link?")){
+        let plid = e.target.parentElement.getAttribute("plid");
+
+        devSeater.deleteProjectLink(plid)
+        .then(response => {
+					if(response["ok"])
+          	e.target.parentElement.remove();
+        })
+        .catch(err => console.error(err));
+      }
+      e.preventDefault();
+    }
+  });
 }
