@@ -176,7 +176,7 @@ function eventListeners(){
 
       e.preventDefault();
     }
-    else if(e.target.classList.contains("delete-user-link")){
+    else if(e.target.id == "delete-user-link"){
       if (confirm("Are you sure to delete this link?")){
         let ulid = e.target.parentElement.getAttribute("ulid");
 

@@ -41,7 +41,6 @@ function eventListeners(){
 
 		devSeater.isProjectAdmin(pid, Session.getCurrentUser()["uid"])
 		.then(response => {
-			console.log(response);
 			if(response["result"]){
 				editProjectButton.style.display = "inline";
 			}
@@ -207,14 +206,14 @@ function eventListeners(){
 
   contentArea.addEventListener("focusout", e => {
     if(e.target.id == "project-name"){
-      devSeater.updateProjectName(e.target.value)
+      devSeater.updateProjectName(pid, e.target.value)
       .then(response => {
         if(response["result"] == "success"){
-          ui.showMessageAfterElement(e.target, "Full name updated!", "success");
+          ui.showMessageAfterElement(e.target, "Project name updated!", "success");
           projectNameInfo.textContent = e.target.value;
         }
         else{
-          ui.showMessageAfterElement(e.target, "Full name couldn't be updated!", "fail");
+          ui.showMessageAfterElement(e.target, "Project name couldn't be updated!", "fail");
         }
       })
       .catch(err => console.error(err));
@@ -235,6 +234,13 @@ function eventListeners(){
 	});
 	
   contentArea.addEventListener("click", e => {
+		if(e.target.id == "create-a-new-seater"){
+			ui.getSeaterFromUser()
+			.then(seater => {
+				console.log(seater);
+			})
+			.catch(err => console.error(err));
+		}
 
     if(e.target.id == "add-new-link"){
       ui.getNewLinkFromUser()

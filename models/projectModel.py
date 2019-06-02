@@ -247,9 +247,11 @@ class ProjectModel(Database):
     cursor = connection.cursor(dictionary=True)
     query = "INSERT INTO projectLinks(pid, name, link) VALUES(%s, %s, %s)"
     cursor.execute(query, (pid, name, link))
+    plid = cursor.lastrowid
     connection.commit()
     cursor.close()
     connection.close()
+    return plid
   
   @exception_handling
   def removeProjectLink(self, plid):

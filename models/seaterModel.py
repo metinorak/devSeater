@@ -116,9 +116,11 @@ class SeaterModel(Database):
     cursor = connection.cursor(dictionary=True)
     query = "INSERT INTO seaters(pid, title, description) VALUES(%s, %s, %s)"
     cursor.execute(query, (seater["pid"], seater["title"], seater["description"]) )
+    sid = cursor.lastrowid
     connection.commit()
     cursor.close()
     connection.close()
+    return sid
   
   @exception_handling
   def removeSeater(self, sid):

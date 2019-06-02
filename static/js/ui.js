@@ -254,8 +254,6 @@ class UI{
   }
 
   showSeaters(seaters){
-    
-
     if(seaters.length == 0){
       this.contentArea.textContent = "This user has no seater.";
       return;
@@ -271,8 +269,6 @@ class UI{
   }
 
   showUserSkills(skills){
-    
-
     if(skills.length == 0){
       this.contentArea.textContent = "This user has no skills.";
       return;
@@ -984,7 +980,7 @@ class UI{
   showEmptySeaters(seaters){
     
     let tabsHtml = 
-    `
+    ` <a href="#" id="create-a-new-seater" class="btn btn-secondary float-right">New Seater</a>
       <ul class="nav nav-tabs">
         <li class="nav-item">
           <a id="empty-seaters" class="nav-link active" href="#">Empty Seaters</a>
@@ -1019,7 +1015,7 @@ class UI{
   showFilledSeaters(seaters){
     
     let tabsHtml = 
-    `
+    ` <a href="#" id="create-a-new-seater" class="btn btn-secondary float-right">New Seater</a>
       <ul class="nav nav-tabs">
         <li class="nav-item">
           <a id="empty-seaters" class="nav-link" href="#">Empty Seaters</a>
@@ -1077,7 +1073,7 @@ class UI{
       element.className = "list-group-item";
       element.innerHTML = 
       `<a href="${l["link"]}">${l["name"]}</a>
-       <a href="#" class="btn btn-danger float-right delete-user-link">Delete</a>
+       <a href="#" id="delete-user-link" class="btn btn-danger float-right">Delete</a>
        `;
 
       linkList.appendChild(element);
@@ -1236,15 +1232,102 @@ class UI{
 
     });
   }
+
+  async getSeaterFromUser(seater=null){
+    return new Promise((resolve, reject) => {
+      //Seater edit
+      let titleText = "";
+      let shortDescriptionText = "";
+      let fullDescriptionText = "";
+      let skillsText = "";
+      if(seater != null){
+        titleText = seater["title"];
+        shortDescriptionText = seater["short_description"];
+        fullDescriptionText = seater["full_description"];
+        seater["skills"].forEach((index, skill) => {
+          if(index != (seater["skills"].length -1))
+            skillsText += (skill["name"] + ",");
+          else
+          skillsText += (skill["name"] + ",");
+        });
+      }
+
+      //Set General Modal
+      let modalBody = document.createElement("div");
+      let html = 
+      `
+      <form>
+        <div class="form-group">
+          <label for="title-input">Title</label>
+          <input type="text" class="form-control" id="title-input" placeholder="ex: Java Developer" value="${titleText}">
+        </div>
+        <div class="form-group">
+          <label for="short-description-input">Short Description (max 100 chars)</label>
+          <input type="text" class="form-control" id="short-description-input" maxlength="100" value = "${shortDescriptionText}">
+        </div>
+        <div class="form-group">
+          <label for="long-description-input">Full Description (markdown)</label>
+          <textarea class="form-control" id="full-description-input"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="skills-input">Skills</label>
+          <input type="text" class="form-control" id="skills-input" placeholder="separate the skills with a comma." value="${skillsText}">
+        </div>
+        
+      </form>
+      `;
+      modalBody.innerHTML = html;
+
+      this.setModal(this.generalModal, "Add New Seater", modalBody);
+
+      let simplemde = new SimpleMDE({
+        element: this.generalModal.querySelector("#full-description-input"),
+        showIcons: ["code"],
+        hideIcons: ["side-by-side", "fullscreen"],
+        spellChecker: false,
+        initialValue: fullDescriptionText
+      });
+
+      let saveButton = this.generalModal.querySelector("#save-general-modal-changes");
+      
+      //Retrieve inputs
+      saveButton.addEventListener("click", e => {
+        let title = this.generalModal.querySelector("#title-input").value;
+        let shortDescription = this.generalModal.querySelector("#short-description-input").value;
+        let fullDescription = simplemde.value();
+        let skills = this.generalModal.querySelector("#skills-input").value.trim().split(",");
+        $("#general-modal").modal("hide");
+        resolve({
+          title: title,
+          shortDescription: shortDescription,
+          fullDescription: fullDescription,
+          skills: skills
+        });
+      });
+
+      $("#general-modal").modal("show");
+
+    });
+  }
   
+
   addLinkListItem(link, container){
     let element = document.createElement("li");
-    element.setAttribute("ulid", link["ulid"]);
+    if(link["ulid"] != undefined){
+      element.setAttribute("ulid", link["ulid"]);
+      element.innerHTML = 
+      `<a href="${link["link"]}">${link["name"]}</a>
+       <a href="#" id="delete-user-link" class="btn btn-danger float-right">Delete</a>
+       `;
+    }
+    else{
+      element.innerHTML = 
+      `<a href="${link["link"]}">${link["name"]}</a>
+       <a href="#" id="delete-project-link" class="btn btn-danger float-right">Delete</a>
+       `;
+      element.setAttribute("plid", link["plid"]);
+    }
     element.className = "list-group-item";
-    element.innerHTML = 
-    `<a href="${link["link"]}">${link["name"]}</a>
-     <a href="#" class="btn btn-danger float-right delete-user-link">Delete</a>
-     `;
 
     container.appendChild(element);
   }

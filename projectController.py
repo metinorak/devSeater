@@ -62,3 +62,7 @@ def projectPage(projectName):
     numberOfMembers = numberOfMembers,
     numberOfEmptySeaters = numberOfEmptySeaters
     )
+  
+@app.route("/p/<string:projectName>/<string:sid>")
+def seaterPage(projectName, sid):
+  pass

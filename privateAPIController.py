@@ -210,7 +210,7 @@ def userPosts():
 
         if post["uid"] == getCurrentUid():
             ModelObject["userPostModel"].removeUserPost(upid)
-            return '{"result" : "success"}'
+            return json.dumps({"result": "success"})
         else:
             return render_template("private-api/forbidden-request.html")
     return render_template("private-api/unknown-request.html")
@@ -324,7 +324,7 @@ def userPostComments(upid):
 
         if comment["uid"] == getCurrentUid():
             ModelObject["userPostModel"].removeUserPostComment(upcid)
-            return '{"result" : "success"}'
+            return json.dumps({"result": "success"})
         
         return render_template("private-api/forbidden-request.html")
 
@@ -335,14 +335,14 @@ def userPostComments(upid):
 @login_required
 def likeUserPostComment(upcid):
     ModelObject["userPostModel"].likeUserPostComment(getCurrentUid(), upcid)
-    return '{"result" : "success"}'
+    return json.dumps({"result": "success"})
 
 
 @app.route("/private-api/user-posts/comments/<string:upcid>/unlike")
 @login_required
 def unlikeUserPostComment(upcid):
     ModelObject["userPostModel"].unlikeUserPostComment(getCurrentUid(), upcid)
-    return '{"result" : "success"}'
+    return json.dumps({"result": "success"})
 
 @app.route("/private-api/user-posts/comments/<string:upcid>/like-number")
 @login_required
@@ -464,7 +464,7 @@ def seaterSkills():
         if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), pid):
             if skill != None:
                 ModelObject["skillModel"].addSeaterSkill(sid, skill)
-                return '{"result" : "success"}'
+                return json.dumps({"result": "success"})
 
     else:
         #Delete a user skill
@@ -475,7 +475,7 @@ def seaterSkills():
 
             if skill["uid"] == getCurrentUid():
                 ModelObject["skillModel"].removeUserSkill(skid)
-                return '{"result" : "success"}'
+                return json.dumps({"result": "success"})
             else:
                 return render_template("private-api/forbidden-request.html")
         
@@ -534,10 +534,16 @@ def getSeater(sid):
 def createSeater(pid):
     if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), pid):
         seater = json.loads(request.data)
-        seater["pid"] = pid
-        ModelObject["seaterModel"].createSeater(pid, seater)
+        sid = ModelObject["seaterModel"].createSeater(pid, seater)
 
-        return '{"result" : "success"}'
+        #Add skills
+        for skill in seater["skills"]:
+            ModelObject["skillModel"].addSeaterSkill(sid, skill)
+
+        return json.dumps({
+            "result": "success",
+            "sid": sid
+            })
     return render_template("private-api/forbidden-request.html")
 
 @app.route("/private-api/seaters/<string:sid>", methods = ["DELETE"])
@@ -547,7 +553,7 @@ def removeSeater(sid):
     if seater != None:
         if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), seater["pid"]):
             ModelObject["seaterModel"].removeSeater(sid)
-            return '{"result" : "success"}'
+            return json.dumps({"result": "success"})
         else:
             return render_template("private-api/forbidden-request.html")
     return render_template("private-api/unknown-request.html")
@@ -560,7 +566,7 @@ def dismissUser(sid):
     if seater != None:
         if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), seater["pid"]):
             ModelObject["seaterModel"].dismissUser(sid)
-            return '{"result" : "success"}'
+            return json.dumps({"result": "success"})
         else:
             return render_template("private-api/forbidden-request.html")
     
@@ -575,7 +581,7 @@ def updateSeater(sid):
         if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), seater["pid"]):
             seater = json.loads(request.data)
             ModelObject["seaterModel"].updateSeater(sid, seater["title"], seater["description"])
-            return '{"result" : "success"}'
+            return json.dumps({"result": "success"})
         else:
             return render_template("private-api/forbidden-request.html")
     
@@ -590,7 +596,7 @@ def assignUser(sid, uid):
         if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), seater["pid"]):
             if ModelObject["seaterModel"].isThereSeaterAspiration(uid, sid):
                 ModelObject["seaterModel"].assignUser(uid, sid)
-                return '{"result" : "success"}'
+                return json.dumps({"result": "success"})
         else:
             return render_template("private-api/forbidden-request.html")
     
@@ -604,7 +610,7 @@ def unassignUser(sid, uid):
     if seater != None:
         if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), seater["pid"]):
             ModelObject["seaterModel"].unassignUser(sid)
-            return '{"result" : "success"}'
+            return json.dumps({"result": "success"})
         else:
             return render_template("private-api/forbidden-request.html")
     
@@ -614,14 +620,14 @@ def unassignUser(sid, uid):
 @login_required
 def aspireSeater(sid):
     ModelObject["seaterModel"].aspireSeater(getCurrentUid(), sid)
-    return '{"result" : "success"}'
+    return json.dumps({"result": "success"})
 
 @app.route("/private-api/seaters/<string:sid>/cancel-aspiration")
 @login_required
 def cancelSeaterAspiration(sid):
     if ModelObject["seaterModel"].isThereSeaterAspiration(getCurrentUid(), sid):
         ModelObject["seaterModel"].cancelSeaterAspiration(getCurrentUid(), sid)
-        return '{"result" : "success"}'
+        return json.dumps({"result": "success"})
     else:
         return render_template("private-api/forbidden-request.html")
 
@@ -642,7 +648,7 @@ def rejectSeater(sid):
     if seater != None and uid != None:
         if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), seater["pid"]):
             ModelObject["seaterModel"].rejectSeaterAspiration(uid, sid)
-            return '{"result" : "success"}'
+            return json.dumps({"result": "success"})
         else:
             return render_template("private-api/forbidden-request.html")
     
@@ -738,7 +744,7 @@ def updateProjectName(pid, newName):
         })
     
     ModelObject["projectModel"].updateProjectName(pid, newName)
-    return '{"result" : "success"}'
+    return json.dumps({"result": "success"})
 
 @app.route("/private-api/projects/<string:pid>/short-description", methods = ["PUT"])
 @login_required
@@ -777,7 +783,6 @@ def projectLinks(pid):
         return json.dumps(links, cls=DateTimeEncoder)
     elif request.method == "POST":
         #Stripping
-        print(request.data)
         data = json.loads(request.data)
         data["name"] = data["name"].strip()
         data["link"] = data["link"].strip()
@@ -883,7 +888,7 @@ def projectPosts(pid):
 
         if post["uid"] == getCurrentUid():
             ModelObject["projectPostModel"].removeProjectPost(ppid)
-            return '{"result" : "success"}'
+            return json.dumps({"result": "success"})
         else:
             return render_template("private-api/forbidden-request.html")
     return render_template("private-api/unknown-request.html")
@@ -969,7 +974,7 @@ def projectPostComments(ppid):
 
         if comment["uid"] == getCurrentUid():
             ModelObject["projectPostModel"].removeProjectPostComment(ppcid)
-            return '{"result" : "success"}'
+            return json.dumps({"result": "success"})
         
         return render_template("private-api/forbidden-request.html")
 
@@ -980,14 +985,14 @@ def projectPostComments(ppid):
 @login_required
 def likeProjectPostComment(ppcid):
     ModelObject["projectPostModel"].likeProjectPostComment(getCurrentUid(), ppcid)
-    return '{"result" : "success"}'
+    return json.dumps({"result": "success"})
 
 
 @app.route("/private-api/project-posts/comments/<string:ppcid>/unlike")
 @login_required
 def unlikeProjectPostComment(ppcid):
     ModelObject["projectPostModel"].unlikeProjectPostComment(getCurrentUid(), ppcid)
-    return '{"result" : "success"}'
+    return json.dumps({"result": "success"})
 
 @app.route("/private-api/project-posts/comments/<string:ppcid>/likes/number")
 @login_required
@@ -1024,7 +1029,7 @@ def getLastNotifications():
 def sendMessage():
     message = json.loads(request.data)
     ModelObject["messageModel"].sendMessage(getCurrentUid(), message["receiver_id"], message["text"])
-    return '{"result" : "success"}'
+    return json.dumps({"result": "success"})
 
 @app.route("/private-api/messages/delete/<string:mid>")
 @login_required
@@ -1033,7 +1038,7 @@ def deleteMessage(mid):
         return render_template("private-api/forbidden-request.html")
 
     ModelObject["messageModel"].deleteMessage(getCurrentUid(), mid)
-    return '{"result" : "success"}'
+    return json.dumps({"result": "success"})
 
 @app.route("/private-api/messages/new-dialog-number")
 @login_required
