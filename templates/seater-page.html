@@ -37,12 +37,12 @@
             {% else %}
               <a href="#" id="aspire-button" class="btn btn-secondary mb-2">Assign Yourself</a>
             {% endif %}
-            <a href="#" id="remove-seater-button" class="btn btn-secondary mb-2">Remove Seater</a>
+            <a href="#" id="remove-seater-button" class="btn btn-danger mb-2">Remove Seater</a>
             <a href="#" id="remove-seater-button" class="btn btn-info mb-2">Aspirations List</a>
           {% else %}
             {% if seater.uid != None %}
                 {% if seater.isAssigned %}
-                  <a href="#" id="dismiss-user-button" class="btn btn-secondary mb-2">Quit</a>
+                  <a href="#" id="dismiss-user-button" class="btn btn-danger mb-2">Quit</a>
                 {% endif %}
             {% else %}
               {% if seater.isAspirated %}

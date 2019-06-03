@@ -217,7 +217,7 @@ class SeaterModel(Database):
     cursor = connection.cursor(dictionary=True)
     query = "SELECT * FROM seaterAspirations WHERE uid = %s AND sid = %s AND isRejected = 0"
     cursor.execute(query, (uid, sid))
-    result = cursor.fetchall()
+    result = cursor.fetchone()
     cursor.close()
     connection.close()
     return (result != None)
