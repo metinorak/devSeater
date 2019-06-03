@@ -96,7 +96,7 @@ class SeaterModel(Database):
     return result["number"]
   
   @exception_handling
-  def getSeater(self, sid, currentUser):
+  def getSeater(self, sid, currentUser=None):
     isAspirated = self.isThereSeaterAspiration(currentUser, sid)
 
     connection = self.getConnection()
@@ -169,16 +169,6 @@ class SeaterModel(Database):
     connection.close()
   
   @exception_handling
-  def unassignUser(self, sid):
-    connection = self.getConnection()
-    cursor = connection.cursor(dictionary=True)
-    query = "UPDATE seaters SET uid = NULL WHERE sid = %s"
-    cursor.execute(query, (sid) )
-    connection.commit()
-    cursor.close()
-    connection.close()
-  
-  @exception_handling
   def aspireSeater(self, uid, sid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -189,7 +179,7 @@ class SeaterModel(Database):
     connection.close()
   
   @exception_handling
-  def cancelAspirationToSeater(self, uid, sid):
+  def cancelAspirationToTheSeater(self, uid, sid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
     query = "DELETE FROM seaterAspirations WHERE uid = %s AND sid = %s"
@@ -199,7 +189,18 @@ class SeaterModel(Database):
     connection.close()
 
   @exception_handling
-  def getSeaterAspirations(self, pid):
+  def getSeaterAspirations(self, sid):
+    connection = self.getConnection()
+    cursor = connection.cursor(dictionary=True)
+    query = """SELECT * FROM seaterAspirations WHERE isRejected = 0 AND sid = %s"""
+    cursor.execute(query, (pid,))
+    result = cursor.fetchall()
+    cursor.close()
+    connection.close()
+    return result
+
+  @exception_handling
+  def getSeaterAspirationsByPid(self, sid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
     query = """SELECT * FROM seaterAspirations WHERE isRejected = 0 AND sid IN 

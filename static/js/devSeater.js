@@ -284,4 +284,37 @@ class DevSeater{
     return this.request.delete(this.url + `projects/no-matters/links?plid=${plid}`);
   }
 
+  //SEATER ACTIONS
+  async aspireSeater(sid){
+    return this.request.get(this.url + `seaters/${sid}/aspire`);
+  }
+
+  async dismissUserToTheSeater(sid){
+    return this.request.get(this.url + `seaters/${sid}/dismiss-user`);
+  }
+
+  async removeSeater(sid){
+    return this.request.delete(this.url + `seaters/${sid}`);
+  }
+
+  async seaterAspirations(sid){
+    return this.request.get(this.url + `seaters/${sid}/aspirations`);
+  }
+
+  async cancelSeaterAspiration(sid){
+    return this.request.get(this.url + `seaters/${sid}/cancel-aspiration`);
+  }
+
+  async assignUserToTheSeater(sid, uid){
+    return this.request.get(this.url + `seaters/${sid}/assign/${uid}`);
+  }
+
+  async dismissUserFromSeater(sid){
+    return this.request.get(this.url + `seaters/${sid}/dismiss-user`);
+  }
+
+  async rejectSeaterAspiration(sid, uid){
+    return this.request.get(this.url + `seaters/${sid}/reject/${uid}`);
+  }
+
 }
