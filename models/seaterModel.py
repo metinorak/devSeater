@@ -172,8 +172,8 @@ class SeaterModel(Database):
   def aspireSeater(self, uid, sid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
-    query = "INSERT INTO seaterAspirations(pid, title, description) VALUES(%s, %s, %s)"
-    cursor.execute(query, (seater["pid"], seater["title"], seater["description"]) )
+    query = "INSERT INTO seaterAspirations(sid, uid) VALUES(%s, %s)"
+    cursor.execute(query, (sid, uid) )
     connection.commit()
     cursor.close()
     connection.close()

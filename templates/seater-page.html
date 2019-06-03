@@ -8,7 +8,7 @@
 
 {% block body %}
   <main class="container">
-    <div class="card" sid="{{seater.sid}}" pid="{{seater.pid}}">
+    <div class="card" sid="{{seater.sid}}" pid="{{seater.pid}}" project-name="{{seater.project_name}}">
         <div class="card-header">
           <a href="/p/{{seater.project_name}}">back to the {{seater.project_name}}</a>
         </div>
@@ -36,9 +36,9 @@
               <a href="#" id="dismiss-user-button" class="btn btn-secondary mb-2">Dismiss User</a>
             {% else %}
               <a href="#" id="aspire-button" class="btn btn-secondary mb-2">Assign Yourself</a>
+              <a href="#" id="aspirations-list-button" class="btn btn-info mb-2">Aspirations List</a>
             {% endif %}
             <a href="#" id="remove-seater-button" class="btn btn-danger mb-2">Remove Seater</a>
-            <a href="#" id="remove-seater-button" class="btn btn-info mb-2">Aspirations List</a>
           {% else %}
             {% if seater.uid != None %}
                 {% if seater.isAssigned %}

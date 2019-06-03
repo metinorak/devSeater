@@ -565,7 +565,7 @@ def dismissUserFromSeater(sid):
     seater = ModelObject["seaterModel"].getSeater(sid)
 
     if seater != None:
-        if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), seater["pid"]):
+        if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), seater["pid"]) or (seater["uid"] == getCurrentUid()):
             ModelObject["seaterModel"].dismissUser(sid)
             return json.dumps({"result": "success"})
         else:
@@ -617,7 +617,7 @@ def aspireSeater(sid):
 @login_required
 def cancelSeaterAspiration(sid):
     if ModelObject["seaterModel"].isThereSeaterAspiration(getCurrentUid(), sid):
-        ModelObject["seaterModel"].cancelSeaterAspiration(getCurrentUid(), sid)
+        ModelObject["seaterModel"].cancelAspirationToTheSeater(getCurrentUid(), sid)
         return json.dumps({"result": "success"})
     else:
         return render_template("private-api/forbidden-request.html")
