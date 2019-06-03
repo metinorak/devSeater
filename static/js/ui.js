@@ -40,12 +40,14 @@ class UI{
       this.searchResults.innerHTML = desiredString;
       this.searchResults.style.display = "block";
     }
-
-
   }
 
   hideGeneralSearchResults(){
     this.searchResults.style.display = "none";
+  }
+
+  hideGeneralModal(){
+    $("#general-modal").modal("hide");
   }
 
   showNewDialogNumber(number){
@@ -302,6 +304,13 @@ class UI{
       var usernameCode = `<p class="card-text"><a href="/u/${seater["username"]}"><b>@${seater["username"]}</b></a></p>`;
     }
 
+    if(seater["aspirationNumber"] == undefined || seater["aspirationNumber"] == 0){
+      var aspirationNumber = "";
+    }
+    else{
+      var aspirationNumber = `<p class="card-text">${seater["aspirationNumber"]} aspiration(s)</p>`;
+    }
+
     let html = 
     `
     <div class="card seater m-2" sid="${seater["sid"]}" style="width: 18rem;">
@@ -311,6 +320,7 @@ class UI{
         <a href="/p/${seater["project_name"]}"><h4 class="card-title">${seater["project_name"]}</h4></a>
         <p class="card-text">${seater["short_description"].substr(0, 100)}</p>
         ${usernameCode}
+        ${aspirationNumber}
         <a href="/p/${seater["project_name"]}/seaters/${seater["sid"]}" class="btn btn-primary">Browse</a>
       </div>
     </div>
@@ -1422,11 +1432,59 @@ class UI{
     });
   }
 
-  setModal(modal, title, body){
+  showSeaterAspirationsList(aspirations){
+    let modalBody = document.createElement("div");
+    if(aspirations.length == 0){
+      modalBody.textContent = "This seater has no aspirations.";
+    }
+    else{
+      modalBody.className = "list-group";
+      aspirations.forEach(aspiration => {
+        let element = document.createElement("li");
+        element.className = "list-group-item";
+        element.setAttribute("uid", aspiration["uid"]);
+        element.setAttribute("sid", aspiration["sid"]);
+  
+        if(aspiration["photo"] == null){
+          aspiration["photo"] = "/static/img/empty-profile.png";
+        }
+        else{
+          aspiration["photo"] = "/static/uploads/users/up/" + aspiration["photo"];
+        }
+  
+        element.innerHTML =
+        `
+        <span class="row">
+          <span class="col-sm-6">
+            <a href="/u/${aspiration["username"]}">
+              <span>${aspiration["full_name"]}</span><br>
+              <span style="font-size:13px" class="text-muted">@${aspiration["username"]}</span>
+            </a>
+          </span>
+          <span class="col-sm-3"><button id="assign-user-button" class="btn btn-primary">Assign</button></span>
+          <span class="col-sm-3"><button id="reject-user-button" class="btn btn-danger">Reject</button></span>
+        </span>
+        `;
+        modalBody.appendChild(element);
+      });  
+    }
+
+    this.setModal(this.generalModal, "Aspirations", modalBody, true);
+    $("#general-modal").modal("show");
+  }
+
+  setModal(modal, title, body, hideFooter = false){
     let modalTitle = modal.querySelector(".modal-title");
     let modalBody = modal.querySelector(".modal-body");
 
     modalTitle.innerText = title;
     modalBody.innerHTML = body.outerHTML;
+
+    if(hideFooter){
+      modal.querySelector(".modal-footer").style.display = "none";
+    }
+    else{
+      modal.querySelector(".modal-footer").style.display = "block";
+    }
   }
 }

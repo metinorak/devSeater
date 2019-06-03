@@ -567,6 +567,7 @@ def dismissUserFromSeater(sid):
     if seater != None:
         if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), seater["pid"]) or (seater["uid"] == getCurrentUid()):
             ModelObject["seaterModel"].dismissUser(sid)
+            ModelObject["seaterModel"].cancelAspirationToTheSeater(seater["uid"], sid)
             return json.dumps({"result": "success"})
         else:
             return render_template("private-api/forbidden-request.html")
@@ -627,8 +628,17 @@ def cancelSeaterAspiration(sid):
 def seaterAspirations(sid):
     seater = ModelObject["seaterModel"].getSeater(sid)
     if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), seater["pid"]):
-        aspirations = ModelObject["seaterModel"].getSeaterAspirations(seater["pid"])
+        aspirations = ModelObject["seaterModel"].getSeaterAspirations(sid)
         return json.dumps(aspirations, cls=DateTimeEncoder)
+    return render_template("private-api/forbidden-request.html")
+
+@app.route("/private-api/seaters/<string:sid>/aspirations/number")
+@login_required
+def seaterAspirationNumber(sid):
+    seater = ModelObject["seaterModel"].getSeater(sid)
+    if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), seater["pid"]):
+        number = ModelObject["seaterModel"].getSeaterAspirationNumber(sid)
+        return json.dumps({"number": number})
     return render_template("private-api/forbidden-request.html")
 
 @app.route("/private-api/seaters/<string:sid>/reject/<string:uid>")

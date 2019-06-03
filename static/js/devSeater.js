@@ -317,4 +317,8 @@ class DevSeater{
     return this.request.get(this.url + `seaters/${sid}/reject/${uid}`);
   }
 
+  async seaterAspirationNumber(sid){
+    return this.request.get(this.url + `seaters/${sid}/aspirations/number`);
+  }
+
 }

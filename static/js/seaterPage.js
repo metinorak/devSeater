@@ -49,17 +49,62 @@ function eventListeners(){
 
   if(removeSeaterButton != null){
     removeSeaterButton.addEventListener("click", e => {
-      devSeater.removeSeater(sid)
-      .then(response => {
-        if(response["ok"])
-          redirect(`/p/${projectName}`);  
+      if(confirm("Are you sure to delete this seater? This is permanent!")){
+        devSeater.removeSeater(sid)
+        .then(response => {
+          if(response["ok"])
+            redirect(`/p/${projectName}`);  
+        })
+        .catch(err => console.error(err));
+      }
+    });
+  }
+
+  if(aspirationsListButton != null){
+    aspirationsListButton.addEventListener("click", e=>{
+      devSeater.seaterAspirations(sid)
+      .then(aspirations => {
+        ui.showSeaterAspirationsList(aspirations);
       })
       .catch(err => console.error(err));
     });
   }
 
-  if(aspirationsListButton != null){
+  document.addEventListener("click", e=>{
+    if(e.target.id == "assign-user-button"){
+      let element = e.target.parentElement.parentElement.parentElement;
+      let sid = element.getAttribute("sid");
+      let uid = element.getAttribute("uid");
 
-  }
+      devSeater.assignUserToTheSeater(sid, uid)
+      .then(response => {
+        if(response["result"] == "success"){
+          location.reload();
+        }
+      })
+      .catch(err => console.error(err));
+    }
+    else if(e.target.id == "reject-user-button"){
+      if(confirm("Are you sure to reject this user? This is permanent!")){
+        let element = e.target.parentElement.parentElement.parentElement;
+        let sid = element.getAttribute("sid");
+        let uid = element.getAttribute("uid");
+  
+        devSeater.rejectSeaterAspiration(sid, uid)
+        .then(response => {
+          if(response["result"] == "success"){
+            element.remove();
+            devSeater.seaterAspirationNumber(sid)
+            .then(response => {
+              if(response["number"] == 0){
+                ui.hideGeneralModal();
+              }
+            })
+          }
+        })
+        .catch(err => console.error(err));
+      }
+    }
+  });
 
 }

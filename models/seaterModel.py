@@ -5,7 +5,8 @@ class SeaterModel(Database):
   def getAllProjectSeaters(self, pid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
-    query = """SELECT seaters.*, projects.project_name 
+    query = """SELECT seaters.*, projects.project_name,
+    (SELECT COUNT(*) FROM seaterAspirations WHERE sid = seaters.sid AND isRejected = 0) AS aspirationNumber 
     FROM seaters INNER JOIN projects ON seaters.pid = projects.pid WHERE projects.pid = %s"""
     cursor.execute(query, (pid,))
     result = cursor.fetchall()
@@ -17,7 +18,8 @@ class SeaterModel(Database):
   def getEmptyProjectSeaters(self, pid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
-    query = """SELECT seaters.*, projects.project_name 
+    query = """SELECT seaters.*, projects.project_name,
+    (SELECT COUNT(*) FROM seaterAspirations WHERE sid = seaters.sid AND isRejected = 0) AS aspirationNumber 
     FROM seaters INNER JOIN projects ON seaters.pid = projects.pid WHERE projects.pid = %s AND uid IS NULL"""
     cursor.execute(query, (pid,))
     result = cursor.fetchall()
@@ -67,6 +69,17 @@ class SeaterModel(Database):
     cursor = connection.cursor(dictionary=True)
     query = "SELECT COUNT(*) AS number FROM seaters WHERE pid = %s AND uid IS NOT NULL"
     cursor.execute(query, (pid,))
+    number = cursor.fetchone()["number"]
+    cursor.close()
+    connection.close()
+    return number
+  
+  @exception_handling
+  def getSeaterAspirationNumber(self, sid):
+    connection = self.getConnection()
+    cursor = connection.cursor(dictionary=True)
+    query = "SELECT COUNT(*) AS number FROM seaterAspirations WHERE sid = %s AND isRejected = 0"
+    cursor.execute(query, (sid,))
     number = cursor.fetchone()["number"]
     cursor.close()
     connection.close()
@@ -192,8 +205,11 @@ class SeaterModel(Database):
   def getSeaterAspirations(self, sid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
-    query = """SELECT * FROM seaterAspirations WHERE isRejected = 0 AND sid = %s"""
-    cursor.execute(query, (pid,))
+    query = """SELECT seaterAspirations.*, users.username, users.uid, users.photo, users.full_name
+    FROM seaterAspirations 
+    INNER JOIN users ON seaterAspirations.uid = users.uid
+    WHERE isRejected = 0 AND sid = %s"""
+    cursor.execute(query, (sid,))
     result = cursor.fetchall()
     cursor.close()
     connection.close()
