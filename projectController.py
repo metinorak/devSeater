@@ -65,7 +65,15 @@ def projectPage(projectName):
   
 @app.route("/p/<string:projectName>/seaters/<string:sid>")
 def seaterPage(projectName, sid):
+  project = ModelObject["projectModel"].getProjectByProjectName(projectName)
+  seater = ModelObject["seaterModel"].getSeater(sid, getCurrentUid())
+  seater["skills"] = ModelObject["skillModel"].getSeaterSkills(sid)
+  assignedUser = ModelObject["userModel"].getUser(seater["uid"])
+  seater["isProjectAdmin"] = ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), project["pid"])
+
   return render_template(
     "seater-page.html",
-    currentUser= getCurrentUser()
+    currentUser= getCurrentUser(),
+    seater = seater,
+    assignedUser = assignedUser
   )

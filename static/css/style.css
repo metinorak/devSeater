@@ -132,7 +132,7 @@ header{
   height: 320px;
 }
 
-.content-area .skill{
+.skill{
   border-radius: 5px;
   background: #dde19cad;
   padding: 5px;
@@ -140,7 +140,7 @@ header{
   font-weight: bold;
 }
 
-.content-area .skill:hover{
+.skill:hover{
   background: #529f8244;
 }
 

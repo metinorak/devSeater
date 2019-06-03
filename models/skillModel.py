@@ -42,7 +42,7 @@ class SkillModel(Database):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
     query = """SELECT * FROM seaterSkills
-    INNER JOIN skills ON skills.skid = seaterSkills.skid WHERE uid = %s"""
+    INNER JOIN skills ON skills.skid = seaterSkills.skid WHERE sid = %s"""
     result = cursor.execute(query, (sid,) )
     result = cursor.fetchall()
     cursor.close()

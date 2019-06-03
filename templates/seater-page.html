@@ -1,21 +1,59 @@
 {% extends "layout.html" %}
 
-{% block title %}{% endblock %}
+{% block title %}{{seater.title}} - {{seater.project_name}}{% endblock %}
 
 {% block scripts %}
-
+  <script src="{{url_for('static', filename='js/seaterPage.js')}}"></script>
 {% endblock %}
 
 {% block body %}
   <main class="container">
-    <div class="card">
+    <div class="card" sid="{{seater.sid}}" pid="{{seater.pid}}">
         <div class="card-header">
-          <a href="#">back to the project name</a>
+          <a href="/p/{{seater.project_name}}">back to the {{seater.project_name}}</a>
         </div>
         <div class="card-body">
-          <h1 class="card-title">Title</h1>
-          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
+          <h1 class="card-title">{{seater.title}}</h1>
+          {% if assignedUser != None %}
+            <h2 class="card-title">Assigned to <a href="/u/{{assignedUser.username}}">@{{assignedUser.username}}</a></h2>
+          {% endif %}
+
+          <p class="card-text text-muted font-italic">{{seater.short_description}}</p>
+          <p class="card-text" id="full-description">{{seater.full_description}}</p>
+          
+          {% if seater.skills != None %}
+            <h2 class="card-title">Skills</h2>
+            <div class="d-flex flex-wrap">
+              {% for skill in seater.skills %}
+                <span class="skill">{{skill.name}}</span>
+              {% endfor %}
+            </div>
+          {% endif %}
+          
+          <hr>
+          {% if seater.isProjectAdmin %}
+            {% if seater.uid != None %}
+              <a href="#" id="dismiss-user-button" class="btn btn-secondary mb-2">Dismiss User</a>
+            {% else %}
+              <a href="#" id="aspire-button" class="btn btn-secondary mb-2">Assign Yourself</a>
+            {% endif %}
+            <a href="#" id="remove-seater-button" class="btn btn-secondary mb-2">Remove Seater</a>
+            <a href="#" id="remove-seater-button" class="btn btn-info mb-2">Aspirations List</a>
+          {% else %}
+            {% if seater.uid != None %}
+                {% if seater.isAssigned %}
+                  <a href="#" id="dismiss-user-button" class="btn btn-secondary mb-2">Quit</a>
+                {% endif %}
+            {% else %}
+              {% if seater.isAspirated %}
+                <a href="#" id="cancel-aspiration-button" class="btn btn-secondary mb-2">Cancel Aspiration</a>
+              {% else %}
+                <a href="#" id="aspire-button" class="btn btn-secondary mb-2">Aspire</a>
+              {% endif %}
+            
+            {% endif %}
+            
+          {% endif %}
         </div>
       </div>
   </main>

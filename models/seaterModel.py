@@ -108,6 +108,12 @@ class SeaterModel(Database):
     result["isAspirated"] = isAspirated
     cursor.close()
     connection.close()
+
+    if currentUser != None:
+      result["isAssigned"] = (result["uid"] == currentUser)
+    else:
+      result["isAssigned"] = False
+      
     return result
 
   @exception_handling

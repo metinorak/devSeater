@@ -1271,7 +1271,7 @@ class UI{
         </div>
         <div class="form-group">
           <label for="skills-input">Skills</label>
-          <input type="text" class="form-control" id="skills-input" placeholder="separate the skills with a comma." value="${skillsText}">
+          <input type="text" class="form-control" id="skills-input" placeholder="separate the skills with commas." value="${skillsText}">
         </div>
         
       </form>
