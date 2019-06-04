@@ -62,6 +62,23 @@ class UserModel(Database):
     cursor.close()
     connection.close()
 
+  @exception_handling
+  def getWhoToFollowList(self, number, currentUser = None):
+    connection = self.getConnection()
+    cursor = connection.cursor(dictionary=True)
+    query = """SELECT users.*, 
+    (SELECT COUNT(*) FROM followers WHERE flwdid = users.uid AND time > (DATE(NOW()) - INTERVAL 7 DAY) ) 
+    AS newFollowerNumber 
+    FROM users 
+    WHERE uid NOT IN (SELECT flwdid FROM followers WHERE flwrid = %s)
+    AND uid != %s
+    ORDER BY newFollowerNumber DESC LIMIT %s"""
+    cursor.execute(query, (currentUser, currentUser, number))
+    result = cursor.fetchall()
+    cursor.close()
+    connection.close()
+    return result
+
   
   #CHECKING
   @exception_handling

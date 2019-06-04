@@ -9,6 +9,8 @@ def userProfile(username):
   userLinks = ModelObject["userModel"].getUserLinks(user["uid"])
   userProjects = ModelObject["projectModel"].getUserProjects(user["uid"])
   lastUserPosts = ModelObject["userPostModel"].getLastUserPosts(user["uid"], 10, getCurrentUid())
+  popularProjects = ModelObject["projectModel"].getPopularProjects(10)
+  whoToFollowList = ModelObject["userModel"].getWhoToFollowList(5, getCurrentUid())
 
   #Remove password and email fields
   user.pop("password")
@@ -20,5 +22,7 @@ def userProfile(username):
     user = user,
     userLinks = userLinks,
     userProjects = userProjects,
-    lastUserPosts = lastUserPosts
+    lastUserPosts = lastUserPosts,
+    popularProjects = popularProjects,
+    whoToFollowList = whoToFollowList
     )

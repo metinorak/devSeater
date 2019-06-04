@@ -51,6 +51,8 @@ def projectPage(projectName):
   lastProjectPosts = ModelObject["projectPostModel"].getLastProjectPosts(project["pid"], 10, getCurrentUid())
   numberOfMembers = ModelObject["projectModel"].getNumberOfMembers(project["pid"])
   numberOfEmptySeaters = ModelObject["seaterModel"].getProjectEmptySeaterNumber(project["pid"])
+  popularProjects = ModelObject["projectModel"].getPopularProjects(10)
+  whoToFollowList = ModelObject["userModel"].getWhoToFollowList(5, getCurrentUid())
 
 
   return render_template(
@@ -60,7 +62,9 @@ def projectPage(projectName):
     projectLinks = projectLinks,
     lastProjectPosts = lastProjectPosts,
     numberOfMembers = numberOfMembers,
-    numberOfEmptySeaters = numberOfEmptySeaters
+    numberOfEmptySeaters = numberOfEmptySeaters,
+    popularProjects = popularProjects,
+    whoToFollowList = whoToFollowList
     )
   
 @app.route("/p/<string:projectName>/seaters/<string:sid>")

@@ -19,7 +19,7 @@
               <button id="post-button" class=" btn btn-light">Post</button>
           </div>
 
-          <div id="seaters" class="d-flex">
+          <div id="seater-recommendations" class="d-none">
               <div class="card" >
                   <img class="card-img-top" src="img/project1.jpg" alt="Card image">
                   <div class="card-body">
@@ -158,9 +158,7 @@
 
           <div>
               <ul class="list-group list-group-flush">
-                  
                   <li class="list-group-item"><h2>Popular Projects</h2></li>
-                  
                     {% for project in popularProjects %}
                         <li class="list-group-item">
                                 <div class="card">
@@ -175,8 +173,6 @@
                                 </div>
                         </li>
                     {% endfor %}
-                    
-
               </ul>
           </div>
 
@@ -184,39 +180,24 @@
           <div>
               <ul class="list-group list-group-flush">
                 <li class="list-group-item"><h2>Who to Follow</h2></li>
-                <li class="list-group-item">
-                    <div class="row">
-                        <div class="col-3"><img class="rounded-circle" src="img/0.jpeg" width="50px" alt=""></div>
-                        <div class="float-right col-9">
-                          <a href="#">Metin Orak</a>
-                          <br>
-                          <button class="btn btn-light">Follow</button>
-                          
-                        </div>  
-                    </div>
-                </li>
-                <li class="list-group-item">
-                    <div class="row">
-                        <div class="col-3"><img class="rounded-circle" src="img/0.jpeg" width="50px" alt=""></div>
-                        <div class="col-9">
-                          <a href="#">Metin Orak</a>
-                          <br>
-                          <button class="btn btn-light">Follow</button>
-                          
-                        </div>  
-                    </div>
-                </li>
-                <li class="list-group-item">
-                    <div class="row">
-                        <div class="col-3"><img class="rounded-circle" src="img/0.jpeg" width="50px" alt=""></div>
-                        <div class="col-9">
-                          <a href="#">Metin Orak</a>
-                          <br>
-                          <button class="btn btn-light">Follow</button>
-                          
-                        </div>  
-                    </div>
-                </li>
+                {% for userToFollow in whoToFollowList %}
+                    <li class="list-group-item" >
+                        <div class="row">
+                            <div class="col-3">
+                                {% if userToFollow.photo == None %}
+                                    <span><img width="50px" class="rounded-circle" src="{{url_for('static', filename= 'img/empty-profile.png') }}" alt=""></span>
+                                {% else %}
+                                    <span><img width="50px" class="rounded-circle" src="{{url_for('static', filename= 'uploads/users/up/' + userToFollow.photo ) }}" alt=""></span>
+                                {% endif %}
+                            </div>
+                            <div class="float-right col-9" uid="{{userToFollow.uid}}">
+                                <a href="/u/{{userToFollow.username}}">{{userToFollow.full_name}}</a>
+                                <br>
+                                <button class="btn btn-light follow-button">Follow</button>
+                            </div>  
+                        </div>
+                    </li>
+                {% endfor %}
           </div>
 
         </div>

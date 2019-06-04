@@ -74,6 +74,7 @@ def index():
     lastFollowingPosts = ModelObject["userPostModel"].getLastFollowingPosts(session["uid"], 10)
 
     popularProjects = ModelObject["projectModel"].getPopularProjects(10)
+    whoToFollowList = ModelObject["userModel"].getWhoToFollowList(5, getCurrentUid())
 
     #Get Current User Informations
     currentUser = ModelObject["userModel"].getUser(session["uid"])
@@ -83,7 +84,9 @@ def index():
       userProjects = userProjects,
       popularProjects = popularProjects,
       lastFollowingPosts = lastFollowingPosts,
-      currentUser = currentUser)
+      currentUser = currentUser,
+      whoToFollowList = whoToFollowList
+      )
 
 
 
