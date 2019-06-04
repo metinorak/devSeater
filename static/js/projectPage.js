@@ -96,7 +96,11 @@ function eventListeners(){
 		.then(seaters => {
 			ui.clearContentArea();
 			ui.hidePostTextAreaCard();
-			ui.showEmptySeaters(seaters);
+			devSeater.isProjectAdmin(pid, Session.getCurrentUser()["uid"])
+			.then(response => {
+				ui.showEmptySeaters(seaters, response["result"]);
+			})
+			.catch(err => console.error(err));
 		})
 		.catch(err => console.error(err));
 	});
@@ -148,9 +152,14 @@ function eventListeners(){
 			.then(seaters => {
 				ui.clearContentArea();
 				ui.hidePostTextAreaCard();
-				ui.showEmptySeaters(seaters);
+				devSeater.isProjectAdmin(pid, Session.getCurrentUser()["uid"])
+				.then(response => {
+					ui.showEmptySeaters(seaters, response["result"]);
+				})
+				.catch(err => console.error(err));
 			})
 			.catch(err => console.error(err));
+	
 
 			e.preventDefault();
 		}
@@ -160,9 +169,14 @@ function eventListeners(){
 			.then(seaters => {
 				ui.clearContentArea();
 				ui.hidePostTextAreaCard();
-				ui.showFilledSeaters(seaters);
+				devSeater.isProjectAdmin(pid, Session.getCurrentUser()["uid"])
+				.then(response => {
+					ui.showFilledSeaters(seaters, response["result"]);
+				})
+				.catch(err => console.error(err));
 			})
 			.catch(err => console.error(err));
+	
 
 			e.preventDefault();
 		}

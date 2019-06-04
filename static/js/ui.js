@@ -6,7 +6,6 @@ class UI{
     this.postButton = document.getElementById("post-button");
     this.addAnotherLinkButton = document.getElementById("add-another-link-button");
     this.newFollowingPostNumberButton = document.getElementById("new-following-post-number");
-    this.theNewestPost = document.querySelector(".post");
     this.postTextarea = document.getElementById("post-textarea");
     this.contentArea = document.querySelector(".content-area");
     this.navbar = document.querySelector("navbar");
@@ -228,7 +227,11 @@ class UI{
 
         `;
         let theNewestPost = document.querySelector(".post");
-        theNewestPost.insertAdjacentElement("beforebegin", postToAdd);
+        if(theNewestPost != null)
+          theNewestPost.insertAdjacentElement("beforebegin", postToAdd);
+        else{
+          this.newFollowingPostNumberButton.insertAdjacentElement("afterend", postToAdd);
+        }
         
     });
 
@@ -987,10 +990,16 @@ class UI{
   }
 
 
-  showEmptySeaters(seaters){
-    
+  showEmptySeaters(seaters, isProjectAdmin){
+    if(!isProjectAdmin){
+      var newSeaterButtonStyle = "display:none;";
+    }
+    else{
+      var newSeaterButtonStyle = "display:inline;"; 
+    }
+
     let tabsHtml = 
-    ` <a href="#" id="create-a-new-seater" class="btn btn-secondary float-right">New Seater</a>
+    ` <a href="#" id="create-a-new-seater" style="${newSeaterButtonStyle}" class="btn btn-secondary float-right">New Seater</a>
       <ul class="nav nav-tabs">
         <li class="nav-item">
           <a id="empty-seaters" class="nav-link active" href="#">Empty Seaters</a>
@@ -1022,10 +1031,17 @@ class UI{
     });
   }
 
-  showFilledSeaters(seaters){
+  showFilledSeaters(seaters, isProjectAdmin){
+    if(!isProjectAdmin){
+      var newSeaterButtonStyle = "display:none;";
+    }
+    else{
+      var newSeaterButtonStyle = "display:inline;"; 
+    }
+
     
     let tabsHtml = 
-    ` <a href="#" id="create-a-new-seater" class="btn btn-secondary float-right">New Seater</a>
+    ` <a href="#" id="create-a-new-seater" style="${newSeaterButtonStyle}" class="btn btn-secondary float-right">New Seater</a>
       <ul class="nav nav-tabs">
         <li class="nav-item">
           <a id="empty-seaters" class="nav-link" href="#">Empty Seaters</a>

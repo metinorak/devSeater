@@ -29,7 +29,12 @@ function eventListeners(){
 			setTimeout(()=>{
 				//Check new notifications number
 				let theNewestPost = getTheNewestPost();
-				let theNewest_upid = theNewestPost.getAttribute("upid");
+				if(theNewestPost == null){
+					var theNewest_upid = 0;
+				}
+				else{
+					var theNewest_upid = theNewestPost.getAttribute("upid");
+				}
 
 				devSeater.newFollowingPostNumber(theNewest_upid)
 				.then(result => {
@@ -47,7 +52,13 @@ function eventListeners(){
 	if(newFollowingPostNumberButton != null){
 		newFollowingPostNumberButton.addEventListener("click", e => {
 			let theNewestPost = getTheNewestPost();
-			let theNewest_upid = theNewestPost.getAttribute("upid");
+			if(theNewestPost == null){
+				var theNewest_upid = 0;
+			}
+			else{
+				var theNewest_upid = theNewestPost.getAttribute("upid");
+			}
+			
 			devSeater.newFollowingPosts(theNewest_upid)
 			.then(posts => {
 
