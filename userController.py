@@ -26,3 +26,11 @@ def userProfile(username):
     popularProjects = popularProjects,
     whoToFollowList = whoToFollowList
     )
+    
+@app.route("/settings")
+@login_required
+def settings():
+  return render_template(
+    "user-settings.html",
+    currentUser = getCurrentUser()    
+    )
