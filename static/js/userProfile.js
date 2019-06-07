@@ -18,12 +18,12 @@ eventListeners();
 function eventListeners(){
   document.addEventListener("DOMContentLoaded", e => {
     let uid = userProfileCard.getAttribute("uid");
-    if(Session.getCurrentUser()["uid"] == uid){
+    if(!Session.isLoggedIn() || Session.getCurrentUser()["uid"] == uid){
       messageButton.style.display = "none";
       followButton.style.display = "none";
     }
 
-    if(uid == Session.getCurrentUser()["uid"]){
+    else if(uid == Session.getCurrentUser()["uid"]){
       editProfileButton.style.display = "inline";
     }
   });

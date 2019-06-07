@@ -56,15 +56,23 @@ function eventListeners(){
 		});
 
 		//CREATE SESSION
-		devSeater.currentUser()
-		.then(user => {
-			Session.createSession(user);
+		devSeater.isLoggedIn()
+		.then(response => {
+			if(response["result"]){
+				devSeater.currentUser()
+				.then(user => {
+					Session.createSession(user);
+				})
+				.catch(err => console.error(err));
+			}
 		})
 		.catch(err => console.error(err));
 
 		//CHECKING
-		checkNewMessages();
-		checkNotifications();
+		if(Session.isLoggedIn()){
+			checkNewMessages();
+			checkNotifications();
+		}
 
 		function checkNewMessages(){
 			setTimeout(()=>{
@@ -152,4 +160,8 @@ function renderText(text){
 
 function redirect(url){
 	location.href = url;
+}
+
+function logout(){
+	Session.destroySession();
 }

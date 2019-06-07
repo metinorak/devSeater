@@ -111,6 +111,9 @@ class DevSeater{
     return this.request.delete(this.url + `user-posts/no-matter/comments?upcid=${upcid}`);
   }
 
+  async isLoggedIn(){
+    return this.request.get(this.url + `user/is-logged-in`);
+  }
 
   async follow(uid){
     return this.request.get(this.url + `follow/${uid}`);

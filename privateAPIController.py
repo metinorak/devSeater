@@ -11,6 +11,11 @@ class DateTimeEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, o)
 
 #USER
+@app.route("/private-api/user/is-logged-in")
+def isLoggedIn():
+    result = (getCurrentUid() != None)
+    return json.dumps({"result" : result})
+
 @app.route("/private-api/user")
 @login_required
 def getUser():
@@ -443,7 +448,6 @@ def userSkills():
 
 #SEATER SKILLS
 @app.route("/private-api/seater-skills", methods = ["GET", "POST", "DELETE"])
-@login_required
 def seaterSkills():
     if request.method == "GET":
         #Get seater skills
