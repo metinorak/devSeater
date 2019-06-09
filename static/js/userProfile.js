@@ -23,7 +23,7 @@ function eventListeners(){
       followButton.style.display = "none";
     }
 
-    else if(uid == Session.getCurrentUser()["uid"]){
+    if(uid == Session.getCurrentUser()["uid"]){
       editProfileButton.style.display = "inline";
     }
   });
