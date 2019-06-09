@@ -376,7 +376,10 @@ def userPhoto(uid):
                 })
         #Delete old uploaded file
         if user["photo"] != None:
-            os.remove(UPLOAD_FOLDER + "/users/up/" + user["photo"])
+            try:
+                os.remove(UPLOAD_FOLDER + "/users/up/" + user["photo"])
+            except:
+                print("File couldn't be removed!")
 
         newFileName = str(uid) + "_" + generateCode(10) + ".jpg"
 
