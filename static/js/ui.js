@@ -1201,10 +1201,10 @@ class UI{
     let alert = document.createElement("div");
     alert.className = `alert alert-${type}`;
     alert.textContent = message;
+    if(element.previousElementSibling != null && element.previousElementSibling.classList.contains("alert")){
+      element.previousElementSibling.remove();
+    }
     element.insertAdjacentElement(position, alert);
-    setTimeout(() => {
-      alert.remove();
-    }, 3000);
   }
   
   async getNewLinkFromUser(){
