@@ -415,6 +415,105 @@ def userBio():
         return json.dumps({"result": "fail"})
 
 
+#UPDATE USERNAME
+@app.route("/private-api/users/username", methods = ["PUT"])
+@login_required
+def updateUsername():
+    data = json.loads(request.data)
+    newUsername = data["username"]
+    password = data["password"]
+
+    if not ModelObject["userModel"].checkPassword(getCurrentUid(), password):
+        return json.dumps({
+            "result": "fail",
+            "msg": "Password is not correct!"
+        })
+
+    if not isValidUsername(newUsername):
+        return json.dumps({
+            "result": "fail",
+            "msg": "Username is not valid! It should be at least 1 character alpha-numeric and can contain '-', '_'"
+        })
+
+    if newUsername != None and newUsername != "":
+        ModelObject["userModel"].updateUsername(getCurrentUid(), newUsername)
+        return json.dumps({
+            "result" : "success",
+            "msg": "Username successfully updated!"
+            })
+    else:
+        return json.dumps({
+            "result": "fail",
+            "msg": "You have to enter username to update it."
+        })
+
+#UPDATE EMAIL
+@app.route("/private-api/users/email", methods = ["PUT"])
+@login_required
+def updateEmail():
+    data = json.loads(request.data)
+    newEmail = data["email"]
+    password = data["password"]
+
+    if not ModelObject["userModel"].checkPassword(getCurrentUid(), password):
+        return json.dumps({
+            "result": "fail",
+            "msg": "Password is not correct!"
+        })
+    
+    if not isValidEmail(newEmail):
+        return json.dumps({
+            "result": "fail",
+            "msg": "Please enter a valid email!"
+        })
+    
+    ModelObject["userModel"].updateEmail(getCurrentUid(), newEmail)
+    return json.dumps({
+        "result" : "success",
+        "msg": "Email updated! You should activate your new email clicking the activation link we've sent you."
+        })
+
+#UPDATE PASSWORD
+@app.route("/private-api/users/password", methods = ["PUT"])
+@login_required
+def updatePassword():
+    data = json.loads(request.data)
+    
+    currentPassword = data["currentPassword"]
+    newPassword = data["newPassword"]
+    confirmNewPassword = data["confirmNewPassword"]
+
+    if not ModelObject["userModel"].checkPassword(getCurrentUid(), currentPassword):
+        return json.dumps({
+            "result": "fail",
+            "msg": "Current password is not correct!"
+        })
+
+    if newPassword != confirmNewPassword:
+        return json.dumps({
+            "result": "fail",
+            "msg": "Passwords don't match!"
+        })
+    
+    if not isValidPassword(newPassword):
+        return json.dumps({
+            "result": "fail",
+            "msg": "Password is not valid! It must be at least 6 characters."
+        })
+    
+    ModelObject["userModel"].updatePassword(getCurrentUid(), newPassword)
+    return json.dumps({
+        "result": "success",
+        "msg": "Password has updated successfully!"
+    })
+
+#CHECK USERNAME AVAILABILIY
+@app.route("/private-api/users/username/check-availability/<string:username>")
+@login_required
+def checkUsernameAvailability(username):
+    return json.dumps({
+        "result": not ModelObject["userModel"].isThereThisUsername(username)
+    })
 
 #USER SKILLS
 @app.route("/private-api/user-skills", methods = ["GET", "POST", "DELETE"])

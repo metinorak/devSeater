@@ -1175,8 +1175,8 @@ class UI{
     });
   }
 
-  showMessageAfterElement(element, message, type){
-    let messageElement = document.createElement("span");
+  showMessageAfterElement(element, message, type = "success"){
+    let messageElement = document.createElement("div");
     messageElement.className = "mt-3 user-msg";
     if(type == "info"){
       messageElement.style.color = "gray";
@@ -1192,7 +1192,19 @@ class UI{
     if(element.nextElementSibling != null && element.nextElementSibling.classList.contains("user-msg")){
       element.nextElementSibling.remove();
     }
-    element.insertAdjacentElement("afterend", messageElement);
+    if(message != ""){
+      element.insertAdjacentElement("afterend", messageElement);
+    }
+  }
+
+  showAlert(element, message, type, position){
+    let alert = document.createElement("div");
+    alert.className = `alert alert-${type}`;
+    alert.textContent = message;
+    element.insertAdjacentElement(position, alert);
+    setTimeout(() => {
+      alert.remove();
+    }, 3000);
   }
   
   async getNewLinkFromUser(){

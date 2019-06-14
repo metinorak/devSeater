@@ -33,9 +33,13 @@ def login_required(f):
     return decorated_function
 
 
-
 def isLoggedIn():
   return ("logged_in" in session)
+
+def isValidPassword(password):
+  if len(password) < 6:
+    return False
+  return True
 
 def isValidEmail(email):
   p = re.compile("(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)")
@@ -67,10 +71,8 @@ def isAnAllowedPhotoFile(filename):
 def getCurrentUser():
   if isLoggedIn():
     user = ModelObject["userModel"].getUser(session["uid"])
-
-    #Remove password and email field
+    #Remove password field
     user.pop("password")
-    user.pop("email")
     return user
   else:
     return None

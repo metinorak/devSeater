@@ -36,16 +36,11 @@ def index():
         errorMessages["terms"] = "You should accept terms"
 
       if(not errorMessages):
-        print(errorMessages)
-
-        #Hash Password
-        hashed_password = sha256_crypt.encrypt(password)
-
         ModelObject["userModel"].addUser({
           "email" : email,
           "username" : username,
           "full_name" : name,
-          "password" : hashed_password
+          "password" : password
         })
 
         hashCode = generateEmailVerificationHashCode(email)
