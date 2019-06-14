@@ -3,7 +3,7 @@
 {% block title %}Settings{% endblock %}
 
 {% block scripts %}
-  <script src="{{url_for('static', filename='js/createProject.js')}}"></script>
+  <script src="{{url_for('static', filename='js/userSettings.js')}}"></script>
 {% endblock %}
 
 
@@ -28,27 +28,27 @@
             </ul>
             <div class="tab-content pt-3" id="myTabContent">
               <div class="tab-pane fade show active" id="username" role="tabpanel" aria-labelledby="username-tab">
-                <form method="post">
+                <form id="update-username">
                   <h2 class="card-title">Change your username</h2>
                   <label>Username:</label>
-                  <input type="text" name="username" class="form-control">
+                  <input autocomplete="off" type="text" class="form-control" id="inlineFormInputGroup" name="username" value="{{currentUser.username}}">
                   <label>Password:</label>
                   <input type="password" name="password" class="form-control">
                   <input type="submit" class="mt-2 btn btn-primary" value="Update username">
                 </form>
               </div>
               <div class="tab-pane fade" id="email" role="tabpanel" aria-labelledby="email-tab">
-                  <form method="post">
+                <form id="update-email">
                   <h2 class="card-title">Change your email</h2>
                   <label>Email:</label>
-                  <input type="text" name="email" class="form-control">
+                  <input autocomplete="off" type="email" name="email" class="form-control" value="{{currentUser.email}}">
                   <label>Password:</label>
                   <input type="password" name="password" class="form-control">
                   <input type="submit" class="mt-2 btn btn-primary" value="Update email">
                 </form>
               </div>
               <div class="tab-pane fade" id="password" role="tabpanel" aria-labelledby="password-tab">
-                <form method="post">
+                <form id="update-password">
                   <h2 class="card-title">Change your password</h2>
                   <label>Current password:</label>
                   <input type="password" name="current-password" class="form-control">

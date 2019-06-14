@@ -115,8 +115,24 @@ class DevSeater{
     return this.request.get(this.url + `user/is-logged-in`);
   }
 
+  async updateUsername(data){
+    return this.request.put(this.url + "users/username", data);
+  }
+
+  async updateEmail(data){
+    return this.request.put(this.url + "users/email", data);
+  }
+
+  async updatePassword(data){
+    return this.request.put(this.url + "users/password", data);
+  }
+
   async follow(uid){
     return this.request.get(this.url + `follow/${uid}`);
+  }
+
+  async checkUsernameAvailability(username){
+    return this.request.get(this.url + `users/username/check-availability/${username}`);
   }
 
   async unFollow(uid){

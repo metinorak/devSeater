@@ -44,6 +44,7 @@ class UserModel(Database):
 
   @exception_handling
   def addUser(self, user):
+    user["password"] = sha256_crypt.encrypt(user["password"])
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
     query = "INSERT INTO users(email, username, password, full_name) VALUES(%s, %s, %s, %s)"
@@ -97,6 +98,21 @@ class UserModel(Database):
     
     return False
   
+  @exception_handling
+  def checkPassword(self, uid, password):
+    connection = self.getConnection()
+    cursor = connection.cursor(dictionary=True)
+    query = "SELECT * FROM users WHERE uid = %s"
+    cursor.execute(query, (uid,) )
+    result = cursor.fetchone()
+    cursor.close()
+    connection.close()
+    if result != None:
+      hashed_password = result["password"]
+      if sha256_crypt.verify(password, hashed_password):
+        return True
+    return False
+
   @exception_handling
   def isThereThisUsername(self, username):
     connection = self.getConnection()
@@ -164,6 +180,7 @@ class UserModel(Database):
   
   @exception_handling
   def updatePassword(self, uid, password):
+    password = sha256_crypt.encrypt(password)
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
     query = "UPDATE users SET password = %s WHERE uid = %s"
@@ -186,7 +203,7 @@ class UserModel(Database):
   def updateEmail(self, uid, email):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
-    query = "UPDATE users SET email = %s WHERE uid = %s"
+    query = "UPDATE users SET email = %s, isEmailVerified = 0 WHERE uid = %s"
     cursor.execute(query, (email, uid))
     connection.commit()
     cursor.close()
