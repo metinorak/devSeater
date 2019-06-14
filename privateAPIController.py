@@ -467,6 +467,12 @@ def updateEmail():
             "msg": "Please enter a valid email!"
         })
     
+    if getCurrentUser()["email"] == newEmail:
+        return json.dumps({
+            "result": "fail",
+            "msg": "This is your current email!"
+        })
+    
     ModelObject["userModel"].updateEmail(getCurrentUid(), newEmail)
     return json.dumps({
         "result" : "success",
