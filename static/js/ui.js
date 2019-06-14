@@ -1201,9 +1201,19 @@ class UI{
     let alert = document.createElement("div");
     alert.className = `alert alert-${type}`;
     alert.textContent = message;
-    if(element.previousElementSibling != null && element.previousElementSibling.classList.contains("alert")){
+    if(position == "beforebegin" && element.previousElementSibling != null && element.previousElementSibling.classList.contains("alert")){
       element.previousElementSibling.remove();
     }
+    else if(position == "afterend" && element.nextElementSibling != null && element.nextElementSibling.classList.contains("alert")){
+      element.nextElementSibling.remove();
+    }
+    else if(position == "afterbegin" && element.firtElementChild != null && element.firtElementChild.classList.contains("alert")){
+      element.firtElementChild.remove();
+    }
+    else if(position == "beforeend" && element.lastElementChild != null && element.lastElementChild.classList.contains("alert")){
+      element.lastElementChild.remove();
+    }
+    
     element.insertAdjacentElement(position, alert);
   }
   
