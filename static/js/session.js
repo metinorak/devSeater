@@ -12,6 +12,6 @@ class Session{
   }
 
   static isLoggedIn(){
-    return (sessionStorage.getItem("currentUser") != null)
+    return (sessionStorage.getItem("currentUser") != null);
   }
 }

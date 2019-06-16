@@ -9,10 +9,6 @@ class DevSeater{
     return this.request.get(this.url + "q/" + query)
   }
 
-  async newDialogNumber(){
-    return this.request.get(this.url + "messages/new-dialog-number");
-  }
-
   //USER POSTS
   async lastUserPosts(uid){
     return this.request.get(this.url + `user-posts?uid=${uid}`);
@@ -60,6 +56,10 @@ class DevSeater{
 
   async currentUser(){
     return this.request.get(this.url + "current-user");
+  }
+
+  async getUser(uid){
+    return this.request.get(this.url + `user?uid=${uid}`);
   }
 
   async deleteUserPost(upid){
@@ -338,6 +338,35 @@ class DevSeater{
 
   async seaterAspirationNumber(sid){
     return this.request.get(this.url + `seaters/${sid}/aspirations/number`);
+  }
+
+  //MESSAGE ACTIONS
+  async newDialogNumber(){
+    return this.request.get(this.url + "messages/new-dialog-number");
+  }
+
+  async sendMessage(data){
+    return this.request.post(this.url + "messages/send", data);
+  }
+
+  async deleteMessage(mid){
+    return this.request.get(this.url + `messages/delete/${mid}`);
+  }
+
+  async dialogList(){
+    return this.request.get(this.url + "messages/dialogs");
+  }
+
+  async dialogLastMessages(uid){
+    return this.request.get(this.url + `messages/dialogs/${uid}`);
+  }
+
+  async dialogPreviousMessages(uid, mid){
+    return this.request.get(this.url + `messages/dialogs/${uid}?mid=${mid}`);
+  }
+
+  async deleteDialog(uid){
+    return this.request.delete(this.url + `messages/dialogs/${uid}`);
   }
 
 }

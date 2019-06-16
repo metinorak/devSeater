@@ -1137,12 +1137,15 @@ def getLastNotifications():
 
 
 #MESSAGE CONTROLLER
-@app.route("/private-api/messages/send")
+@app.route("/private-api/messages/send", methods = ["POST"])
 @login_required
 def sendMessage():
     message = json.loads(request.data)
-    ModelObject["messageModel"].sendMessage(getCurrentUid(), message["receiver_id"], message["text"])
-    return json.dumps({"result": "success"})
+    mid = ModelObject["messageModel"].sendMessage(getCurrentUid(), message["receiver_id"], message["text"])
+    return json.dumps({
+        "result": "success",
+        "mid": mid
+        })
 
 @app.route("/private-api/messages/delete/<string:mid>")
 @login_required
@@ -1174,17 +1177,22 @@ def getDialogList():
 @app.route("/private-api/messages/dialogs/<string:uid>")
 @login_required
 def getDialog(uid):
-    page = request.args.get("page")
-
-    if page == None:
-        page = 1
-    
-    msgList = ModelObject["messageModel"].getDialog(getCurrentUid(), uid, page, 10)
+    mid = request.args.get("mid")
+    if mid == None:
+        msgList = ModelObject["messageModel"].getDialogLastMessages(getCurrentUid(), uid, 10)
+    else:
+        msgList = ModelObject["messageModel"].getDialogPreviousMessages(getCurrentUid(), uid, mid, 10)
+        print(msgList)
 
     return json.dumps({
         "msgList" : msgList
     }, cls=DateTimeEncoder)
 
+@app.route("/private-api/messages/dialogs/<string:uid>", methods = ["DELETE"])
+@login_required
+def deleteDialog(uid):
+    ModelObject["messageModel"].deleteDialog(getCurrentUid(), uid)
+    return json.dumps({"result" : "success"})
 
 
 #SEARCH CONTROLLER

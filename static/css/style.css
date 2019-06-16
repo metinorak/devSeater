@@ -31,28 +31,28 @@ body{
 }
 
 h1{
-  font-size: 22px;
+  font-size: 20px;
   font-size: bold;
 }
 
 h2{
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
 }
 
 h3{
-  font-size: 15px;
+  font-size: 16px;
   font-weight: bold;
 }
 
 h4{
-  font-size: 13px;
+  font-size: 14px;
   font-weight: bold;
   margin:0px;
 }
 
 h5{
-  font-size: 11px;
+  font-size: 13px;
   font-weight: bold;
   margin:0px;
 }
@@ -241,6 +241,38 @@ header{
 
 .flex-container{
   display: flex;
+}
+
+.modal-body{
+  height: 100%;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.bg-new-message{
+  background: rgb(209, 236, 227);
+}
+
+.incoming-msg{
+  float: left;
+  font-size: 14px;
+  padding: 15px;
+  min-height: 40px;
+  margin-bottom: 15px;
+  width: 80%;
+  border-radius: 30px 30px 30px 0px !important;
+  background: rgb(209, 209, 209);
+}
+
+.outgoing-msg{
+  float: right;
+  font-size: 14px;
+  padding: 15px;
+  min-height: 40px;
+  margin-bottom: 15px;
+  width: 80%;
+  border-radius: 30px 30px 0px 30px !important;
+  background: #dde19c83;
 }
 
 #member-options > a{

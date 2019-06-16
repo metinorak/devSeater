@@ -1,6 +1,5 @@
 //Selecting elements
 const memberOptions = document.getElementById("member-options");
-const navbarLinks = document.getElementById("navbar-links");
 const searchInput = document.getElementById("search-input");
 const searhResults = document.getElementById("search-results");
 const searchForm = document.getElementById("search-form");
@@ -17,7 +16,6 @@ ui.changeTimeFormats(timeInfos);
 eventListeners();
 
 function eventListeners(){
-
   document.addEventListener("click", e => {
     
     if(e.target.classList.contains("follow-button")){
@@ -56,22 +54,27 @@ function eventListeners(){
 		});
 
 		//CREATE SESSION
-		devSeater.isLoggedIn()
-		.then(response => {
-			if(response["result"]){
-				devSeater.currentUser()
-				.then(user => {
-					Session.createSession(user);
-				})
-				.catch(err => console.error(err));
-			}
-		})
-		.catch(err => console.error(err));
+		if(!Session.isLoggedIn()){
+			devSeater.isLoggedIn()
+			.then(response => {
+				if(response["result"]){
+					devSeater.currentUser()
+					.then(user => {
+						Session.createSession(user);
 
-		//CHECKING
-		if(Session.isLoggedIn()){
+						//CHECKING
+						checkNewMessages();
+						checkNotifications();		
+					})
+					.catch(err => console.error(err));
+				}
+			})
+			.catch(err => console.error(err));
+		}
+		else{
+			//CHECKING
 			checkNewMessages();
-			checkNotifications();
+			checkNotifications();		
 		}
 
 		function checkNewMessages(){
@@ -86,7 +89,7 @@ function eventListeners(){
 					checkNewMessages();
 				});
 	
-			}, 3000);
+			}, 1000);
 		}
 		
 		function checkNotifications(){
@@ -101,7 +104,7 @@ function eventListeners(){
 					checkNotifications();
 				});
 	
-			}, 3000);
+			}, 1000);
 		}
 
 	});

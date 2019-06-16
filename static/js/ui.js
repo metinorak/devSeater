@@ -10,6 +10,7 @@ class UI{
     this.contentArea = document.querySelector(".content-area");
     this.navbar = document.querySelector("navbar");
     this.generalModal = document.querySelector("#general-modal");
+    this.messageModal = document.querySelector("#message-modal");
   }
 
   showGeneralResults(results){
@@ -50,12 +51,12 @@ class UI{
   }
 
   showNewDialogNumber(number){
-    if(Number(number) > 0){
+    if(Number(number) == 0){
+      this.messagesLink.lastElementChild.style.display = "none";
+    }
+    else{
       this.messagesLink.lastElementChild.textContent = number;
       this.messagesLink.lastElementChild.style.display = "inline";
-    }
-    else if(this.messagesLink.lastElementChild.style.display == "inline"){
-      this.messagesLink.lastElementChild.style.display == "none"
     }
     
   }
@@ -1511,12 +1512,118 @@ class UI{
     $("#general-modal").modal("show");
   }
 
+  showDialogList(dialogList){
+    this.closeAllModals();
+
+    let modalBody = document.createElement("div");
+    if(dialogList.length == 0){
+      modalBody.textContent = "You don't have any message :(";
+    }
+    else{
+      modalBody.className = "list-group";
+      dialogList.forEach(dialog => {
+        let element = document.createElement("li");
+        element.className = 
+        `list-group-item ${dialog["isRead"] == 0 ? 'bg-new-message' : ''}`;
+        element.setAttribute("uid", dialog["uid"]);
+  
+        if(dialog["photo"] == null){
+          dialog["photo"] = "/static/img/empty-profile.png";
+        }
+        else{
+          dialog["photo"] = "/static/uploads/users/up/" + dialog["photo"];
+        }
+  
+        element.innerHTML =
+        `
+        <span class="row">
+          <span class="col-sm-9">
+            <a href="#" onclick="openMessageBox(${dialog["uid"]})" class="row ${dialog["isRead"] ? '' : 'font-weight-bold'}">
+              <img src="${dialog["photo"]}" class="col-sm-3" width="40px" height="40px">
+              <span class="col-sm-9">
+                <span>${dialog["full_name"]}</span><br>
+                <span style="font-size:13px" class="text-muted">@${dialog["username"]}</span>
+              </span>
+            </a>
+          </span>
+          <span class="col-sm-3"><button id="delete-dialog-button" class="btn btn-danger">Delete</button></span>
+        </span>
+        `;
+        modalBody.appendChild(element);
+      });  
+    }
+
+    this.setModal(this.generalModal, "Messages", modalBody, true);
+    $("#general-modal").modal("show");
+  }
+
+  showMessages(msgList, currentUser, otherUser){
+    this.closeAllModals();
+    
+    let modalBody = document.createElement("div");
+    modalBody.setAttribute("uid", otherUser["uid"]);
+    if(msgList.length == 0){
+      modalBody.textContent = "You don't have any message with this user :(";
+    }
+    else{
+      msgList.forEach(message => {
+        let element = document.createElement("span");
+        element.className = `msg ${(message["sender_id"] == currentUser["uid"]) ? 'outgoing-msg' : 'incoming-msg'}`;
+        element.setAttribute("mid", message["mid"]);
+  
+        element.innerHTML =
+        `
+          ${message["message"]}
+        `;
+        
+        modalBody.insertAdjacentElement("afterbegin", element);
+      });  
+    }
+
+    this.setModal(this.messageModal, otherUser["full_name"], modalBody);
+
+    $("#message-modal").modal("show");
+  }
+
+  showPreviousMessages(msgList, currentUser){
+    msgList.forEach(message => {
+      let element = document.createElement("span");
+      element.className = `msg ${(message["sender_id"] == currentUser["uid"]) ? 'outgoing-msg' : 'incoming-msg'}`;
+      element.setAttribute("mid", message["mid"]);
+
+      element.innerHTML =
+      `
+        ${message["message"]}
+      `;
+      let container = this.messageModal.querySelector(".modal-body").firstElementChild;
+      container.insertAdjacentElement("afterbegin", element);
+    });  
+  }
+
+
+  addMessage(mid, message, type){
+    let element = document.createElement("span");
+    element.className = `msg ${type}-msg`;
+    element.setAttribute("mid", mid);
+
+    element.textContent = message;
+
+    this.messageModal.querySelector(".modal-body").firstElementChild.appendChild(element);
+    this.messageModal.querySelector("textarea").value = "";
+
+    this.gotoBottom(this.messageModal.querySelector(".modal-body"));
+  }
+
+
   setModal(modal, title, body, hideFooter = false){
     let modalTitle = modal.querySelector(".modal-title");
     let modalBody = modal.querySelector(".modal-body");
 
     modalTitle.innerText = title;
+
     modalBody.innerHTML = body.outerHTML;
+
+    this.gotoBottom(modalBody);
 
     if(hideFooter){
       modal.querySelector(".modal-footer").style.display = "none";
@@ -1524,5 +1631,17 @@ class UI{
     else{
       modal.querySelector(".modal-footer").style.display = "block";
     }
+  }
+
+  gotoBottom(element){
+    //Change this later
+    setTimeout(() => {
+      element.scrollTo(0, element.scrollHeight);
+    }, 350);
+  }
+
+  closeAllModals(){
+    $("#general-modal").modal("hide");
+    $("#message-modal").modal("hide");
   }
 }

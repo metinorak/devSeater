@@ -9,6 +9,9 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">  
   <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  {% block css_files %}{% endblock %}
+  
 </head>
 <body> 
 
@@ -35,6 +38,7 @@
   <script src="{{url_for('static', filename='js/devSeater.js')}}"></script>
   <script src="{{url_for('static', filename='js/ui.js')}}"></script>
   <script src="{{url_for('static', filename='js/common.js')}}"></script>
+  <script src="{{url_for('static', filename='js/messages.js')}}"></script>
   
   {% block scripts %}{% endblock %}
   
