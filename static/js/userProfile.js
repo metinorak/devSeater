@@ -28,6 +28,10 @@ function eventListeners(){
     }
   });
 
+  messageButton.addEventListener("click", e => {
+    openMessageBox(uid);
+  });
+
   postsButton.addEventListener("click", e => {
     let uid = userProfileCard.getAttribute("uid");
 
