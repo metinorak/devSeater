@@ -88,8 +88,11 @@ class MessageModel(Database):
     cursor = connection.cursor(dictionary=True)
     query = """
     SELECT * FROM messages WHERE
-    ((receiver_id = %s AND sender_id = %s) OR (receiver_id = %s AND sender_id = %s) ) 
-    AND isDeletedByReceiver = 0 
+    (
+      (receiver_id = %s AND sender_id = %s AND isDeletedByReceiver = 0)
+      OR 
+      (receiver_id = %s AND sender_id = %s AND isDeletedBySender = 0) 
+    ) 
     ORDER BY time DESC LIMIT %s"""
     cursor.execute(query, (current_uid, other_uid, other_uid, current_uid, number))
     result = cursor.fetchall()
