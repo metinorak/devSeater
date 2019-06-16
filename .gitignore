@@ -1,0 +1,11 @@
+
+# Compiled source #
+###################
+*.pyc
+
+
+# Folders #
+###################
+__pycache__
+models/__pycache__
+static/uploads
