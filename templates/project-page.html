@@ -95,7 +95,7 @@
                                         <ul class="dropdown-menu">
                                             {% if session.uid == post.uid %}
                                                 <li><a class="dropdown-item delete-post">Delete</a></li>
-                                                <li><a class="dropdown-item edit-post">Edit</a></li>
+                                                <li><a class="dropdown-item edit-post d-none">Edit</a></li>
                                             {% endif %}
                                             
                                         </ul>
@@ -134,7 +134,7 @@
                             {% endif %}
                                
                             <button class="btn btn-post mr-2 comment-button">Comment</button>
-                            <button class="btn btn-post mr-2">Share</button>
+                            <button class="btn btn-post mr-2 d-none">Share</button>
                             </div>
                             
                             <div style="display: none;" class="comment-box mt-2">

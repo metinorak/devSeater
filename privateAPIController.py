@@ -282,9 +282,6 @@ def userPostCommentNumber(upid):
     number = ModelObject["userPostModel"].getUserPostCommentNumber(upid)
     return json.dumps({"number" : number})
 
-
-
-
 @app.route("/private-api/user-posts/<string:upid>/comments", methods = ["GET", "POST", "PUT", "DELETE"])
 @login_required
 def userPostComments(upid):

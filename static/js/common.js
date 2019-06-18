@@ -64,7 +64,7 @@ function eventListeners(){
 
 						//CHECKING
 						checkNewMessages();
-						checkNotifications();		
+						//checkNotifications();		
 					})
 					.catch(err => console.error(err));
 				}
@@ -74,7 +74,7 @@ function eventListeners(){
 		else{
 			//CHECKING
 			checkNewMessages();
-			checkNotifications();		
+			//checkNotifications();		
 		}
 
 		function checkNewMessages(){

@@ -12,10 +12,13 @@
             {% if currentUser != None %}
               <ul class="navbar-nav">
                   <li>
-                    <a href="#" id = "messages-link" class="mr-3">messages<span style="display:none" class="badge badge-success ml-1"></span></a>
+                    <a title="messages" href="#" id = "messages-link" class="mr-3">
+                      <i class="material-icons pt-2">mail_outline</i>
+                      <span style="display:none" class=""></span>
+                    </a>
                   </li>
                   <li>
-                    <a href="#" id="notifications-link">notifications<span style="display:none" class="badge badge-info ml-1"></span></a>
+                    <a href="#" id="notifications-link" style="display: none;">notifications<span style="display:none" class="badge badge-info ml-1"></span></a>
                   </li>
 
               </ul>
@@ -44,8 +47,8 @@
                     <span class="text-muted">@{{currentUser.username}}</span>
                   </a>
                   <hr>
-                  <a class="dropdown-item" href="#">Projects</a>
-                  <a class="dropdown-item" href="#">Seaters</a>
+                  <a class="dropdown-item d-none" href="#">Projects</a>
+                  <a class="dropdown-item d-none" href="#">Seaters</a>
                   <a class="dropdown-item" href="{{url_for('settings')}}">Settings</a>
                   <hr>
                   <a class="dropdown-item" onclick="logout();" href="{{url_for('logout')}}">Log out</a>

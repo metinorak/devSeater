@@ -69,10 +69,10 @@ class MessageModel(Database):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
     query = """
-    SELECT U.*, M.isRead FROM 
+    SELECT U.*, M.isRead=1 FROM 
     (SELECT sender_id AS uid, time, isRead FROM messages WHERE receiver_id = %s AND isDeletedByReceiver = 0
     UNION
-    SELECT receiver_id AS uid, time, 1 FROM messages WHERE sender_id = %s AND isDeletedBySender = 0) M, users U
+    SELECT receiver_id AS uid, time, isRead FROM messages WHERE sender_id = %s AND isDeletedBySender = 0) M, users U
     WHERE U.uid = M.uid
     GROUP BY M.uid ORDER BY M.time DESC
     """

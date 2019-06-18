@@ -146,7 +146,7 @@ class UI{
         var menuContent = 
         `
         <li><a class="dropdown-item delete-post">Delete</a></li>
-        <li><a class="dropdown-item edit-post">Edit</a></li>
+        <li><a class="dropdown-item edit-post d-none">Edit</a></li>
         `;
       }
       else{
@@ -210,7 +210,7 @@ class UI{
       </span>
       ${likeButton}
       <button class="btn btn-post mr-2 comment-button">Comment</button>
-      <button class="btn btn-post mr-2">Share</button>
+      <button class="btn btn-post mr-2 d-none">Share</button>
       </div>
 
       <div style="display: none;" class="comment-box mt-2">
@@ -368,7 +368,7 @@ class UI{
       var menuContent = 
       `
       <li><a class="dropdown-item delete-post">Delete</a></li>
-      <li><a class="dropdown-item edit-post">Edit</a></li>
+      <li><a class="dropdown-item edit-post d-none">Edit</a></li>
       `;
     }
     else{
@@ -440,7 +440,7 @@ class UI{
     </span>
     ${likeButton}
     <button class="btn btn-post mr-2 comment-button">Comment</button>
-    <button class="btn btn-post mr-2">Share</button>
+    <button class="btn btn-post mr-2 d-none">Share</button>
     </div>
 
     <div style="display: none;" class="comment-box mt-2">
@@ -602,7 +602,7 @@ class UI{
         var likeButton = `<button class="comment-like-button mr-2">Like</button>`;
       }
 
-      if(comment["uid"] = currentUser["uid"]){
+      if(comment["uid"] == currentUser["uid"]){
         var deleteButton = `<button class="comment-delete-button mr-2">Delete</button>`;
       }
       else{
@@ -808,7 +808,7 @@ class UI{
         var likeButton = `<button class="comment-like-button mr-2">Like</button>`;
       }
 
-      if(comment["uid"] = currentUser["uid"]){
+      if(comment["uid"] == currentUser["uid"]){
         var deleteButton = `<button class="comment-delete-button mr-2">Delete</button>`;
       }
       else{
@@ -1538,7 +1538,7 @@ class UI{
         `
         <span class="row">
           <span class="col-sm-9">
-            <a href="#" onclick="openMessageBox(${dialog["uid"]})" class="row ${dialog["isRead"] ? '' : 'font-weight-bold'}">
+            <a href="#" onclick="openMessageBox(${dialog["uid"]})" class="row ${!dialog["isRead"] ? '' : 'font-weight-bold'}">
               <img src="${dialog["photo"]}" class="col-sm-3" width="40px" height="40px">
               <span class="col-sm-9">
                 <span>${dialog["full_name"]}</span><br>
