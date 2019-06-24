@@ -11,8 +11,6 @@ def exception_handling(f):
         print(e)
   return decorated_function
 
-
-
 class Database():
   dbconfig = {
       "host": DB_HOST,
@@ -21,10 +19,13 @@ class Database():
       "database": DB_NAME
     }
 
-  cnxpool = mysql.connector.pooling.MySQLConnectionPool(pool_name = "devseater", pool_size = 32, **dbconfig)
+  cnxpool = mysql.connector.pooling.MySQLConnectionPool(pool_name = "devseater", pool_size = 5, **dbconfig)
   
   def getConnection(self):
-    return self.cnxpool.get_connection()
+    try:
+      return self.cnxpool.get_connection()
+    except:
+      self.cnxpool.add_connection()
 
 
   
