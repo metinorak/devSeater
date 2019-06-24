@@ -12,7 +12,7 @@ class DateTimeEncoder(json.JSONEncoder):
 
 #USER
 @app.route("/private-api/user/is-logged-in")
-def isLoggedIn():
+def isCurrentUserLoggedIn():
     result = (getCurrentUid() != None)
     return json.dumps({"result" : result})
 
@@ -559,7 +559,7 @@ def seaterSkills():
         sid = request.args.get("sid")
 
         if sid != None:
-            skills = ModelObject["skillModel"].getUserSkills(uid)
+            skills = ModelObject["skillModel"].getUserSkills(getCurrentUid)
             return json.dumps(skills, cls=DateTimeEncoder)
         return render_template("private-api/unknown-request.html")
 
@@ -1106,10 +1106,9 @@ def unlikeProjectPostComment(ppcid):
 
 @app.route("/private-api/project-posts/comments/<string:ppcid>/likes/number")
 @login_required
-def projectPostCommentLikeNumber(upcid):
+def projectPostCommentLikeNumber(ppcid):
     number = ModelObject["projectPostModel"].getProjectPostCommentLikeNumber(ppcid)
     return json.dumps({"number": number})
-
 
 #NOTIFICATION CONTROLLER
 @app.route("/private-api/notifications/new")

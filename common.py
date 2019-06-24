@@ -8,12 +8,6 @@ from models.config import *
 import random
 import string
 
-#Mail Libs
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-
-
 app = Flask(__name__)
 app.secret_key = "martymclfy"
 

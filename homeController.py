@@ -1,4 +1,5 @@
 from common import *
+from mailController import sendVerificationEmail
 
 #HOME CONTROLLER
 @app.route("/", methods = ["GET", "POST"])
@@ -19,7 +20,6 @@ def index():
         errorMessages["email"] = "This email address is already taken"
       elif(not isValidEmail(email)):
         errorMessages["email"] = "Please enter a valid email address"
-
       
       if(len(name) < 3):
         errorMessages["name"] = "Name should be at least 3 characters"
@@ -43,14 +43,7 @@ def index():
           "password" : password
         })
 
-        hashCode = generateEmailVerificationHashCode(email)
-
-        sendMail({
-          "To" : email,
-          "Subject" : "Email Verification - devSeater",
-          "Body" : render_template("mail/email-verification-mail.html", email = email, hashCode = hashCode)
-
-        })
+        sendVerificationEmail(email)
 
         flash("User created successfully, please check your inbox for email verification", "success")
 
@@ -82,8 +75,6 @@ def index():
       currentUser = currentUser,
       whoToFollowList = whoToFollowList
       )
-
-
 
 @app.route("/login", methods = ["GET", "POST"])
 def login():
@@ -117,3 +108,12 @@ def about():
 def contact():
   return render_template("contact.html")
 
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template(
+      'not-found.html',
+      title = "404 Not Found!",
+      message = "The page you trying to load not found.",
+      currentUser = getCurrentUser()
+      )

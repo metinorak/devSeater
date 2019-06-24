@@ -1,5 +1,10 @@
 from common import *
 
+#Mail Libs
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
 #MAIL CONTROLLER
 def sendMail(email):
   msg = MIMEMultipart()
@@ -30,7 +35,6 @@ def passwordReset():
     hashCodeFromUser = request.form.get("hash")
     password = request.form.get("password")
     confirmPassword = request.form.get("confirm-password")
-
 
     if email != None and ModelObject["userModel"].isThereThisEmail(email):
       hashCode = generatePasswordResetHashCode(email)
@@ -99,3 +103,11 @@ def generateEmailVerificationHashCode(email):
   stringToHash = user["email"] + user["password"] + user["full_name"] + user["username"]
   h.update(stringToHash.encode("utf-8"))
   return h.hexdigest()
+
+def sendVerificationEmail(email):
+  hashCode = generateEmailVerificationHashCode(email)
+  sendMail({
+    "To" : email,
+    "Subject" : "Email Verification - devSeater",
+    "Body" : render_template("mail/email-verification-mail.html", email = email, hashCode = hashCode)
+  })
