@@ -1,0 +1,47 @@
+<ul class="list-group list-group-flush">
+    <li class="list-group-item"><h2>Popular Projects</h2></li>
+      {% for project in popularProjects %}
+          <li class="list-group-item">
+                  <div class="card">
+                      {% if project.photo != None %}
+                          <a href="/p/{{ project.project_name }}">
+                              <img class="card-img-top" src="{{url_for('static', filename= 'uploads/projects/pp/' + project.photo) }}" alt="Card image">
+                          </a>
+                      {% endif %}
+                      
+                      <div class="card-body">
+                      <h3 class="card-title"><a href="/p/{{ project.project_name }}">{{project.project_name}}</a></h3>
+                      <p class="card-text">{{project.short_description}}</p>
+                      </div>
+                  </div>
+          </li>
+      {% endfor %}
+</ul>
+</div>
+
+
+<div>
+<ul class="list-group list-group-flush">
+  <li class="list-group-item"><h2>Who to Follow</h2></li>
+  {% for userToFollow in whoToFollowList %}
+      <li class="list-group-item" >
+          <div class="row">
+              <div class="col-3">
+                  <a href="/u/{{userToFollow.username}}">
+                      {% if userToFollow.photo == None %}
+                          <span><img width="50px" class="rounded-circle" src="{{url_for('static', filename= 'img/empty-profile.png') }}" alt=""></span>
+                      {% else %}
+                          <span><img width="50px" class="rounded-circle" src="{{url_for('static', filename= 'uploads/users/up/' + userToFollow.photo ) }}" alt=""></span>
+                      {% endif %}
+                  </a>
+              </div>
+              <div class="float-right col-9" uid="{{userToFollow.uid}}">
+                  <a href="/u/{{userToFollow.username}}">{{userToFollow.full_name}}</a>
+                  <br>
+                  <button class="btn btn-light follow-button">Follow</button>
+              </div>  
+          </div>
+      </li>
+  {% endfor %}
+</div>
+
