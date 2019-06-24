@@ -53,10 +53,11 @@ class ProjectPostModel(Database):
     (SELECT COUNT(*) FROM projectPostCommentLikes WHERE ppid = projectPosts.ppid AND uid = %s) AS isLiked, 
     (SELECT COUNT(*) FROM projectPostLikes WHERE ppid = projectPosts.ppid) AS likeNumber,
     (SELECT COUNT(*) FROM projectPostComments WHERE ppid = projectPosts.ppid AND uid = %s) AS commentNumber,
-    projectPosts.* FROM projectPosts 
+    projectPosts.*, users.photo, users.full_name, users.username 
+    FROM projectPosts 
     INNER JOIN users ON users.uid = projectPosts.uid
     WHERE pid = %s AND ppid < %s ORDER BY time DESC LIMIT %s"""
-    cursor.execute(query, (currentUser, pid, ppid, number))
+    cursor.execute(query, (currentUser, currentUser, pid, ppid, number))
     result = cursor.fetchall()
     cursor.close()
     connection.close()

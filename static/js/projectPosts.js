@@ -219,4 +219,22 @@ function eventListeners(){
 		}
 	});
 
+	//When touched the bottom
+	window.onscroll = function(e) {
+		if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50) {
+			// Load previous following posts
+			let lastPost = getTheLastPost();
+			let ppid = lastPost.getAttribute("ppid");
+
+			devSeater.previousProjectPosts(pid, ppid)
+			.then(posts => {
+				console.log(posts);
+				posts = renderPosts(posts);
+
+				ui.showPreviousPosts(posts, Session.getCurrentUser());
+				PR.prettyPrint();
+			})
+			.catch(err => console.error(err));
+		}
+	};
 }

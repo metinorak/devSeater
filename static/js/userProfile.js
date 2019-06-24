@@ -81,7 +81,7 @@ function eventListeners(){
 
 	//When touched the bottom
 	window.onscroll = function(e) {
-    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50) {
 			// Load previous following posts
 			let lastPost = getTheLastPost();
       let upid = lastPost.getAttribute("upid");
