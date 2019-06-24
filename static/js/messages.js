@@ -34,12 +34,13 @@ function eventListeners(){
   });
 
   messageModal.querySelector(".modal-body").addEventListener("scroll", e => {
-    if(e.target.scrollTop < 100){
+    if(e.target.scrollTop < 20){
       let mid = e.target.querySelector(".msg").getAttribute("mid");
       let uid = e.target.firstElementChild.getAttribute("uid");
 
       devSeater.dialogPreviousMessages(uid, mid)
       .then(response => {
+        console.log(response["msgList"]);
         ui.showPreviousMessages(response["msgList"], Session.getCurrentUser());
       })
       .catch(err => console.error(err));
@@ -69,6 +70,7 @@ function openMessageBox(uid){
   .then(response => {
     devSeater.getUser(uid)
     .then(user => {
+      console.log(response["msgList"]);
       ui.showMessages(response["msgList"], Session.getCurrentUser(), user);
     })
     .catch(err => console.error(err));

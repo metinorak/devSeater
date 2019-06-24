@@ -1596,7 +1596,14 @@ class UI{
         ${message["message"]}
       `;
       let container = this.messageModal.querySelector(".modal-body").firstElementChild;
-      container.insertAdjacentElement("afterbegin", element);
+      let firstMessage = container.querySelector(".msg");
+      let firstMessageId = firstMessage.getAttribute("mid");
+      if(message["mid"] < firstMessageId){
+        firstMessage.insertAdjacentElement("beforebegin", element);
+      }
+      else{
+        return;
+      }
     });  
   }
 

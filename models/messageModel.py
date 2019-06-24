@@ -93,7 +93,7 @@ class MessageModel(Database):
       OR 
       (receiver_id = %s AND sender_id = %s AND isDeletedBySender = 0) 
     ) 
-    ORDER BY time DESC LIMIT %s"""
+    ORDER BY mid DESC LIMIT %s"""
     cursor.execute(query, (current_uid, other_uid, other_uid, current_uid, number))
     result = cursor.fetchall()
 
@@ -120,7 +120,7 @@ class MessageModel(Database):
     OR
     (receiver_id = %s AND sender_id = %s AND isDeletedBySender = 0) ) 
     AND mid < %s
-    ORDER BY time DESC LIMIT %s"""
+    ORDER BY mid DESC LIMIT %s"""
 
     cursor.execute(query, (current_uid, other_uid, other_uid, current_uid, mid, number))
     result = cursor.fetchall()
