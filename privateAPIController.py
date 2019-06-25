@@ -371,18 +371,19 @@ def userPhoto(uid):
                 "result": "fail",
                 "msg": "File can not be more than 2 MB"
                 })
-        #Delete old uploaded file
-        if user["photo"] != None:
-            try:
-                os.remove(UPLOAD_FOLDER + "/users/up/" + user["photo"])
-            except:
-                print("File couldn't be removed!")
 
         newFileName = str(uid) + "_" + generateCode(10) + ".jpg"
 
         with open(UPLOAD_FOLDER + "/users/up/" + newFileName, "wb") as fh:
             fh.write(request.data)
             ModelObject["userModel"].updateProfilePhoto(getCurrentUid(), newFileName)
+
+            #Delete old uploaded file
+            if user["photo"] != None:
+                try:
+                    os.remove(UPLOAD_FOLDER + "/users/up/" + user["photo"])
+                except:
+                    print("File couldn't be removed!")
             return json.dumps({"result": "success"})
     return json.dumps({"result": "fail"})
     
@@ -829,15 +830,20 @@ def projectPhoto(pid):
                 "result": "fail",
                 "msg": "File can not be more than 2 MB"
                 })
-        #Delete old uploaded file
-        if project["photo"] != None:
-            os.remove(UPLOAD_FOLDER + "/projects/pp/" + project["photo"])
 
         newFileName = str(pid) + "_" + generateCode(10) + ".jpg"
 
         with open(UPLOAD_FOLDER + "/projects/pp/" + newFileName, "wb") as fh:
             fh.write(request.data)
             ModelObject["projectModel"].updateProjectPhoto(pid, newFileName)
+
+            #Delete old uploaded file
+            if project["photo"] != None:
+                try:
+                    os.remove(UPLOAD_FOLDER + "/projects/pp/" + project["photo"])
+                except:
+                    print("File couldn't be uploaded.");
+
             return json.dumps({"result": "success"})
     return json.dumps({"result": "fail"})
 
