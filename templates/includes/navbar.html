@@ -40,11 +40,10 @@
                   {% endif %}
                   
                 </button>
-                <div id="member-options" class="dropdown-menu">
-                  <a class="dropdown-item" href="/u/{{currentUser.username}}">
-                    {{currentUser.full_name}}
-                    <br>
-                    <span class="text-muted">@{{currentUser.username}}</span>
+                <div id="navbar-user-options" class="dropdown-menu">
+                  <a class="dropdown-item" id="user-profile-link" href="/u/{{currentUser.username}}">
+                    <span class="d-block">{{currentUser.full_name}}</span>
+                    <span class="text-muted d-block">@{{currentUser.username}}</span>
                   </a>
                   <hr>
                   <a class="dropdown-item d-none" href="#">Projects</a>

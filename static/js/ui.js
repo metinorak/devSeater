@@ -8,7 +8,7 @@ class UI{
     this.newFollowingPostNumberButton = document.getElementById("new-following-post-number");
     this.postTextarea = document.getElementById("post-textarea");
     this.contentArea = document.querySelector(".content-area");
-    this.navbar = document.querySelector("navbar");
+    this.navbar = document.querySelector(".navbar");
     this.generalModal = document.querySelector("#general-modal");
     this.messageModal = document.querySelector("#message-modal");
   }
@@ -1088,6 +1088,17 @@ class UI{
       </div>
     </div>
     `;
+  }
+
+  changeUsernameInNavbar(username){
+    let link = this.navbar.querySelector("#user-profile-link");
+    link.href = `/u/${username}`;
+    link.children[1].textContent = `@${username}`;
+  }
+
+  changeFullNameInNavbar(full_name){
+    let link = this.navbar.querySelector("#user-profile-link");
+    link.children[0].textContent = full_name;
   }
   
   showUserProfileSettings(currentUser, links, skills){

@@ -59,6 +59,7 @@ function eventListeners(){
     .then(response => {
       if(response["result"] == "success"){
         ui.showAlert(e.target, response["msg"], "success", "beforebegin");
+        ui.changeUsernameInNavbar(e.target["username"].value);
       }
       else{
         ui.showAlert(e.target, response["msg"], "danger", "beforebegin");

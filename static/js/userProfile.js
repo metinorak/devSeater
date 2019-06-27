@@ -141,6 +141,7 @@ function eventListeners(){
         if(response["result"] == "success"){
           ui.showMessageAfterElement(e.target, "Full name updated!", "success");
           userFullNameInfo.textContent = e.target.value;
+          ui.changeFullNameInNavbar(e.target.value);
         }
         else{
           ui.showMessageAfterElement(e.target, "Full name couldn't be updated!", "fail");

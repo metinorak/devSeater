@@ -1,5 +1,5 @@
 //Selecting elements
-const memberOptions = document.getElementById("member-options");
+const navbarUserOptions = document.getElementById("navbar-user-options");
 const searchInput = document.getElementById("search-input");
 const searhResults = document.getElementById("search-results");
 const searchForm = document.getElementById("search-form");
