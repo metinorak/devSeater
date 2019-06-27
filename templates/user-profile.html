@@ -55,6 +55,7 @@
                   <div>
                     <h1 class="text-muted">Projects</h1>
                     <div class="list-group">
+                        <a href="{{url_for('createAProject')}}" style="display:none;" class="btn btn-primary new-project-button">Create a New Project</a>
                         {% if not userProjects %}
                             <span>This user does not have any projects</span>
                         {% else %}
@@ -62,9 +63,7 @@
                                 <a type="button" href="/p/{{project.project_name}}" class="list-group-item list-group-item-action">{{project.project_name}}</a>   
                             {% endfor %}                            
                         {% endif %}
-                        
 
-                        
                     </div>
                   </div>
       

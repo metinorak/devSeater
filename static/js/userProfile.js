@@ -1,6 +1,7 @@
 //Selecting elements
 const messageButton = document.querySelector(".message-button");
 const followButton = document.querySelector(".follow-button");
+const newProjectButton = document.querySelector(".new-project-button");
 const userProfileCard = document.querySelector("#user-profile-card");
 const uid = userProfileCard.getAttribute("uid");
 const contentArea = document.querySelector(".content-area");
@@ -25,6 +26,7 @@ function eventListeners(){
 
     if(uid == Session.getCurrentUser()["uid"]){
       editProfileButton.style.display = "inline";
+      newProjectButton.style.display = "inline";
     }
   });
 
