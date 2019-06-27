@@ -121,7 +121,7 @@ class ProjectModel(Database):
   def updateProjectName(self, pid, name):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
-    query = "UPDATE projects SET name = %s WHERE pid = %s"
+    query = "UPDATE projects SET project_name = %s WHERE pid = %s"
     cursor.execute(query, (name, pid) )
     connection.commit()
     cursor.close()
