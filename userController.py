@@ -6,6 +6,15 @@ from common import *
 def userProfile(username):
   currentUser = getCurrentUser()
   user = ModelObject["userModel"].getUserByUsername(username, getCurrentUid())
+
+  if user == None:
+    return render_template(
+      "not-found.html",
+      title = "User Not Found!",
+      msg = "The user you trying to access not found!",
+      currentUser = getCurrentUser()
+      )
+
   userLinks = ModelObject["userModel"].getUserLinks(user["uid"])
   userProjects = ModelObject["projectModel"].getUserProjects(user["uid"])
   lastUserPosts = ModelObject["userPostModel"].getLastUserPosts(user["uid"], 10, getCurrentUid())

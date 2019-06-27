@@ -193,7 +193,7 @@ function eventListeners(){
           img.onload = function() {
               let ratio = this.width / this.height;
               if(ratio == (16/9)){
-                ui.showMessageAfterElement(e.target, "File is uploading...", "info");
+                ui.showMessageAfterElement(e.target, "Uploading file...", "info");
                 devSeater.updateProjectPhoto(pid, file)
                 .then(response => {
 									console.log(response);

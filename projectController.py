@@ -47,6 +47,15 @@ def createAProject():
 def projectPage(projectName):
   currentUser = getCurrentUser()
   project = ModelObject["projectModel"].getProjectByProjectName(projectName)
+
+  if project == None:
+    return render_template(
+      "not-found.html",
+      title = "Project Not Found!",
+      msg = "The project you trying to access not found!",
+      currentUser = getCurrentUser()
+      )
+
   projectLinks = ModelObject["projectModel"].getProjectLinks(project["pid"])
   lastProjectPosts = ModelObject["projectPostModel"].getLastProjectPosts(project["pid"], 10, getCurrentUid())
   numberOfMembers = ModelObject["projectModel"].getNumberOfMembers(project["pid"])

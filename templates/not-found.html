@@ -1,12 +1,15 @@
 {% extends "layout.html" %}
 
-{% block title %}404 Not Found!{% endblock %}
+{% block title %}{{title}}{% endblock %}
 
 
 {% block body %}
 <main class="container">
     <div class="card p-3">
-      <h1>404 Not Found!</h1>
+      <center>
+        <h1>{{title}}</h1>
+        <p>{{msg}}</p>
+      </center>
     </div>
 </main>
 
