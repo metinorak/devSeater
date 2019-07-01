@@ -20,6 +20,8 @@ a:hover{
 }
 
 .alert{
+  padding: 5px;
+  margin-bottom: 5px;
   color:  lightsalmon;
   background: whitesmoke;
   font-size: 14px;
@@ -80,7 +82,7 @@ footer{
   padding: 10px;
 }
 
-input{
+input, textarea{
   color: #666547;
   font-weight: bold;
   font-size: 1.2em;
@@ -91,6 +93,10 @@ input{
   padding: 2px;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
+}
+
+textarea{
+  height: auto;
 }
 
 input[type=checkbox]{
@@ -141,5 +147,12 @@ input[type=checkbox]{
 .login-form{
   padding-bottom: 20px;
   grid-column: 2;
+  align-content: center;
+}
+
+.contact-form{
+  margin: auto;
+  padding-bottom: 20px;
+  max-width: 500px;
   align-content: center;
 }

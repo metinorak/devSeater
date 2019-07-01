@@ -106,7 +106,39 @@ def about():
 
 @app.route("/contact", methods = ["POST", "GET"])
 def contact():
-  return render_template("contact.html")
+  if request.method == "POST":
+    name = request.form.get("name").strip()
+    email = request.form.get("email").strip()
+    subject = request.form.get("subject").strip()
+    message = request.form.get("message").strip()
+
+    isValid = True
+
+    #Validation
+    if name == None or name == "":
+      isValid = False
+      flash("Please enter a name", "alert")
+    if not isValidEmail(email):
+      isValid = False
+      flash("Please enter a valid email", "alert")
+    if subject == None or subject == "":
+      isValid = False
+      flash("Please enter a subject", "alert")
+    if message == None or message == "":
+      isValid = False
+      flash("Please enter a message", "alert")
+    
+    if isValid:
+      ModelObject["contactModel"].addContactMessage({
+        "name" : name,
+        "subject" : subject,
+        "email" : email,
+        "message" : message
+      })
+      
+      flash("Message sent successfully", "success")
+    
+  return render_template("intro/contact.html")
 
 @app.errorhandler(404)
 def page_not_found(e):
