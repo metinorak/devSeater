@@ -622,15 +622,15 @@ class UI{
       let html = 
       `
       <div class="comment row mt-2" upcid = ${comment["upcid"]}>
-        <a href="/u/${comment["username"]}" class="col-sm-1">
+        <a href="/u/${comment["username"]}" class="col-md-1 col-2">
             <img width="30px" class="rounded-circle" src="${comment["photo"]}" alt="">
         </a>
-        <div class="col-sm-2">
+        <div class="col-md-2 col-10">
             <a href="/u/${comment["username"]}" class="row small">${comment["full_name"]}</a>
             <a href="/u/${comment["username"]}" class="row text-muted small">@${comment["username"]}</a>
 
         </div>
-        <div class="col-sm-9">
+        <div class="col-md-9">
           <p class="comment-text">${comment["comment"]}</p>
           <span >
             ${likeButton}
@@ -1548,16 +1548,18 @@ class UI{
         element.innerHTML =
         `
         <span class="row">
-          <span class="col-sm-9">
+          <span class="col-8 col-md-9">
             <a href="#" onclick="openMessageBox(${dialog["uid"]})" class="row ${!dialog["isRead"] ? '' : 'font-weight-bold'}">
-              <img src="${dialog["photo"]}" class="col-sm-3" width="40px" height="40px">
-              <span class="col-sm-9">
+              <span class="col-4 col-md-3">
+                <img src="${dialog["photo"]}" class="dialog-profile-photo">
+              </span>
+              <span class="col-8 col-md-9">
                 <span>${dialog["full_name"]}</span><br>
                 <span style="font-size:13px" class="text-muted">@${dialog["username"]}</span>
               </span>
             </a>
           </span>
-          <span class="col-sm-3"><button id="delete-dialog-button" class="btn btn-danger">Delete</button></span>
+          <span class="col-4 col-md-3"><button id="delete-dialog-button" class="btn btn-danger">Delete</button></span>
         </span>
         `;
         modalBody.appendChild(element);

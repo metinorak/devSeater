@@ -441,3 +441,8 @@ li.L5, li.L6, li.L7, li.L8, li.L9 {
 .profile-settings-button:hover{
   background-color: #dde19c59;
 }
+
+.dialog-profile-photo{
+  height: 50px !important;
+  width: 50px !important;
+}
