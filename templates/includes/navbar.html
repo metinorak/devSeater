@@ -32,7 +32,7 @@
             {% if currentUser != None %}
 
               <div class="dropdown">
-                <button type="button" class="mobile-hidden btn dropdown-toggle" data-toggle="dropdown">
+                <button type="button" class="mobile-hidden btn dropdown-toggle" id="profile-page-button" data-toggle="dropdown">
                   {% if currentUser.photo == None %}
                     <img src="{{url_for('static', filename= 'img/empty-profile.png') }}" height="30px" class="rounded" alt="">
                   {% else %}

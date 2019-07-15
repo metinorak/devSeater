@@ -122,6 +122,10 @@ header{
     width: 5px !important;
   }
 
+  #profile-page-button{
+    padding: 10px 0 10px 0 !important;
+  }
+
 }
 
 #seaters{
@@ -316,6 +320,7 @@ header{
   border: 1px solid #89bda5;
   border-radius: 3px;
   width: 250px;
+  z-index: 10 !important;
 }
 
 #search-results.list-group>a{
@@ -457,4 +462,32 @@ li.L5, li.L6, li.L7, li.L8, li.L9 {
 .dialog-profile-photo{
   height: 50px !important;
   width: 50px !important;
+}
+
+@media (max-width: 1000px) {
+  .navbar-collapse {
+      position: absolute;
+      top: 50px;
+      left: 0;
+      padding-left: 15px;
+      padding-right: 15px;
+      padding-bottom: 15px;
+      width: 100%;
+      background: beige;
+  }
+  .navbar-collapse.collapsing {
+      height: auto;
+      -webkit-transition: left 0.3s ease;
+      -o-transition: left 0.3s ease;
+      -moz-transition: left 0.3s ease;
+      transition: left 0.3s ease;
+      left: -100%;
+  }
+  .navbar-collapse.show {
+      left: 0;
+      -webkit-transition: left 0.3s ease-in;
+      -o-transition: left 0.3s ease-in;
+      -moz-transition: left 0.3s ease-in;
+      transition: left 0.3s ease-in;
+  }
 }
