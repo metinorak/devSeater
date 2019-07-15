@@ -4,6 +4,7 @@ const searchInput = document.getElementById("search-input");
 const searhResults = document.getElementById("search-results");
 const searchForm = document.getElementById("search-form");
 const timeInfos = document.querySelectorAll(".time");
+const navbarToggler = document.querySelector(".navbar-toggler");
 
 const ui = new UI();
 const devSeater = new DevSeater();
@@ -134,6 +135,16 @@ function eventListeners(){
 	document.addEventListener("click", e => {
 		if (e.target != searhResults){
 			ui.hideGeneralSearchResults();
+		}
+	});
+
+	navbarToggler.firstElementChild.addEventListener("click", e => {
+		let item = e.target;
+		if(item.textContent === "menu"){
+			item.textContent = "close";
+		}
+		else{
+			item.textContent = "menu";
 		}
 	});
 
