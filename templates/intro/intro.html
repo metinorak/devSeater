@@ -45,7 +45,7 @@
                     <input type="password" name = "password" autocomplete="off"><br><br>
 
                     <input type="checkbox" name="terms">
-                    I aggree to the DevSeater terms
+                     I aggree to the <a href="/terms-and-conditions" target="_blank">devSeater terms and conditions</a>
                   {% else %}
                     <label for="name">Name: </label><br>
                     <input type="text" name = "name" value="{{form.get('name')}}"><br>
@@ -63,9 +63,8 @@
                     <input type="password" name = "password" value="{{form.get('password')}}">
                     <p class="alert">{{errorMessages.password}}</p>
 
-
                     <input type="checkbox" name="terms">
-                    I aggree to the DevSeater terms
+                    I aggree to the <a href="/terms-and-conditions" target="_blank">devSeater terms and conditions</a>
                     <p class="alert">{{errorMessages.terms}}</p>
                   {% endif %}
                   

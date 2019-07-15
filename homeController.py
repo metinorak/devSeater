@@ -104,6 +104,10 @@ def logout():
 def about():
   return render_template("intro/about.html")
 
+@app.route("/terms-and-conditions")
+def terms():
+  return render_template("intro/terms-and-conditions.html")
+
 @app.route("/contact", methods = ["POST", "GET"])
 def contact():
   if request.method == "POST":
