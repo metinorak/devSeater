@@ -108,6 +108,10 @@ def about():
 def terms():
   return render_template("intro/terms-and-conditions.html")
 
+@app.route("/privacy-policy")
+def privacy():
+  return render_template("intro/privacy-policy.html")
+
 @app.route("/contact", methods = ["POST", "GET"])
 def contact():
   if request.method == "POST":
