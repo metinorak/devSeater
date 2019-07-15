@@ -110,6 +110,18 @@ header{
     margin-bottom: 15px;
   }
 
+  .modal{
+    height: auto;
+  }
+
+  .modal-body{
+    max-height: 300px !important;
+  }
+
+  .profile-settings-button{
+    width: 5px !important;
+  }
+
 }
 
 #seaters{
@@ -244,7 +256,7 @@ header{
 }
 
 .modal-body{
-  height: 100%;
+  height: auto;
   max-height: 400px;
   overflow-y: auto;
 }
