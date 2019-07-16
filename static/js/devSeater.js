@@ -1,7 +1,7 @@
 class DevSeater{
 
   constructor() {
-    this.url = "http://localhost:5000/private-api/"
+    this.url = "/private-api/"
     this.request = new Request()
   }
   
