@@ -1532,7 +1532,10 @@ class UI{
     }
     else{
       modalBody.className = "list-group";
-      dialogList.forEach(dialog => {
+
+      for(let i = 0; i < dialogList.length; i++){
+        let dialog = dialogList[i];
+
         let element = document.createElement("li");
         element.className = 
         `list-group-item ${dialog["isRead"] == 0 ? 'bg-new-message' : ''}`;
@@ -1562,8 +1565,10 @@ class UI{
           <span class="col-4 col-md-3"><button id="delete-dialog-button" class="btn btn-danger">Delete</button></span>
         </span>
         `;
+
         modalBody.appendChild(element);
-      });  
+
+      } 
     }
 
     this.setModal(this.generalModal, "Messages", modalBody, true);
