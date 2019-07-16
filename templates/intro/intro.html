@@ -30,40 +30,40 @@
             </div>
             <div class="signup-form">
               <h1>Sign up now!</h1>
-                <form action="/contact" method="post">
+                <form action="" method="post">
                   {% if form == undefined %}
                     <label for="name">Name: </label><br>
-                    <input type="text" name = "name"><br>
+                    <input type="text" name = "name" required><br>
 
                     <label for="username">Username: </label><br>
-                    <input type="text" name = "username"><br>
+                    <input type="text" name = "username" required><br>
 
                     <label for="email">Email: </label><br>
-                    <input type="email" name = "email" autocomplete="off"><br>
+                    <input type="email" name = "email" autocomplete="off" required><br>
 
                     <label for="password">Password:</label><br>
-                    <input type="password" name = "password" autocomplete="off"><br><br>
+                    <input type="password" name = "password" autocomplete="off" required><br><br>
 
-                    <input type="checkbox" name="terms">
+                    <input type="checkbox" name="terms" required>
                      I aggree to the <a href="/terms-and-conditions" target="_blank">devSeater terms and conditions</a>
                   {% else %}
                     <label for="name">Name: </label><br>
-                    <input type="text" name = "name" value="{{form.get('name')}}"><br>
+                    <input type="text" name = "name" value="{{form.get('name')}}" required><br>
                     <p class="alert">{{errorMessages.name}}</p>
 
                     <label for="username">Username: </label><br>
-                    <input type="text" name = "username" value="{{form.get('username')}}"><br>
+                    <input type="text" name = "username" value="{{form.get('username')}}" required><br>
                     <p class="alert">{{errorMessages.username}}</p>
 
                     <label for="email">Email: </label><br>
-                    <input type="email" name = "email" value="{{form.get('email')}}"><br>
+                    <input type="email" name = "email" value="{{form.get('email')}}" required><br>
                     <p class="alert">{{errorMessages.email}}</p>
 
                     <label for="password">Password:</label><br>
-                    <input type="password" name = "password" value="{{form.get('password')}}">
+                    <input type="password" name = "password" value="{{form.get('password')}}" required>
                     <p class="alert">{{errorMessages.password}}</p>
 
-                    <input type="checkbox" name="terms">
+                    <input type="checkbox" name="terms" required>
                     I aggree to the <a href="/terms-and-conditions" target="_blank">devSeater terms and conditions</a>
                     <p class="alert">{{errorMessages.terms}}</p>
                   {% endif %}
