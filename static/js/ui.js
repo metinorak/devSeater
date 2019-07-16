@@ -1566,7 +1566,9 @@ class UI{
         </span>
         `;
 
-        modalBody.appendChild(element);
+        setTimeout(() => {
+          modalBody.appendChild(element);
+        }, 50);
 
       } 
     }
