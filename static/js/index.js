@@ -24,6 +24,9 @@ function eventListeners(){
 		//CHECKING
 		checkNewFollowingPosts();
 
+		//Highlight the codes
+		PR.prettyPrint();
+
 		function checkNewFollowingPosts(){
 			setTimeout(()=>{
 				//Check new notifications number
