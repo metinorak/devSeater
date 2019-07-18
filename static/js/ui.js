@@ -1533,9 +1533,7 @@ class UI{
     else{
       modalBody.className = "list-group";
 
-      for(let i = 0; i < dialogList.length; i++){
-        let dialog = dialogList[i];
-
+      for(const dialog of dialogList){
         let element = document.createElement("li");
         element.className = 
         `list-group-item ${dialog["isRead"] == 0 ? 'bg-new-message' : ''}`;
@@ -1565,11 +1563,7 @@ class UI{
           <span class="col-4 col-md-3"><button id="delete-dialog-button" class="btn btn-danger">Delete</button></span>
         </span>
         `;
-
-        setTimeout(() => {
-          modalBody.appendChild(element);
-        }, 50);
-
+        modalBody.insertAdjacentElement("beforeend", element);
       } 
     }
 
