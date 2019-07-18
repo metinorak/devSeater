@@ -252,8 +252,6 @@ class UI{
   }
 
   showPosts(posts, currentUser){
-    
-
     posts.forEach(post => {
       this.addPostToTheBottom(post, currentUser, this.contentArea);
     });
@@ -261,7 +259,7 @@ class UI{
 
   showSeaters(seaters){
     if(seaters.length == 0){
-      this.contentArea.textContent = "This user has no seater.";
+      this.contentArea.textContent = "This user has no seaters.";
       return;
     }
 
@@ -873,10 +871,8 @@ class UI{
   }
 
   showProjectMembers(members, currentUser){
-    
-
     if(members.length == 0){
-      this.contentArea.textContent = "This user has no seater.";
+      this.contentArea.textContent = "This project has no members.";
       return;
     }
 
