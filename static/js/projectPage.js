@@ -86,7 +86,10 @@ function eventListeners(){
 		.then(posts => {
 			ui.clearContentArea();
 			ui.showPostTextAreaCard();
+			posts = renderPosts(posts);
 			ui.showPosts(posts, Session.getCurrentUser());
+			
+			PR.prettyPrint();
 		})
 		.catch(err => console.error(err));
 	});

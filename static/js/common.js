@@ -54,6 +54,9 @@ function eventListeners(){
 			post.innerHTML = markDownConverter.makeHtml(post.textContent.trim());
 		});
 
+		//Highlight the codes
+		PR.prettyPrint();
+
 		//CREATE SESSION
 		if(!Session.isLoggedIn()){
 			devSeater.isLoggedIn()
