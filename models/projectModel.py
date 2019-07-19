@@ -98,8 +98,9 @@ class ProjectModel(Database):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
     query = """
-    SELECT projects.*, COUNT(seaters.pid) AS number
-    FROM projects LEFT JOIN seaters ON seaters.pid = projects.pid GROUP BY projects.pid ORDER BY number DESC LIMIT %s
+    SELECT projects.*, COUNT(seaters.sid) AS number
+    FROM projects LEFT JOIN seaters ON seaters.pid = projects.pid 
+    GROUP BY projects.pid ORDER BY number DESC LIMIT %s
     """
     cursor.execute(query, (number,) )
     result = cursor.fetchall()

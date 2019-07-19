@@ -1530,41 +1530,46 @@ class UI{
       modalBody.className = "list-group";
 
       for(const dialog of dialogList){
-        let element = document.createElement("li");
-        element.className = 
-        `list-group-item ${dialog["isRead"] == 0 ? 'bg-new-message' : ''}`;
-        element.setAttribute("uid", dialog["uid"]);
-  
-        if(dialog["photo"] == null){
-          dialog["photo"] = "/static/img/empty-profile.png";
-        }
-        else{
-          dialog["photo"] = "/static/uploads/users/up/" + dialog["photo"];
-        }
-  
-        element.innerHTML =
-        `
-        <span class="row">
-          <span class="col-8 col-md-9">
-            <a href="#" onclick="openMessageBox(${dialog["uid"]})" class="row ${!dialog["isRead"] ? '' : 'font-weight-bold'}">
-              <span class="col-4 col-md-3">
-                <img src="${dialog["photo"]}" class="dialog-profile-photo">
-              </span>
-              <span class="col-8 col-md-9">
-                <span>${dialog["full_name"]}</span><br>
-                <span style="font-size:13px" class="text-muted">@${dialog["username"]}</span>
-              </span>
-            </a>
-          </span>
-          <span class="col-4 col-md-3"><button id="delete-dialog-button" class="btn btn-danger">Delete</button></span>
-        </span>
-        `;
-        modalBody.insertAdjacentElement("beforeend", element);
+        this.appendDialog(dialog, modalBody);
       } 
     }
 
     this.setModal(this.generalModal, "Messages", modalBody, true);
     $("#general-modal").modal("show");
+  }
+
+  appendDialog(dialog, container){
+    let element = document.createElement("li");
+    element.className = 
+    `list-group-item ${dialog["isRead"] == 0 ? 'bg-new-message' : ''}`;
+    element.setAttribute("uid", dialog["uid"]);
+
+    if(dialog["photo"] == null){
+      dialog["photo"] = "/static/img/empty-profile.png";
+    }
+    else{
+      dialog["photo"] = "/static/uploads/users/up/" + dialog["photo"];
+    }
+
+    element.innerHTML =
+    `
+    <span class="row">
+      <span class="col-8 col-md-9">
+        <a href="#" onclick="openMessageBox(${dialog["uid"]})" class="row ${!dialog["isRead"] ? '' : 'font-weight-bold'}">
+          <span class="col-4 col-md-3">
+            <img src="${dialog["photo"]}" class="dialog-profile-photo">
+          </span>
+          <span class="col-8 col-md-9">
+            <span>${dialog["full_name"]}</span><br>
+            <span style="font-size:13px" class="text-muted">@${dialog["username"]}</span>
+          </span>
+        </a>
+      </span>
+      <span class="col-4 col-md-3"><button id="delete-dialog-button" class="btn btn-danger">Delete</button></span>
+    </span>
+    `;
+
+    container.appendChild(element);
   }
 
   showMessages(msgList, currentUser, otherUser){
