@@ -101,7 +101,7 @@ class SkillModel(Database):
       #Getting new added skill id
       skid = cursor.lastrowid
 
-    #Adding user skill
+    #Adding seater skill
     query = "INSERT INTO seaterSkills(sid, skid) VALUES(%s, %s)"
     cursor.execute(query, (sid, skid) )
 

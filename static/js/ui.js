@@ -1269,7 +1269,7 @@ class UI{
       skillInput.className = "form-control";
       skillInput.setAttribute("id", "skill-input");
       skillInput.setAttribute("type", "text");
-      skillInput.setAttribute("placeholder", "ex: Java, C++, OOP, Machine Learning");
+      skillInput.setAttribute("placeholder", "ex: Java");
 
       modalBody.appendChild(skillInput);
 
