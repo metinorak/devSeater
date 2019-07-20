@@ -69,15 +69,38 @@ class MessageModel(Database):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
     query = """
-    SELECT U.*, M.isRead=1 FROM 
-    (SELECT sender_id AS uid, time, isRead FROM messages WHERE receiver_id = %s AND isDeletedByReceiver = 0
+    SELECT U.* FROM 
+    (SELECT sender_id AS uid, time FROM messages WHERE receiver_id = %s AND isDeletedByReceiver = 0
     UNION
-    SELECT receiver_id AS uid, time, isRead FROM messages WHERE sender_id = %s AND isDeletedBySender = 0) M, users U
+    SELECT receiver_id AS uid, time FROM messages WHERE sender_id = %s AND isDeletedBySender = 0) M, users U
     WHERE U.uid = M.uid
     GROUP BY M.uid ORDER BY M.time DESC
     """
     cursor.execute(query, (uid, uid) )
-    result = cursor.fetchall()
+    users = cursor.fetchall()
+
+    result = []
+
+    for user in users:
+      query = """
+      SELECT * FROM messages 
+      WHERE 
+      (sender_id = %s AND receiver_id = %s) OR (sender_id = %s AND receiver_id = %s)
+      ORDER BY mid DESC LIMIT 1
+      """
+      cursor.execute(query, ( uid, user["uid"], user["uid"], uid) )
+      dialog = cursor.fetchone()
+      user["max_mid"] = dialog["mid"]
+
+      if dialog["sender_id"] == uid:
+        user["isRead"] = 1
+      else:
+        user["isRead"] = dialog["isRead"]
+
+      result.append(user)
+
+    result = sorted(result, key = lambda i: i['max_mid'],reverse=True) 
+
     cursor.close()
     connection.close()
     return result
@@ -102,7 +125,7 @@ class MessageModel(Database):
     UPDATE messages SET isRead = 1
     WHERE
     receiver_id = %s AND sender_id = %s 
-    AND isDeletedByReceiver = 0"""
+    """
     cursor.execute(query, (current_uid, other_uid))
     connection.commit()
 
