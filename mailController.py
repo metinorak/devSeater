@@ -59,7 +59,7 @@ def passwordReset():
         sendMail({
           "To" : email,
           "Subject" : "Password Reset - devSeater",
-          "Body" : render_template("mail/password-reset-mail.html", siteAddress = SITE_ADDR, email = email, hashCode = hashCode)
+          "Body" : render_template("mail/password-reset-mail.html", SITE_ADDR = SITE_ADDR, email = email, hashCode = hashCode)
         })
 
     else:
@@ -109,5 +109,5 @@ def sendVerificationEmail(email):
   sendMail({
     "To" : email,
     "Subject" : "Email Verification - devSeater",
-    "Body" : render_template("mail/email-verification-mail.html", email = email, hashCode = hashCode)
+    "Body" : render_template("mail/email-verification-mail.html", email = email, hashCode = hashCode, SITE_ADDR = SITE_ADDR)
   })
