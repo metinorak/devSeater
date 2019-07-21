@@ -362,7 +362,7 @@ class UI{
     }
 
     //Specify drop menu content
-    if(post["uid"] == currentUser["uid"]){
+    if(currentUser != null && post["uid"] == currentUser["uid"]){
       var menuContent = 
       `
       <li><a class="dropdown-item delete-post">Delete</a></li>
@@ -373,11 +373,19 @@ class UI{
       var menuContent = ``;
     }
 
-    if(post["isLiked"] == "1"){
-      var likeButton = `<button class="btn btn-post mr-2 like-button liked">Like</button>`;
+    if(currentUser != null){
+      if(post["isLiked"] == "1"){
+        var likeButton = `<button class="btn btn-post mr-2 like-button liked">Like</button>`;
+      }
+      else{
+        var likeButton = `<button class="btn btn-post mr-2 like-button">Like</button>`;
+      }
+
+      var commentButton = `<button class="btn btn-post mr-2 comment-button">Comment</button>`;
     }
     else{
-      var likeButton = `<button class="btn btn-post mr-2 like-button">Like</button>`;
+      var likeButton = "";
+      var commentButton = "";
     }
 
     if(post["commentNumber"] > 1){
@@ -437,7 +445,7 @@ class UI{
         ${commentNumber}
     </span>
     ${likeButton}
-    <button class="btn btn-post mr-2 comment-button">Comment</button>
+    ${commentButton}
     <button class="btn btn-post mr-2 d-none">Share</button>
     </div>
 
@@ -899,7 +907,7 @@ class UI{
       var imgAddress = `/static/uploads/users/up/${member["photo"]}`;
     }
 
-    if(currentUser["uid"] == member["uid"]){
+    if(currentUser == null || currentUser["uid"] == member["uid"]){
       var followButton = "";
     }
     else if(member["isFollowed"]){

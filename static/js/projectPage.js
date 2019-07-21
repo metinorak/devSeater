@@ -99,11 +99,16 @@ function eventListeners(){
 		.then(seaters => {
 			ui.clearContentArea();
 			ui.hidePostTextAreaCard();
-			devSeater.isProjectAdmin(pid, Session.getCurrentUser()["uid"])
-			.then(response => {
-				ui.showEmptySeaters(seaters, response["result"]);
-			})
-			.catch(err => console.error(err));
+			if(Session.isLoggedIn()){
+				devSeater.isProjectAdmin(pid, Session.getCurrentUser()["uid"])
+				.then(response => {
+					ui.showEmptySeaters(seaters, response["result"]);
+				})
+				.catch(err => console.error(err));
+			}
+			else{
+				ui.showEmptySeaters(seaters, false);
+			}
 		})
 		.catch(err => console.error(err));
 	});
@@ -155,11 +160,16 @@ function eventListeners(){
 			.then(seaters => {
 				ui.clearContentArea();
 				ui.hidePostTextAreaCard();
-				devSeater.isProjectAdmin(pid, Session.getCurrentUser()["uid"])
-				.then(response => {
-					ui.showEmptySeaters(seaters, response["result"]);
-				})
-				.catch(err => console.error(err));
+				if(Session.isLoggedIn()){
+					devSeater.isProjectAdmin(pid, Session.getCurrentUser()["uid"])
+					.then(response => {
+						ui.showEmptySeaters(seaters, response["result"]);
+					})
+					.catch(err => console.error(err));
+				}
+				else{
+					ui.showEmptySeaters(seaters, false);
+				}
 			})
 			.catch(err => console.error(err));
 	
@@ -172,16 +182,18 @@ function eventListeners(){
 			.then(seaters => {
 				ui.clearContentArea();
 				ui.hidePostTextAreaCard();
-				devSeater.isProjectAdmin(pid, Session.getCurrentUser()["uid"])
-				.then(response => {
-					ui.showFilledSeaters(seaters, response["result"]);
-				})
-				.catch(err => console.error(err));
+				if(Session.isLoggedIn()){
+					devSeater.isProjectAdmin(pid, Session.getCurrentUser()["uid"])
+					.then(response => {
+						ui.showFilledSeaters(seaters, response["result"]);
+					})
+					.catch(err => console.error(err));
+				}
+				else{
+					ui.showFilledSeaters(seaters, false);
+				}
 			})
 			.catch(err => console.error(err));
-	
-
-			e.preventDefault();
 		}
 
 	});
