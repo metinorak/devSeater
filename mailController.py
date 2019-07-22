@@ -41,14 +41,11 @@ def passwordReset():
 
       if hashCodeFromUser != None and password != None and confirmPassword != None:
         if hashCode == hashCodeFromUser and password == confirmPassword:
-          #Hash Password
-          hashed_password = sha256_crypt.encrypt(password)
-
           #Get user id
           userId = ModelObject["userModel"].getUserByEmail(email)["uid"]
 
           #Update password
-          ModelObject["userModel"].updatePassword(userId, hashed_password)
+          ModelObject["userModel"].updatePassword(userId, password)
 
           flash("Your password updated succesfully. Now you can log in.", "success")
           return redirect(url_for("login"))
@@ -61,12 +58,13 @@ def passwordReset():
           "Subject" : "Password Reset - devSeater",
           "Body" : render_template("mail/password-reset-mail.html", SITE_ADDR = SITE_ADDR, email = email, hashCode = hashCode)
         })
+        
+        #Show message
+        flash("If you have entered your email address properly, we sent you an email. Please check your inbox.", "success")
 
     else:
       return redirect(url_for("index"))
         
-    #Show message
-    flash("If you have entered your email address properly, we sent you an email. Please check your inbox.", "success")
     return redirect(url_for("passwordReset"))
 
   else:

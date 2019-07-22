@@ -26,13 +26,3 @@ class Database():
       return self.cnxpool.get_connection()
     except:
       self.cnxpool.add_connection()
-
-
-  
-
-
-
-
-
-    
-
