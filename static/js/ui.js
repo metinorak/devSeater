@@ -947,14 +947,14 @@ class UI{
   
   timeSince(date) {
     //Convert timevalue to localtime from utc
-    
+
     date = new Date(date);
     var timezoneOffset = date.getTimezoneOffset();
 
     var seconds = Math.floor((new Date() - date) / 1000);
 
     // Add timezone offset to the seconds
-    seconds += (timezoneOffset * 60);
+    seconds -= (timezoneOffset * 60);
 
     var interval = Math.floor(seconds / 31536000);
 
