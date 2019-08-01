@@ -16,22 +16,20 @@ def index():
       
       #Validate all values
       errorMessages = dict()
-      if(len(email) == 0):
-        errorMessages["email"] = "Please enter an email address"
+      if(not isValidEmail(email)):
+        errorMessages["email"] = "Please enter a valid email address"
       elif(ModelObject["userModel"].isThereThisEmail(email)):
         errorMessages["email"] = "This email address is already taken"
-      elif(not isValidEmail(email)):
-        errorMessages["email"] = "Please enter a valid email address"
-      
+
       if(len(name) < 3):
         errorMessages["name"] = "Name should be at least 3 characters"
 
-      if(isValidUsername(username)):
+      if(not isValidUsername(username)):
         errorMessages["username"] = "Username value may only consist of A-z0-9 and -, _"
       elif(ModelObject["userModel"].isThereThisUsername(username)):
         errorMessages["username"] = "This username is already taken"
       
-      if isValidPassword(password):
+      if not isValidPassword(password):
         errorMessages["password"] = "Password should be at least 6 characters"
       
       if(terms != "on"):
