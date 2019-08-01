@@ -954,7 +954,7 @@ class UI{
     var seconds = Math.floor((new Date() - date) / 1000);
 
     // Add timezone offset to the seconds
-    seconds -= (timezoneOffset * 60);
+    seconds += (timezoneOffset * 60);
 
     var interval = Math.floor(seconds / 31536000);
 
