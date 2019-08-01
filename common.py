@@ -9,7 +9,7 @@ import random
 import string
 
 app = Flask(__name__)
-app.secret_key = "martymclfy"
+app.secret_key = "54544343\\\??i%.$^delisin/781100qq@@.rfxz"
 
 from models import Objects as ModelObject
 
