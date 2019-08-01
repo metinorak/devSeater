@@ -6,6 +6,8 @@ from mailController import sendVerificationEmail
 def index():
   if not isLoggedIn():
     if request.method == "POST":
+      # USER REGISTRATION
+
       email = request.form.get("email").strip()
       name = request.form.get("name").strip()
       username = request.form.get("username").strip()
@@ -24,12 +26,12 @@ def index():
       if(len(name) < 3):
         errorMessages["name"] = "Name should be at least 3 characters"
 
-      if(len(username) < 1):
-        errorMessages["username"] = "Username should be at least 1 character"
+      if(isValidUsername(username)):
+        errorMessages["username"] = "Username value may only consist of A-z0-9 and -, _"
       elif(ModelObject["userModel"].isThereThisUsername(username)):
         errorMessages["username"] = "This username is already taken"
       
-      if(len(password) < 6):
+      if isValidPassword(password):
         errorMessages["password"] = "Password should be at least 6 characters"
       
       if(terms != "on"):
