@@ -1610,6 +1610,7 @@ class UI{
     }
 
     this.setModal(this.messageModal, otherUser["full_name"], modalBody);
+    this.gotoBottom(this.messageModal.querySelector(".modal-body"));
 
     $("#message-modal").modal("show");
   }
@@ -1658,8 +1659,6 @@ class UI{
     modalTitle.innerText = title;
 
     modalBody.innerHTML = body.outerHTML;
-
-    this.gotoBottom(modalBody);
 
     if(hideFooter){
       modal.querySelector(".modal-footer").style.display = "none";

@@ -88,6 +88,12 @@ def emailVerify():
   return redirect(url_for("index"))
 
 
+@app.route("/send-verification-mail/<string:mailAddress>")
+def verificationMail(mailAddress):
+  sendVerificationEmail(mailAddress)
+  flash("Verification mail sent successfully! Please check your inbox.")
+  return redirect(url_for('login'))
+
 def generatePasswordResetHashCode(email):
   user = ModelObject["userModel"].getUserByEmail(email)
   h = hashlib.sha256()
