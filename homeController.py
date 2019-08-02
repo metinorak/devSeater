@@ -84,8 +84,18 @@ def login():
       email = request.form.get("email")
       password = request.form.get("password")
       if(ModelObject["userModel"].login(email, password)):
-        createSession(email)
-        return redirect(url_for("index"))
+        user = ModelObject["userModel"].getUserByEmail(email)
+
+        if user["isEmailVerified"]:
+          createSession(email)
+          return redirect(url_for("index"))
+        else:
+          flash("""
+          You didn't activate your email address. Please activate your email address.
+          If you didn't receive an email, <a href="/send-verification-mail/{}">click here.</a> 
+          """.format(email))
+          return redirect(url_for("login"))
+
       else:
         flash("Email or password is not correct")
         return redirect(url_for("login"))
