@@ -1,6 +1,7 @@
 from common import *
 import os
 import importlib
+from flask_compress import Compress
 
 #Import all controllers
 
@@ -15,4 +16,6 @@ for moduleName in moduleNames:
   importlib.import_module(moduleName)
 
 if __name__ == "__main__":
+  compress = Compress()
+  compress.init_app(app)
   app.run(debug=True, port=8000, host='0.0.0.0', threaded=True)
