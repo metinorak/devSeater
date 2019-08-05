@@ -755,6 +755,7 @@ class UI{
 
 
   updateProjectPostCommentLikeNumber(ppcid, number){
+    console.log(number);
     let comment = document.querySelector(`.comment[ppcid="${ppcid}"]`);
     let likeNumber = comment.querySelector(".like-number");
 

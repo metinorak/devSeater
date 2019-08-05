@@ -242,12 +242,12 @@ class ProjectPostModel(Database):
     connection.close()
 
   @exception_handling
-  def getProjectPostCommentLikeNumber(self, ppid):
+  def getProjectPostCommentLikeNumber(self, ppcid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
     query = "SELECT COUNT(*) AS number FROM projectPostCommentLikes WHERE ppcid = %s"
-    cursor.execute(query, (ppid,) )
-    result = cursor.fetchone["number"]
+    cursor.execute(query, (ppcid,) )
+    result = cursor.fetchone()["number"]
     cursor.close()
     connection.close()
     return result

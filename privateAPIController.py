@@ -1165,7 +1165,6 @@ def getDialog(uid):
         msgList = ModelObject["messageModel"].getDialogLastMessages(getCurrentUid(), uid, 10)
     else:
         msgList = ModelObject["messageModel"].getDialogPreviousMessages(getCurrentUid(), uid, mid, 10)
-        print(msgList)
 
     return json.dumps({
         "msgList" : msgList

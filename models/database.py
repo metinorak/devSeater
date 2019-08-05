@@ -25,4 +25,4 @@ class Database():
     try:
       return self.cnxpool.get_connection()
     except:
-      self.cnxpool.add_connection()
+      print("Could not get connection object")
