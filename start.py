@@ -1,6 +1,7 @@
 from common import *
 import os
 import importlib
+from flask_compress import Compress
 
 #Import all controllers
 

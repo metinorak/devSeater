@@ -8,5 +8,4 @@ passlib==1.7.1
 requests==2.19.1
 Werkzeug==0.14.1
 gunicorn
-flask-talisman
-
+flask-compress
