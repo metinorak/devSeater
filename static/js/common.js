@@ -93,7 +93,7 @@ function eventListeners(){
 					checkNewMessages();
 				});
 	
-			}, 10000);
+			}, 3500);
 		}
 		
 		function checkNotifications(){
@@ -108,7 +108,7 @@ function eventListeners(){
 					checkNotifications();
 				});
 	
-			}, 10000);
+			}, 3500);
 		}
 
 	});

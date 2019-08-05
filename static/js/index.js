@@ -44,7 +44,7 @@ function eventListeners(){
 					checkNewFollowingPosts();
 				});
 	
-			}, 10000);
+			}, 4500);
 		}
 	});
 
