@@ -167,3 +167,4 @@ def page_not_found(e):
       message = "The page you trying to load not found.",
       currentUser = getCurrentUser()
       )
+
