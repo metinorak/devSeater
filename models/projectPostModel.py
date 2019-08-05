@@ -126,7 +126,7 @@ class ProjectPostModel(Database):
     return result
 
   @exception_handling
-  def isPostLiked(uid, ppid):
+  def isPostLiked(self, uid, ppid):
     connection = self.getConnection() 
     cursor = connection.cursor(dictionary=True)
     query = "SELECT * FROM projectPostCommentLikes WHERE uid = %s AND ppid = %s"
@@ -246,14 +246,14 @@ class ProjectPostModel(Database):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
     query = "SELECT COUNT(*) AS number FROM projectPostCommentLikes WHERE ppcid = %s"
-    cursor.execute(query, (ppcid,) )
+    cursor.execute(query, (ppid,) )
     result = cursor.fetchone["number"]
     cursor.close()
     connection.close()
     return result
 
   @exception_handling
-  def isCommentLiked(uid, ppcid):
+  def isCommentLiked(self, uid, ppcid):
     connection = self.getConnection() 
     cursor = connection.cursor(dictionary=True)
     query = "SELECT * FROM projectPostCommentLikes WHERE uid = %s AND ppcid = %s"

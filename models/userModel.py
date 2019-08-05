@@ -68,12 +68,12 @@ class UserModel(Database):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
     query = """SELECT users.*, 
-    (SELECT COUNT(*) FROM followers WHERE flwdid = users.uid AND time > (DATE(NOW()) - INTERVAL 7 DAY) ) 
-    AS newFollowerNumber 
+    (SELECT COUNT(*) FROM userPosts WHERE userPosts.uid = users.uid AND time > (DATE(NOW()) - INTERVAL 7 DAY) ) 
+    AS postNumber 
     FROM users 
     WHERE uid NOT IN (SELECT flwdid FROM followers WHERE flwrid = %s)
     AND uid != %s
-    ORDER BY newFollowerNumber DESC LIMIT %s"""
+    ORDER BY postNumber DESC LIMIT %s"""
     cursor.execute(query, (currentUser, currentUser, number))
     result = cursor.fetchall()
     cursor.close()
