@@ -2,7 +2,7 @@ from common import *
 import os
 import importlib
 from flask_compress import Compress
-from flask.ext.cache import Cache
+from flask_cache import Cache
 
 #Import all controllers
 

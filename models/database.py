@@ -19,10 +19,12 @@ class Database():
       "database": DB_NAME
     }
 
-  cnxpool = mysql.connector.pooling.MySQLConnectionPool(pool_name = "devseater", pool_size = 32, **dbconfig)
+  cnxpool = mysql.connector.pooling.MySQLConnectionPool(pool_name = "devseater", pool_size = 4, **dbconfig)
   
   def getConnection(self):
     try:
       return self.cnxpool.get_connection()
     except:
+      self.cnxpool.add_connection()
       print("Could not get connection object")
+      return self.cnxpool.get_connection()
