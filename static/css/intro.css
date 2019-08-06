@@ -130,7 +130,8 @@ input[type=checkbox]{
     width: auto;
   }
   #links{
-    display: none;
+    grid-column: 1;
+    text-align: center;
   }
   .mobile_hidden{
     display: none;
