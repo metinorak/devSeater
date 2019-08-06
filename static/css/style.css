@@ -79,9 +79,12 @@ header{
 }
 
 
+#profile-header-cols{
+  max-height: 320px;
+}
+
 #profile-header-cols > div > div{
   overflow-y: scroll;
-  max-height: 320px;
 }
 
 .profile-settings-button{
