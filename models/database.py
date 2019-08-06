@@ -19,7 +19,7 @@ class Database():
       "database": DB_NAME
     }
 
-  cnxpool = mysql.connector.pooling.MySQLConnectionPool(pool_name = "devseater", pool_size = 32, **dbconfig)
+  cnxpool = mysql.connector.pooling.MySQLConnectionPool(pool_name = "devseater", pool_size = 4, **dbconfig)
   
   def getConnection(self):
     try:

@@ -9,4 +9,4 @@ requests==2.19.1
 Werkzeug==0.14.1
 gunicorn
 flask-compress
-Flask-Cache
+flask-cache
