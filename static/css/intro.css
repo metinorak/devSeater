@@ -131,7 +131,6 @@ input[type=checkbox]{
   }
   #links{
     grid-column: 1;
-    text-align: center;
   }
   .mobile_hidden{
     display: none;
