@@ -114,7 +114,6 @@ input[type=checkbox]{
   color: #0a111b;
 }
 
-
 @media (max-width: 767px) {
   header{
     grid-template-columns: 1fr;
