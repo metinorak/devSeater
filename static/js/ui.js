@@ -160,16 +160,22 @@ class UI{
         var likeButton = `<button class="btn btn-post mr-2 like-button">Like</button>`;
       }
 
-      if(post["commentNumber"] > 0){
-        var commentNumber = `<a href="#" class="comment-number">${post["commentNumber"]}</a>`;
+      if(post["commentNumber"] > 1){
+        var commentNumber = `<a href="#" class="comment-number">${post["commentNumber"]} comments</a>`;
+      }
+      else if(post["commentNumber"] == 1){
+        var commentNumber = `<a href="#" class="comment-number">1 comment</a>`;
       }
       else{
         var commentNumber = `<a href="#" class="comment-number"></a>`;
       } 
 
 
-      if(post["likeNumber"] > 0){
-        var likeNumber = `<a href="#" class="like-number">${post["likeNumber"]}</a>`;
+      if(post["likeNumber"] > 1){
+        var likeNumber = `<a href="#" class="like-number">${post["likeNumber"]} likes</a>`;
+      }
+      else if(post["likeNumber"] == 1){
+        var likeNumber = `<a href="#" class="like-number">1 like</a>`;
       }
       else{
         var likeNumber = `<a href="#" class="like-number"></a>`;
