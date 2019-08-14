@@ -41,6 +41,18 @@ class ProjectModel(Database):
     return result
 
   @exception_handling
+  def getLastProjects(self, count):
+    connection = self.getConnection()
+    cursor = connection.cursor(dictionary=True)
+    
+    query = """SELECT * FROM projects ORDER BY pid DESC LIMIT %s"""
+    cursor.execute(query, (count, ) )
+    result = cursor.fetchall()
+    cursor.close()
+    connection.close()
+    return result
+
+  @exception_handling
   def getProjectByProjectName(self, name):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)

@@ -17,6 +17,18 @@ class UserModel(Database):
     return result
 
   @exception_handling
+  def getLastUsers(self, count):
+    connection = self.getConnection()
+    cursor = connection.cursor(dictionary=True)
+    
+    query = """SELECT * FROM users ORDER BY uid DESC LIMIT %s"""
+    cursor.execute(query, (count, ) )
+    result = cursor.fetchall()
+    cursor.close()
+    connection.close()
+    return result
+
+  @exception_handling
   def getUserByUsername(self, username, currentUser = None):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)

@@ -168,3 +168,14 @@ def page_not_found(e):
       currentUser = getCurrentUser()
       )
 
+@app.route("/sitemap.xml")
+def sitemap():
+  lastUsers = ModelObject["userModel"].getLastUsers(500)
+  lastProjects = ModelObject["projectModel"].getLastProjects(500)
+
+  return render_template(
+    "sitemap.xml",
+    lastUsers = lastUsers,
+    lastProjects = lastProjects,
+    SITE_ADDR = SITE_ADDR
+  )

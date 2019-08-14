@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  {% for project in lastProjects %}
+  <url>
+    <loc>{{ SITE_ADDR + "/p/" + project.project_name }}</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  {% endfor %}
+  {% for user in lastUsers %}
+  <url>
+    <loc>{{ SITE_ADDR + "/u/" + user.username }}</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  {% endfor %}
+
+</urlset>

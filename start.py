@@ -2,7 +2,7 @@ from common import *
 import os
 import importlib
 from flask_compress import Compress
-from flask_cache import Cache
+#from flask_cache import Cache
 
 #Import all controllers
 
@@ -19,5 +19,5 @@ for moduleName in moduleNames:
 if __name__ == "__main__":
   compress = Compress()
   compress.init_app(app)
-  cache = Cache(app,config={'CACHE_TYPE': 'simple'})
+  #cache = Cache(app,config={'CACHE_TYPE': 'simple'})
   app.run(threaded=True)
