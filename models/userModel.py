@@ -124,7 +124,6 @@ class UserModel(Database):
   #CHECKING
   
   def login(self, email, password):
-    print(deneme)
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:

@@ -78,8 +78,8 @@ class UserPostModel(Database):
 
   def removeUserPost(self, upid):
     connection = self.getConnection()
-    try:
     cursor = connection.cursor(dictionary=True)
+    try:
       query = "DELETE FROM userPosts WHERE upid = %s"
       cursor.execute(query, (upid,) )
       connection.commit()
