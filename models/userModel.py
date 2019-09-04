@@ -113,7 +113,7 @@ class UserModel(Database):
       FROM users 
       WHERE uid NOT IN (SELECT flwdid FROM followers WHERE flwrid = %s)
       AND uid != %s
-      ORDER BY (postNumber + postCommentNumber + followNumber) DESC LIMIT %s"""
+      ORDER BY (postNumber + postCommentNumber + followNumber) DESC, uid DESC LIMIT %s"""
       cursor.execute(query, (currentUser, currentUser, number))
       result = cursor.fetchall()
     except Exception as e:
