@@ -104,12 +104,16 @@ class UserModel(Database):
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT users.*, 
-      (SELECT COUNT(*) FROM userPosts WHERE userPosts.uid = users.uid AND time > (DATE(NOW()) - INTERVAL 7 DAY) ) 
-      AS postNumber 
+      (SELECT COUNT(*) FROM userPosts WHERE userPosts.uid = users.uid AND time > (DATE(NOW()) - INTERVAL 7 DAY)) 
+      AS postNumber,
+      (SELECT COUNT(*) FROM userPostComments WHERE userPostComments.uid = users.uid AND time > (DATE(NOW()) - INTERVAL 7 DAY))
+      AS postCommentNumber,
+      (SELECT COUNT(*) FROM followers WHERE (followers.flwrid = users.uid OR followers.flwdid = users.uid) AND time > (DATE(NOW()) - INTERVAL 7 DAY))
+      AS followNumber
       FROM users 
       WHERE uid NOT IN (SELECT flwdid FROM followers WHERE flwrid = %s)
       AND uid != %s
-      ORDER BY postNumber DESC LIMIT %s"""
+      ORDER BY (postNumber + postCommentNumber + followNumber) DESC LIMIT %s"""
       cursor.execute(query, (currentUser, currentUser, number))
       result = cursor.fetchall()
     except Exception as e:
