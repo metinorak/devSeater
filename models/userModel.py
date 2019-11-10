@@ -1,4 +1,4 @@
-from models.database import *
+from models.database import Database
 from passlib.hash import sha256_crypt
 
 class UserModel(Database):
@@ -90,6 +90,7 @@ class UserModel(Database):
   def removeUser(self, uid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
+    query = "DELETE FROM users WHERE uid = %s"
     try:
       cursor.execute(query, (uid,) )
       connection.commit()

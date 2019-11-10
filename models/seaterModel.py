@@ -1,4 +1,4 @@
-from models.database import *
+from models.database import Database
 
 class SeaterModel(Database):
   
@@ -134,8 +134,8 @@ class SeaterModel(Database):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
-      query = "SELECT COUNT(*) AS number FROM seaters WHERE pid = %s"
-      cursor.execute(query, (pid,))
+      query = "SELECT COUNT(*) AS number FROM seaters WHERE uid = %s"
+      cursor.execute(query, (uid,))
       result = cursor.fetchone()
     except Exception as e:
       print(e)
@@ -283,7 +283,7 @@ class SeaterModel(Database):
       connection.close()
     return result
 
-  def getSeaterAspirationsByPid(self, sid):
+  def getSeaterAspirationsByPid(self, pid):
     connection = self.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:

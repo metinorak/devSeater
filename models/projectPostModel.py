@@ -1,4 +1,4 @@
-from models.database import *
+from models.database import Database
 
 class ProjectPostModel(Database):
   

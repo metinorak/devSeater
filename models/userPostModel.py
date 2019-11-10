@@ -1,4 +1,4 @@
-from models.database import *
+from models.database import Database
 
 class UserPostModel(Database):
   
@@ -152,7 +152,7 @@ class UserPostModel(Database):
       query = """SELECT * FROM userPosts 
       WHERE (uid = %s OR uid IN (SELECT flwdid FROM followers WHERE flwrid = %s)) AND upid > %s"""
       cursor.execute(query, (uid, uid, upid))
-      result = cursor.fetchall()
+      cursor.fetchall()
       count = cursor.rowcount
     except Exception as e:
       print(e)
