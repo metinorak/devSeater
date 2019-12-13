@@ -5,10 +5,10 @@ DB_PASSWORD = ""
 DB_NAME = "devseater"
 
 #MAIL SETTINGS
-MAIL_HOST = "mail.yorumdeposu.com"
+MAIL_HOST = ""
 MAIL_PORT = 587
-MAIL_ADDR = "mail@yorumdeposu.com"
-MAIL_PASS = "DZxj73W7"
+MAIL_ADDR = ""
+MAIL_PASS = ""
 
 #WEBSITE SETTINGS
 SITE_ADDR = "http://localhost:5000"
