@@ -82,89 +82,94 @@
                     <button type="button" title="edit profile" class="btn profile-settings-button float-right" style="display:none" id="edit-profile-button"></button>
                   </div>
                   <div class="content-area">
-                        {% for post in lastUserPosts %}
-                        <div class="post" upid="{{post.upid}}">
-                            <div class="post-header mb-2">
-                                <a href="/u/{{post.username}}">
-                                    {% if post.photo == None %}
-                                        <span ><img width="55px" class="rounded-circle" src="{{url_for('static', filename= 'img/empty-profile.png') }}" alt=""></span>
-                                    {% else %}
-                                        <span ><img width="55px" class="rounded-circle" src="{{url_for('static', filename= 'uploads/users/up/' + post.photo ) }}" alt=""></span>
-                                    {% endif %}
-                                    
-                                </a> 
-                                <span>
-                                    <a href="/u/{{post.username}}">
-                                        <h4>{{post.full_name}}</h4>
-                                        <span style="font-size:13px" class="text-muted">@{{post.username}}</span>
-                                    </a>
-                                    <p class="time">{{post.time}}</p>
-                                </span>
-                                <span class="float-right">
-                                    <div class="dropdown">
-                                        <button type="button" class="btn btn-basic" data-toggle="dropdown"><b>...</b></button>
-                                        <ul class="dropdown-menu">
-                                            {% if session.uid == post.uid %}
-                                                <li><a class="dropdown-item delete-post">Delete</a></li>
-                                                <li><a class="dropdown-item edit-post d-none">Edit</a></li>
-                                            {% endif %}
-                                            
-                                        </ul>
-                                    </div>
-                                </span>
-                            </div>
-            
-                            <div class="post-body mb-2">
-                            <p>{{post.post}}</p>
-                            </div>
-            
-                            <div class="post-footer">
-                            <hr>
-                            {% if currentUser != None %}
-                                
-                                <span class="row container post-footer-links mb-2">
-                                    <a href="#" class="like-number" href="">
-                                        {% if post.likeNumber == 1 %}
-                                            1 like
-                                        {% elif post.likeNumber > 1 %}
-                                            {{post.likeNumber}} likes
-                                        {% endif %}
-                                        
-                                    </a>
-                                    <a href="#" class="comment-number ml-3">
-                                        {% if post.commentNumber == 1 %}
-                                            1 comment
-                                        {% elif post.commentNumber > 1 %}
-                                            {{post.commentNumber}} comments
-                                        {% endif %}
-                                    </a>
-                                </span>
-                                
-                                {% if post.isLiked %}
-                                    <button class="btn btn-post mr-2 like-button liked">Liked</button>
-                                {% else %}
-                                    <button class="btn btn-post mr-2 like-button">Like</button>
-                                {% endif %}
-                                
-                                <button class="btn btn-post mr-2 comment-button">Comment</button>
-                                <button class="btn btn-post mr-2 d-none">Share</button>
-                                </div>
-                                
-                                <div style="display: none;" class="comment-box mt-2">
-                                    <form class="row container comment-form">
-                                        <textarea class="form-control col-sm-10" rows="1" placeholder="Add a comment..."></textarea>
-                                        <input class="col-sm-2 btn btn-secondary container" type="submit" value="Send">
-                                    </form>
-                                    <button  class="btn btn-link load-comments">Load previous comments...</button>
-                                    
-                                    <div class="comments container">
-                                        
-                                </div>
-                                {% endif %}
-                            </div>
-                        
-                        </div>
+
+                  {% if lastUserPosts %}
+                    {% for post in lastUserPosts %}
+                      <div class="post" upid="{{post.upid}}">
+                          <div class="post-header mb-2">
+                              <a href="/u/{{post.username}}">
+                                  {% if post.photo == None %}
+                                      <span ><img width="55px" class="rounded-circle" src="{{url_for('static', filename= 'img/empty-profile.png') }}" alt=""></span>
+                                  {% else %}
+                                      <span ><img width="55px" class="rounded-circle" src="{{url_for('static', filename= 'uploads/users/up/' + post.photo ) }}" alt=""></span>
+                                  {% endif %}
+                                  
+                              </a> 
+                              <span>
+                                  <a href="/u/{{post.username}}">
+                                      <h4>{{post.full_name}}</h4>
+                                      <span style="font-size:13px" class="text-muted">@{{post.username}}</span>
+                                  </a>
+                                  <p class="time">{{post.time}}</p>
+                              </span>
+                              <span class="float-right">
+                                  <div class="dropdown">
+                                      <button type="button" class="btn btn-basic" data-toggle="dropdown"><b>...</b></button>
+                                      <ul class="dropdown-menu">
+                                          {% if session.uid == post.uid %}
+                                              <li><a class="dropdown-item delete-post">Delete</a></li>
+                                              <li><a class="dropdown-item edit-post d-none">Edit</a></li>
+                                          {% endif %}
+                                          
+                                      </ul>
+                                  </div>
+                              </span>
+                          </div>
+          
+                          <div class="post-body mb-2">
+                          <p>{{post.post}}</p>
+                          </div>
+          
+                          <div class="post-footer">
+                          <hr>
+                          {% if currentUser != None %}
+                              
+                              <span class="row container post-footer-links mb-2">
+                                  <a href="#" class="like-number" href="">
+                                      {% if post.likeNumber == 1 %}
+                                          1 like
+                                      {% elif post.likeNumber > 1 %}
+                                          {{post.likeNumber}} likes
+                                      {% endif %}
+                                      
+                                  </a>
+                                  <a href="#" class="comment-number ml-3">
+                                      {% if post.commentNumber == 1 %}
+                                          1 comment
+                                      {% elif post.commentNumber > 1 %}
+                                          {{post.commentNumber}} comments
+                                      {% endif %}
+                                  </a>
+                              </span>
+                              
+                              {% if post.isLiked %}
+                                  <button class="btn btn-post mr-2 like-button liked">Liked</button>
+                              {% else %}
+                                  <button class="btn btn-post mr-2 like-button">Like</button>
+                              {% endif %}
+                              
+                              <button class="btn btn-post mr-2 comment-button">Comment</button>
+                              <button class="btn btn-post mr-2 d-none">Share</button>
+                              </div>
+                              
+                              <div style="display: none;" class="comment-box mt-2">
+                                  <form class="row container comment-form">
+                                      <textarea class="form-control col-sm-10" rows="1" placeholder="Add a comment..."></textarea>
+                                      <input class="col-sm-2 btn btn-secondary container" type="submit" value="Send">
+                                  </form>
+                                  <button  class="btn btn-link load-comments">Load previous comments...</button>
+                                  
+                                  <div class="comments container">
+                                      
+                              </div>
+                              {% endif %}
+                          </div>
+                      
+                      </div>
                     {% endfor %}
+                  {% else %}
+                    <p>This user has no posts.</p>
+                  {% endif %}
 
                   </div>
                 </div>

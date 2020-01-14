@@ -258,9 +258,14 @@ class UI{
   }
 
   showPosts(posts, currentUser){
-    posts.forEach(post => {
-      this.addPostToTheBottom(post, currentUser, this.contentArea);
-    });
+    if(posts.length == 0){
+      this.contentArea.textContent = "There isn't any post yet.";
+    }
+    else{
+      posts.forEach(post => {
+        this.addPostToTheBottom(post, currentUser, this.contentArea);
+      });
+    }
   }
 
   showSeaters(seaters){
