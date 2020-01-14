@@ -1528,10 +1528,10 @@ class UI{
         `
         <span class="row">
           <span class="col-sm-6">
-            <a href="/u/${aspiration["username"]}">
+            <button class="btn" target="_blank" onclick="window.open('/u/${aspiration["username"]}', '_blank')">
               <span>${aspiration["full_name"]}</span><br>
               <span style="font-size:13px" class="text-muted">@${aspiration["username"]}</span>
-            </a>
+            </button>
           </span>
           <span class="col-sm-3"><button id="assign-user-button" class="btn btn-primary">Assign</button></span>
           <span class="col-sm-3"><button id="reject-user-button" class="btn btn-danger">Reject</button></span>
