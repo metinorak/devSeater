@@ -14,4 +14,5 @@ venv
 
 # Files #
 ###################
-models/config.py
+./models/config.py
+common.py
