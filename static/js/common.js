@@ -77,26 +77,23 @@ function eventListeners(){
 		}
 		else{
 			//CHECKING
-			checkNewMessages.timeout();
+			checkNewMessages();
 			
 			//checkNotifications();		
 		}
 
 		function checkNewMessages(){
-			this.timeout =  function(){
-				//Check new message number
-				devSeater.newDialogNumber()
-				.then(result => {
-					ui.showNewDialogNumber(result["number"]);
-				})
-				.catch(err => console.error(err))
-				.finally(() => {
-					checkNewMessages();
-				});
-	
-			}
-			setTimeout(this.timeout, 3500);
-		}
+			//Check new message number
+			devSeater.newDialogNumber()
+			.then(result => {
+				ui.showNewDialogNumber(result["number"]);
+			})
+			.catch(err => console.error(err))
+			.finally(() => {
+				setTimeout(checkNewMessages, 3500);
+			});
+
+		};
 		
 		function checkNotifications(){
 			setTimeout(()=>{
