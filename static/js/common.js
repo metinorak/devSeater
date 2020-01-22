@@ -77,6 +77,7 @@ function eventListeners(){
 		}
 		else{
 			//CHECKING
+			checkNewMessages.timeout();
 			checkNewMessages();
 			//checkNotifications();		
 		}
@@ -94,7 +95,6 @@ function eventListeners(){
 				});
 	
 			}
-			timeout();
 			setTimeout(timeout, 3500);
 		}
 		
