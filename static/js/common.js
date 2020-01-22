@@ -78,12 +78,12 @@ function eventListeners(){
 		else{
 			//CHECKING
 			checkNewMessages.timeout();
-			checkNewMessages();
+			
 			//checkNotifications();		
 		}
 
 		function checkNewMessages(){
-			function timeout(){
+			this.timeout =  function(){
 				//Check new message number
 				devSeater.newDialogNumber()
 				.then(result => {
@@ -95,7 +95,7 @@ function eventListeners(){
 				});
 	
 			}
-			setTimeout(timeout, 3500);
+			setTimeout(this.timeout, 3500);
 		}
 		
 		function checkNotifications(){
