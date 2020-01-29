@@ -3,16 +3,15 @@
 ###################
 *.pyc
 
-
 # Folders #
 ###################
-__pycache__
-models/__pycache__
-static/uploads
+project/__pycache__
+project/models/__pycache__
+project/static/uploads
 venv
-
 
 # Files #
 ###################
-./models/config.py
-common.py
+project/config.py
+project/common.py
+start.py
