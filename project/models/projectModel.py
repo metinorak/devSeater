@@ -1,9 +1,10 @@
-from models.database import Database
+from project.models.database import Database
 
 class ProjectModel(Database):
   
-  def createProject(self, project, founder_uid):
-    connection = self.getConnection()
+  @staticmethod
+  def createProject(project, founder_uid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "INSERT INTO projects(project_name, short_description, full_description) VALUES(%s, %s, %s)"
@@ -18,9 +19,10 @@ class ProjectModel(Database):
     finally:
       cursor.close()
       connection.close()
-
-  def getUserProjects(self, uid):
-    connection = self.getConnection()
+  
+  @staticmethod
+  def getUserProjects(uid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT * FROM projects WHERE pid IN (SELECT DISTINCT pid FROM seaters WHERE uid = %s)
@@ -36,9 +38,9 @@ class ProjectModel(Database):
       connection.close()
     return result
   
-  
-  def getProject(self, pid):
-    connection = self.getConnection()
+  @staticmethod
+  def getProject(pid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT * FROM projects WHERE pid = %s"
@@ -52,9 +54,9 @@ class ProjectModel(Database):
       connection.close()
     return result
 
-  
-  def getLastProjects(self, count):
-    connection = self.getConnection()
+  @staticmethod
+  def getLastProjects(count):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT * FROM projects ORDER BY pid DESC LIMIT %s"""
@@ -68,9 +70,9 @@ class ProjectModel(Database):
       connection.close()
     return result
 
-  
-  def getProjectByProjectName(self, name):
-    connection = self.getConnection()
+  @staticmethod
+  def getProjectByProjectName(name):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT * FROM projects WHERE project_name = %s"
@@ -84,8 +86,9 @@ class ProjectModel(Database):
       connection.close()
     return result
   
-  def getMembers(self, pid, currentUser):
-    connection = self.getConnection()
+  @staticmethod
+  def getMembers(pid, currentUser):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = """
@@ -109,9 +112,10 @@ class ProjectModel(Database):
       connection.close()
     return result
   
-  def getNumberOfMembers(self, pid):
+  @staticmethod
+  def getNumberOfMembers(pid):
     #By team member number
-    connection = self.getConnection()
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = """
@@ -132,11 +136,11 @@ class ProjectModel(Database):
       connection.close()
     return count 
   
-  
-  def getPopularProjects(self, number):
+  @staticmethod
+  def getPopularProjects(number):
     #By team member number
     #THIS SHOULD BE TESTED
-    connection = self.getConnection()
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = """
@@ -154,8 +158,9 @@ class ProjectModel(Database):
       connection.close()
     return result 
 
-  def updateProjectPhoto(self, pid, photo):
-    connection = self.getConnection()
+  @staticmethod
+  def updateProjectPhoto(pid, photo):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "UPDATE projects SET photo = %s WHERE pid = %s"
@@ -167,9 +172,9 @@ class ProjectModel(Database):
       cursor.close()
       connection.close()
 
-  
-  def updateProjectName(self, pid, name):
-    connection = self.getConnection()
+  @staticmethod
+  def updateProjectName(pid, name):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "UPDATE projects SET project_name = %s WHERE pid = %s"
@@ -181,8 +186,9 @@ class ProjectModel(Database):
       cursor.close()
       connection.close()
   
-  def updateShortDescription(self, pid, shortDescription):
-    connection = self.getConnection()
+  @staticmethod
+  def updateShortDescription(pid, shortDescription):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "UPDATE projects SET short_description = %s WHERE pid = %s"
@@ -194,8 +200,9 @@ class ProjectModel(Database):
       cursor.close()
       connection.close()
   
-  def updateFullDescription(self, pid, fullDescription):
-    connection = self.getConnection()
+  @staticmethod
+  def updateFullDescription(pid, fullDescription):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     query = "UPDATE projects SET full_description = %s WHERE pid = %s"
     cursor.execute(query, (fullDescription, pid) )
@@ -203,9 +210,9 @@ class ProjectModel(Database):
     cursor.close()
     connection.close()
 
-  
-  def searchProjects(self, keyword, number):
-    connection = self.getConnection()
+  @staticmethod
+  def searchProjects(keyword, number):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT * FROM projects WHERE project_name LIKE %s LIMIT %s"
@@ -221,8 +228,9 @@ class ProjectModel(Database):
 
   #PROJECT ADMINS
   
-  def getProjectAdmins(self, pid):
-    connection = self.getConnection()
+  @staticmethod
+  def getProjectAdmins(pid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT * FROM users WHERE uid IN (SELECT uid FROM projectAdmins WHERE pid = %s)"
@@ -236,9 +244,9 @@ class ProjectModel(Database):
       connection.close()
     return result
   
-  
-  def isProjectAdmin(self, uid, pid):
-    connection = self.getConnection()
+  @staticmethod
+  def isProjectAdmin(uid, pid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT * FROM projectAdmins WHERE uid = %s AND pid = %s"
@@ -251,9 +259,9 @@ class ProjectModel(Database):
       connection.close()
     return (result != None)
 
-  
-  def isProjectMember(self, uid, pid):
-    connection = self.getConnection()
+  @staticmethod
+  def isProjectMember(uid, pid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = """
@@ -271,9 +279,9 @@ class ProjectModel(Database):
       connection.close()
     return (result != None)
   
-  
-  def isThereThisProjectName(self, name):
-    connection = self.getConnection()
+  @staticmethod
+  def isThereThisProjectName(name):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT * FROM projects WHERE project_name = %s)"
@@ -286,9 +294,9 @@ class ProjectModel(Database):
       connection.close()
     return (result != None)
   
-  
-  def removeProjectAdmin(self, pid, uid):
-    connection = self.getConnection()
+  @staticmethod
+  def removeProjectAdmin(pid, uid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "DELETE FROM projectAdmins WHERE pid = %s AND uid = %s"
@@ -302,8 +310,9 @@ class ProjectModel(Database):
 
   #PROJECT LINKS
 
-  def getProjectLinks(self, pid):
-    connection = self.getConnection()
+  @staticmethod
+  def getProjectLinks(pid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT * FROM projectLinks WHERE pid = %s"
@@ -317,8 +326,9 @@ class ProjectModel(Database):
       connection.close()
     return result
   
-  def getProjectLink(self, plid):
-    connection = self.getConnection()
+  @staticmethod
+  def getProjectLink(plid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT * FROM projectLinks WHERE plid = %s"
@@ -332,9 +342,9 @@ class ProjectModel(Database):
       connection.close()
     return result
 
-  
-  def addProjectLink(self, pid, name, link):
-    connection = self.getConnection()
+  @staticmethod
+  def addProjectLink(pid, name, link):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "INSERT INTO projectLinks(pid, name, link) VALUES(%s, %s, %s)"
@@ -349,8 +359,9 @@ class ProjectModel(Database):
       connection.close()
     return plid
   
-  def removeProjectLink(self, plid):
-    connection = self.getConnection()
+  @staticmethod
+  def removeProjectLink(plid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "DELETE FROM projectLinks WHERE plid = %s"
@@ -362,8 +373,9 @@ class ProjectModel(Database):
       cursor.close()
       connection.close()
 
-  def updateProjectLink(self, plid, name, link):
-    connection = self.getConnection()
+  @staticmethod
+  def updateProjectLink(plid, name, link):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "UPDATE projectLinks SET name = %s, link = %s WHERE plid = %s"

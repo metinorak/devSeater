@@ -1,10 +1,11 @@
-from models.database import Database
+from project.models.database import Database
 from passlib.hash import sha256_crypt
 
 class UserModel(Database):
   
-  def getUser(self, uid, currentUser = None):
-    connection = self.getConnection()
+  @staticmethod
+  def getUser(uid, currentUser = None):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     
     try:
@@ -21,8 +22,9 @@ class UserModel(Database):
       connection.close()
     return result
   
-  def getLastUsers(self, count):
-    connection = self.getConnection()
+  @staticmethod
+  def getLastUsers(count):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     
     try:
@@ -37,9 +39,9 @@ class UserModel(Database):
       connection.close()
     return result
 
-  
-  def getUserByUsername(self, username, currentUser = None):
-    connection = self.getConnection()
+  @staticmethod
+  def getUserByUsername(username, currentUser = None):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT 
@@ -55,8 +57,9 @@ class UserModel(Database):
       connection.close()
     return result
 
-  def getUserByEmail(self, email, currentUser = None):
-    connection = self.getConnection()
+  @staticmethod
+  def getUserByEmail(email, currentUser = None):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT 
@@ -72,9 +75,10 @@ class UserModel(Database):
       connection.close()
     return result
 
-  def addUser(self, user):
+  @staticmethod
+  def addUser(user):
     user["password"] = sha256_crypt.encrypt(user["password"])
-    connection = self.getConnection()
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "INSERT INTO users(email, username, password, full_name) VALUES(%s, %s, %s, %s)"
@@ -86,9 +90,9 @@ class UserModel(Database):
       cursor.close()
       connection.close()
 
-  
-  def removeUser(self, uid):
-    connection = self.getConnection()
+  @staticmethod
+  def removeUser(uid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     query = "DELETE FROM users WHERE uid = %s"
     try:
@@ -100,8 +104,9 @@ class UserModel(Database):
       cursor.close()
       connection.close()
   
-  def getWhoToFollowList(self, number, currentUser = None):
-    connection = self.getConnection()
+  @staticmethod
+  def getWhoToFollowList(number, currentUser = None):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT users.*, 
@@ -128,8 +133,9 @@ class UserModel(Database):
   
   #CHECKING
   
-  def login(self, email, password):
-    connection = self.getConnection()
+  @staticmethod
+  def login(email, password):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT * FROM users WHERE email = %s"
@@ -147,8 +153,9 @@ class UserModel(Database):
       cursor.close()
       connection.close()
   
-  def checkPassword(self, uid, password):
-    connection = self.getConnection()
+  @staticmethod
+  def checkPassword(uid, password):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT * FROM users WHERE uid = %s"
@@ -166,8 +173,9 @@ class UserModel(Database):
       cursor.close()
       connection.close()
 
-  def isThereThisUsername(self, username):
-    connection = self.getConnection()
+  @staticmethod
+  def isThereThisUsername(username):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT * FROM users WHERE username = %s"
@@ -181,8 +189,9 @@ class UserModel(Database):
       connection.close()
     return (result != None)
 
-  def isThereThisEmail(self, email):
-    connection = self.getConnection()
+  @staticmethod
+  def isThereThisEmail(email):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT * FROM users WHERE email = %s"
@@ -196,8 +205,9 @@ class UserModel(Database):
       connection.close()
     return (result != None)
   
-  def isEmailVerified(self, email):
-    connection = self.getConnection()
+  @staticmethod
+  def isEmailVerified(email):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT * FROM users WHERE email = %s AND isEmailVerified = 1"
@@ -211,8 +221,9 @@ class UserModel(Database):
       connection.close()
     return (result != None)
   
-  def isGlobalAdmin(self, uid):
-    connection = self.getConnection()
+  @staticmethod
+  def isGlobalAdmin(uid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT * FROM globalAdmins WHERE uid = %s"
@@ -228,8 +239,9 @@ class UserModel(Database):
 
   #UPDATE
   
-  def updateFullname(self, uid, fullname):
-    connection = self.getConnection()
+  @staticmethod
+  def updateFullname(uid, fullname):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "UPDATE users SET full_name = %s WHERE uid = %s"
@@ -241,8 +253,9 @@ class UserModel(Database):
       cursor.close()
       connection.close()
   
-  def updateUsername(self, uid, username):
-    connection = self.getConnection()
+  @staticmethod
+  def updateUsername(uid, username):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "UPDATE users SET username = %s WHERE uid = %s"
@@ -254,9 +267,10 @@ class UserModel(Database):
       cursor.close()
       connection.close()
   
-  def updatePassword(self, uid, password):
+  @staticmethod
+  def updatePassword(uid, password):
     password = sha256_crypt.encrypt(password)
-    connection = self.getConnection()
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "UPDATE users SET password = %s WHERE uid = %s"
@@ -268,8 +282,9 @@ class UserModel(Database):
       cursor.close()
       connection.close()
   
-  def updateProfilePhoto(self, uid, photo):
-    connection = self.getConnection()
+  @staticmethod
+  def updateProfilePhoto(uid, photo):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "UPDATE users SET photo = %s WHERE uid = %s"
@@ -281,8 +296,9 @@ class UserModel(Database):
       cursor.close()
       connection.close()
 
-  def updateEmail(self, uid, email):
-    connection = self.getConnection()
+  @staticmethod
+  def updateEmail(uid, email):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "UPDATE users SET email = %s, isEmailVerified = 0 WHERE uid = %s"
@@ -294,8 +310,9 @@ class UserModel(Database):
       cursor.close()
       connection.close()
   
-  def updateBio(self, uid, bio):
-    connection = self.getConnection()
+  @staticmethod
+  def updateBio(uid, bio):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "UPDATE users SET bio = %s WHERE uid = %s"
@@ -307,8 +324,9 @@ class UserModel(Database):
       cursor.close()
       connection.close()
   
-  def verifyEmail(self, email):
-    connection = self.getConnection()
+  @staticmethod
+  def verifyEmail(email):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "UPDATE users SET isEmailVerified = 1 WHERE email = %s"
@@ -322,8 +340,9 @@ class UserModel(Database):
   
   #FOLLOW ACTIONS
   
-  def follow(self, followerId, followedId):
-    connection = self.getConnection()
+  @staticmethod
+  def follow(followerId, followedId):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "INSERT INTO followers(flwrid, flwdid) VALUES(%s, %s)"
@@ -335,8 +354,9 @@ class UserModel(Database):
       cursor.close()
       connection.close()
   
-  def unFollow(self, followerId, followedId):
-    connection = self.getConnection()
+  @staticmethod
+  def unFollow(followerId, followedId):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "DELETE FROM followers WHERE flwrid = %s AND flwdid = %s"
@@ -350,8 +370,9 @@ class UserModel(Database):
 
   #USER LINKS
   
-  def getUserLinks(self, uid):
-    connection = self.getConnection()
+  @staticmethod
+  def getUserLinks(uid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT * FROM userLinks WHERE uid = %s"
@@ -365,8 +386,9 @@ class UserModel(Database):
       connection.close()
     return result
   
-  def getUserLink(self, ulid):
-    connection = self.getConnection()
+  @staticmethod
+  def getUserLink(ulid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT * FROM userLinks WHERE ulid = %s"
@@ -380,8 +402,9 @@ class UserModel(Database):
       connection.close()
     return result
 
-  def addUserLink(self, uid, name, link):
-    connection = self.getConnection()
+  @staticmethod
+  def addUserLink(uid, name, link):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "INSERT INTO userLinks(uid, name, link) VALUES(%s, %s, %s)"
@@ -396,8 +419,9 @@ class UserModel(Database):
       connection.close()
     return ulid
   
-  def removeUserLink(self, ulid):
-    connection = self.getConnection()
+  @staticmethod
+  def removeUserLink(ulid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "DELETE FROM userLinks WHERE ulid = %s"
@@ -409,8 +433,9 @@ class UserModel(Database):
       cursor.close()
       connection.close()
   
-  def updateUserLink(self, ulid, name, link):
-    connection = self.getConnection()
+  @staticmethod
+  def updateUserLink(ulid, name, link):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "UPDATE userLinks SET name = %s, link = %s WHERE ulid = %s"
@@ -422,8 +447,9 @@ class UserModel(Database):
       cursor.close()
       connection.close()
   
-  def searchUsers(self, keyword, number):
-    connection = self.getConnection()
+  @staticmethod
+  def searchUsers(keyword, number):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT * FROM users WHERE full_name LIKE %s OR username LIKE %s LIMIT %s"

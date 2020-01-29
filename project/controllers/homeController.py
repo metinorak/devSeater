@@ -1,5 +1,15 @@
-from common import *
-from mailController import sendVerificationEmail
+from project.common import *
+from project.controllers.mailController import sendVerificationEmail
+
+# import required models
+from project.models.userModel import UserModel
+from project.models.userPostModel import UserPostModel
+from project.models.projectModel import ProjectModel
+from project.models.contactModel import ContactModel
+
+@app.route("/deneme")
+def fsdnfkjjf():
+  return "fdfdsf"
 
 #HOME CONTROLLER
 @app.route("/", methods = ["GET", "POST"])
@@ -18,7 +28,7 @@ def index():
       errorMessages = dict()
       if(not isValidEmail(email)):
         errorMessages["email"] = "Please enter a valid email address"
-      elif(ModelObject["userModel"].isThereThisEmail(email)):
+      elif(UserModel.isThereThisEmail(email)):
         errorMessages["email"] = "This email address is already taken"
 
       if(len(name) < 3):
@@ -26,7 +36,7 @@ def index():
 
       if(not isValidUsername(username)):
         errorMessages["username"] = "Username value may only consist of A-z0-9 and -, _"
-      elif(ModelObject["userModel"].isThereThisUsername(username)):
+      elif(UserModel.isThereThisUsername(username)):
         errorMessages["username"] = "This username is already taken"
       
       if not isValidPassword(password):
@@ -36,7 +46,7 @@ def index():
         errorMessages["terms"] = "You should accept terms"
 
       if(not errorMessages):
-        ModelObject["userModel"].addUser({
+        UserModel.addUser({
           "email" : email,
           "username" : username,
           "full_name" : name,
@@ -58,14 +68,14 @@ def index():
     #Logged In
 
     #Get User Projects
-    userProjects = ModelObject["projectModel"].getUserProjects(session["uid"])
-    lastFollowingPosts = ModelObject["userPostModel"].getLastFollowingPosts(session["uid"], 10)
+    userProjects = ProjectModel.getUserProjects(session["uid"])
+    lastFollowingPosts = UserPostModel.getLastFollowingPosts(session["uid"], 10)
 
-    popularProjects = ModelObject["projectModel"].getPopularProjects(10)
-    whoToFollowList = ModelObject["userModel"].getWhoToFollowList(5, getCurrentUid())
+    popularProjects = ProjectModel.getPopularProjects(10)
+    whoToFollowList = UserModel.getWhoToFollowList(5, getCurrentUid())
 
     #Get Current User Informations
-    currentUser = ModelObject["userModel"].getUser(session["uid"])
+    currentUser = UserModel.getUser(session["uid"])
 
     return render_template(
       "index.html",
@@ -83,8 +93,8 @@ def login():
       #User Login
       email = request.form.get("email")
       password = request.form.get("password")
-      if(ModelObject["userModel"].login(email, password)):
-        user = ModelObject["userModel"].getUserByEmail(email)
+      if(UserModel.login(email, password)):
+        user = UserModel.getUserByEmail(email)
 
         if user["isEmailVerified"]:
           createSession(email)
@@ -147,7 +157,7 @@ def contact():
       flash("Please enter a message", "alert")
     
     if isValid:
-      ModelObject["contactModel"].addContactMessage({
+      ContactModel.addContactMessage({
         "name" : name,
         "subject" : subject,
         "email" : email,
@@ -170,8 +180,8 @@ def page_not_found(e):
 
 @app.route("/sitemap.xml")
 def sitemap():
-  lastUsers = ModelObject["userModel"].getLastUsers(500)
-  lastProjects = ModelObject["projectModel"].getLastProjects(500)
+  lastUsers = UserModel.getLastUsers(500)
+  lastProjects = ProjectModel.getLastProjects(500)
 
   return render_template(
     "sitemap.xml",

@@ -1,9 +1,10 @@
-from models.database import Database
+from project.models.database import Database
 
 class SeaterModel(Database):
   
-  def getAllProjectSeaters(self, pid):
-    connection = self.getConnection()
+  @staticmethod
+  def getAllProjectSeaters(pid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT seaters.*, projects.project_name,
@@ -19,8 +20,9 @@ class SeaterModel(Database):
       connection.close()
     return result
 
-  def getEmptyProjectSeaters(self, pid):
-    connection = self.getConnection()
+  @staticmethod
+  def getEmptyProjectSeaters(pid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT seaters.*, projects.project_name,
@@ -36,8 +38,9 @@ class SeaterModel(Database):
       connection.close()
     return result
   
-  def getFilledProjectSeaters(self, pid):
-    connection = self.getConnection()
+  @staticmethod
+  def getFilledProjectSeaters(pid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT seaters.*, projects.project_name,
@@ -53,8 +56,9 @@ class SeaterModel(Database):
       connection.close()
     return result
   
-  def getProjectSeaterNumber(self, pid):
-    connection = self.getConnection()
+  @staticmethod
+  def getProjectSeaterNumber(pid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT * FROM seaters WHERE pid = %s"
@@ -69,8 +73,9 @@ class SeaterModel(Database):
       connection.close()
     return count
 
-  def getProjectEmptySeaterNumber(self, pid):
-    connection = self.getConnection()
+  @staticmethod
+  def getProjectEmptySeaterNumber(pid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT COUNT(*) AS number FROM seaters WHERE pid = %s AND uid IS NULL"
@@ -84,8 +89,9 @@ class SeaterModel(Database):
       connection.close()
     return number
   
-  def getProjectFilledSeaterNumber(self, pid):
-    connection = self.getConnection()
+  @staticmethod
+  def getProjectFilledSeaterNumber(pid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT COUNT(*) AS number FROM seaters WHERE pid = %s AND uid IS NOT NULL"
@@ -99,8 +105,9 @@ class SeaterModel(Database):
       connection.close()
     return number
   
-  def getSeaterAspirationNumber(self, sid):
-    connection = self.getConnection()
+  @staticmethod
+  def getSeaterAspirationNumber(sid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT COUNT(*) AS number FROM seaterAspirations WHERE sid = %s AND isRejected = 0"
@@ -114,8 +121,9 @@ class SeaterModel(Database):
       connection.close()
     return number
   
-  def getUserSeaters(self, uid):
-    connection = self.getConnection()
+  @staticmethod
+  def getUserSeaters(uid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT seaters.*, projects.project_name 
@@ -130,8 +138,9 @@ class SeaterModel(Database):
       connection.close()
     return result
 
-  def getUserSeaterNumber(self, uid):
-    connection = self.getConnection()
+  @staticmethod
+  def getUserSeaterNumber(uid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT COUNT(*) AS number FROM seaters WHERE uid = %s"
@@ -145,10 +154,11 @@ class SeaterModel(Database):
       connection.close()
     return result["number"]
   
-  def getSeater(self, sid, currentUser=None):
-    isAspirated = self.isThereSeaterAspiration(currentUser, sid)
+  @staticmethod
+  def getSeater(sid, currentUser=None):
+    isAspirated = SeaterModel.isThereSeaterAspiration(currentUser, sid)
 
-    connection = self.getConnection()
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT seaters.*, projects.project_name 
@@ -170,8 +180,9 @@ class SeaterModel(Database):
       
     return result
 
-  def createSeater(self, pid, seater):
-    connection = self.getConnection()
+  @staticmethod
+  def createSeater(pid, seater):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "INSERT INTO seaters(pid, title, short_description, full_description) VALUES(%s, %s, %s, %s)"
@@ -186,9 +197,9 @@ class SeaterModel(Database):
       connection.close()
     return sid
   
-  
-  def removeSeater(self, sid):
-    connection = self.getConnection()
+  @staticmethod
+  def removeSeater(sid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "DELETE FROM seaters WHERE sid = %s"
@@ -200,8 +211,9 @@ class SeaterModel(Database):
       cursor.close()
       connection.close()
   
-  def dismissUser(self, sid):
-    connection = self.getConnection()
+  @staticmethod
+  def dismissUser(sid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "UPDATE seaters SET uid = NULL WHERE sid = %s"
@@ -213,8 +225,9 @@ class SeaterModel(Database):
       cursor.close()
       connection.close()
   
-  def updateSeater(self, sid, title, description):
-    connection = self.getConnection()
+  @staticmethod
+  def updateSeater(sid, title, description):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "UPDATE seaters SET title = %s, description = %s WHERE sid = %s"
@@ -226,8 +239,9 @@ class SeaterModel(Database):
       cursor.close()
       connection.close()
 
-  def assignUser(self, uid, sid):
-    connection = self.getConnection()
+  @staticmethod
+  def assignUser(uid, sid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "UPDATE seaters SET uid = %s WHERE sid = %s"
@@ -239,8 +253,9 @@ class SeaterModel(Database):
       cursor.close()
       connection.close()
   
-  def aspireSeater(self, uid, sid):
-    connection = self.getConnection()
+  @staticmethod
+  def aspireSeater(uid, sid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "INSERT INTO seaterAspirations(sid, uid) VALUES(%s, %s)"
@@ -252,8 +267,9 @@ class SeaterModel(Database):
       cursor.close()
       connection.close()
   
-  def cancelAspirationToTheSeater(self, uid, sid):
-    connection = self.getConnection()
+  @staticmethod
+  def cancelAspirationToTheSeater(uid, sid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "DELETE FROM seaterAspirations WHERE uid = %s AND sid = %s"
@@ -265,8 +281,9 @@ class SeaterModel(Database):
       cursor.close()
       connection.close()
 
-  def getSeaterAspirations(self, sid):
-    connection = self.getConnection()
+  @staticmethod
+  def getSeaterAspirations(sid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT seaterAspirations.*, users.username, users.uid, users.photo, users.full_name
@@ -283,8 +300,9 @@ class SeaterModel(Database):
       connection.close()
     return result
 
-  def getSeaterAspirationsByPid(self, pid):
-    connection = self.getConnection()
+  @staticmethod
+  def getSeaterAspirationsByPid(pid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT * FROM seaterAspirations WHERE isRejected = 0 AND sid IN 
@@ -299,8 +317,9 @@ class SeaterModel(Database):
       connection.close()
     return result
   
-  def isThereSeaterAspiration(self, uid, sid):
-    connection = self.getConnection()
+  @staticmethod
+  def isThereSeaterAspiration(uid, sid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT * FROM seaterAspirations WHERE uid = %s AND sid = %s AND isRejected = 0"
@@ -314,8 +333,9 @@ class SeaterModel(Database):
       connection.close()
     return (result != None)
 
-  def rejectSeaterAspiration(self, uid, sid):
-    connection = self.getConnection()
+  @staticmethod
+  def rejectSeaterAspiration(uid, sid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "UPDATE seaterAspirations SET isRejected = 1 WHERE  uid = %s AND sid = %s"

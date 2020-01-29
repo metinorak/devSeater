@@ -1,9 +1,10 @@
-from models.database import Database
+from project.models.database import Database
 
 class MessageModel(Database):
 
-  def sendMessage(self, senderId, receiverId, message):
-    connection = self.getConnection()
+  @staticmethod
+  def sendMessage(senderId, receiverId, message):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "INSERT INTO messages(sender_id, receiver_id, message) VALUES(%s, %s, %s)"
@@ -18,8 +19,9 @@ class MessageModel(Database):
       connection.close()
     return mid
   
-  def isTheUserMessageOwner(self, uid, mid):
-    connection = self.getConnection()
+  @staticmethod
+  def isTheUserMessageOwner(uid, mid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT * FROM messages WHERE mid = %s AND (receiver_id = %s OR sender_id = %s)"
@@ -33,8 +35,9 @@ class MessageModel(Database):
       connection.close()
     return (result != None)
   
-  def deleteMessage(self, uid, mid):
-    connection = self.getConnection()
+  @staticmethod
+  def deleteMessage(uid, mid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
   
     try:
@@ -52,9 +55,9 @@ class MessageModel(Database):
       cursor.close()
       connection.close()
 
-
-  def getNewMessageNumberInDialog(self, current_uid, other_uid):
-    connection = self.getConnection()
+  @staticmethod
+  def getNewMessageNumberInDialog(current_uid, other_uid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT COUNT(*) AS number FROM messages WHERE receiver_id = %s AND sender_id = %s AND isRead = 0"
@@ -68,9 +71,9 @@ class MessageModel(Database):
       connection.close()
     return result["number"]
   
-
-  def getNewMessageDialogNumber(self, uid):
-    connection = self.getConnection()
+  @staticmethod
+  def getNewMessageDialogNumber(uid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT * FROM messages WHERE receiver_id = %s AND isRead = 0 AND isDeletedByReceiver = 0 GROUP BY sender_id"
@@ -85,9 +88,9 @@ class MessageModel(Database):
       connection.close()
     return count
   
-
-  def getDialogList(self, uid):
-    connection = self.getConnection()
+  @staticmethod
+  def getDialogList(uid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = """
@@ -131,9 +134,9 @@ class MessageModel(Database):
 
     return result
   
-
-  def getDialogLastMessages(self, current_uid, other_uid, number):
-    connection = self.getConnection()
+  @staticmethod
+  def getDialogLastMessages(current_uid, other_uid, number):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = """
@@ -164,9 +167,9 @@ class MessageModel(Database):
       connection.close()
     return result
 
-
-  def getDialogPreviousMessages(self, current_uid, other_uid, mid, number):
-    connection = self.getConnection()
+  @staticmethod
+  def getDialogPreviousMessages(current_uid, other_uid, mid, number):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = """
@@ -187,8 +190,9 @@ class MessageModel(Database):
       connection.close()
     return result
 
-  def deleteDialog(self, current_uid, other_uid):
-    connection = self.getConnection()
+  @staticmethod
+  def deleteDialog(current_uid, other_uid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     
     try:

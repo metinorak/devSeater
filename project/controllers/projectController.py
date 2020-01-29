@@ -1,4 +1,11 @@
-from common import *
+from project.common import *
+
+# import required models
+from project.models.projectModel import ProjectModel
+from project.models.projectPostModel import ProjectPostModel
+from project.models.userModel import UserModel
+from project.models.skillModel import SkillModel
+from project.models.seaterModel import SeaterModel
 
 @app.route("/create-a-project", methods = ["GET", "POST"])
 def createAProject():
@@ -23,14 +30,14 @@ def createAProject():
         "short_description": shortDescription,
         "full_description": fullDescription
       }
-      ModelObject["projectModel"].createProject(project, session["uid"])
+      ProjectModel.createProject(project, session["uid"])
 
       #Add project links
-      pid = ModelObject["projectModel"].getProjectByProjectName(projectName)["pid"]
+      pid = ProjectModel.getProjectByProjectName(projectName)["pid"]
       
       if pid != None:
         for link, name in zip(links, linkNames):
-          ModelObject["projectModel"].addProjectLink(pid, name, link)
+          ProjectModel.addProjectLink(pid, name, link)
 
       return redirect(url_for("projectPage", projectName = projectName))
     else:
@@ -46,7 +53,7 @@ def createAProject():
 @app.route("/p/<string:projectName>")
 def projectPage(projectName):
   currentUser = getCurrentUser()
-  project = ModelObject["projectModel"].getProjectByProjectName(projectName)
+  project = ProjectModel.getProjectByProjectName(projectName)
 
   if project == None:
     return render_template(
@@ -56,12 +63,12 @@ def projectPage(projectName):
       currentUser = getCurrentUser()
       )
 
-  projectLinks = ModelObject["projectModel"].getProjectLinks(project["pid"])
-  lastProjectPosts = ModelObject["projectPostModel"].getLastProjectPosts(project["pid"], 10, getCurrentUid())
-  numberOfMembers = ModelObject["projectModel"].getNumberOfMembers(project["pid"])
-  numberOfEmptySeaters = ModelObject["seaterModel"].getProjectEmptySeaterNumber(project["pid"])
-  popularProjects = ModelObject["projectModel"].getPopularProjects(10)
-  whoToFollowList = ModelObject["userModel"].getWhoToFollowList(5, getCurrentUid())
+  projectLinks = ProjectModel.getProjectLinks(project["pid"])
+  lastProjectPosts = ProjectPostModel.getLastProjectPosts(project["pid"], 10, getCurrentUid())
+  numberOfMembers = ProjectModel.getNumberOfMembers(project["pid"])
+  numberOfEmptySeaters = SeaterModel.getProjectEmptySeaterNumber(project["pid"])
+  popularProjects = ProjectModel.getPopularProjects(10)
+  whoToFollowList = UserModel.getWhoToFollowList(5, getCurrentUid())
 
 
   return render_template(
@@ -78,11 +85,11 @@ def projectPage(projectName):
   
 @app.route("/p/<string:projectName>/seaters/<string:sid>")
 def seaterPage(projectName, sid):
-  project = ModelObject["projectModel"].getProjectByProjectName(projectName)
-  seater = ModelObject["seaterModel"].getSeater(sid, getCurrentUid())
-  seater["skills"] = ModelObject["skillModel"].getSeaterSkills(sid)
-  assignedUser = ModelObject["userModel"].getUser(seater["uid"])
-  seater["isProjectAdmin"] = ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), project["pid"])
+  project = ProjectModel.getProjectByProjectName(projectName)
+  seater = SeaterModel.getSeater(sid, getCurrentUid())
+  seater["skills"] = SkillModel.getSeaterSkills(sid)
+  assignedUser = UserModel.getUser(seater["uid"])
+  seater["isProjectAdmin"] = ProjectModel.isProjectAdmin(getCurrentUid(), project["pid"])
 
   return render_template(
     "seater-page.html",

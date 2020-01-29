@@ -1,9 +1,10 @@
-from models.database import Database
+from project.models.database import Database
 
 class ContactModel(Database):
 
-  def addContactMessage(self, msg):
-    connection = self.getConnection()
+  @staticmethod
+  def addContactMessage(msg):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "INSERT INTO contactMessages(name, subject, email, message) VALUES(%s, %s, %s, %s)"
@@ -16,10 +17,11 @@ class ContactModel(Database):
       cursor.close()
       connection.close()
 
-  def getLastContactMessages(self, page, messageNumberPerPage):
+  @staticmethod
+  def getLastContactMessages(page, messageNumberPerPage):
     previousMessageNumber = (page - 1) * messageNumberPerPage
 
-    connection = self.getConnection()
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT * FROM contactMessages ORDER BY time DESC LIMIT %s,%s"
@@ -33,8 +35,9 @@ class ContactModel(Database):
       connection.close()
     return result
   
-  def removeContactMessage(self, cmid):
-    connection = self.getConnection()
+  @staticmethod
+  def removeContactMessage(cmid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "DELETE FROM contactMessages WHERE cmid = %s"

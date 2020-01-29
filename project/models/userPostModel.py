@@ -1,9 +1,10 @@
-from models.database import Database
+from project.models.database import Database
 
 class UserPostModel(Database):
   
-  def addUserPost(self, uid, post):
-    connection = self.getConnection() 
+  @staticmethod
+  def addUserPost(uid, post):
+    connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
     try:
       query = "INSERT INTO userPosts(uid, post) VALUES(%s, %s)"
@@ -15,8 +16,9 @@ class UserPostModel(Database):
       cursor.close()
       connection.close()
     
-  def getUserPost(self, upid, currentUser = None):
-    connection = self.getConnection() 
+  @staticmethod
+  def getUserPost(upid, currentUser = None):
+    connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT 
@@ -34,8 +36,9 @@ class UserPostModel(Database):
       connection.close()
     return result
 
-  def getLastUserPosts(self, uid, number, currentUser = None):
-    connection = self.getConnection() 
+  @staticmethod
+  def getLastUserPosts(uid, number, currentUser = None):
+    connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT 
@@ -55,8 +58,9 @@ class UserPostModel(Database):
       connection.close()
     return result
 
-  def getPreviousUserPosts(self, uid, upid, number, currentUser = None):
-    connection = self.getConnection() 
+  @staticmethod
+  def getPreviousUserPosts(uid, upid, number, currentUser = None):
+    connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT 
@@ -76,8 +80,9 @@ class UserPostModel(Database):
       connection.close()
     return result
 
-  def removeUserPost(self, upid):
-    connection = self.getConnection()
+  @staticmethod
+  def removeUserPost(upid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "DELETE FROM userPosts WHERE upid = %s"
@@ -89,8 +94,9 @@ class UserPostModel(Database):
       cursor.close()
       connection.close()
   
-  def updateUserPost(self, upid, post):
-    connection = self.getConnection() 
+  @staticmethod
+  def updateUserPost(upid, post):
+    connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
     try:
       query = "UPDATE userPosts SET post = %s WHERE upid = %s"
@@ -102,8 +108,9 @@ class UserPostModel(Database):
       cursor.close()
       connection.close()
     
-  def getLastFollowingPosts(self, uid, number):
-    connection = self.getConnection() 
+  @staticmethod
+  def getLastFollowingPosts(uid, number):
+    connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT 
@@ -123,8 +130,9 @@ class UserPostModel(Database):
       connection.close()
     return result
 
-  def getNewFollowingPosts(self, uid, upid):
-    connection = self.getConnection() 
+  @staticmethod
+  def getNewFollowingPosts(uid, upid):
+    connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT 
@@ -145,8 +153,9 @@ class UserPostModel(Database):
       connection.close()
     return result
   
-  def getNewFollowingPostNumber(self, uid, upid):
-    connection = self.getConnection() 
+  @staticmethod
+  def getNewFollowingPostNumber(uid, upid):
+    connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT * FROM userPosts 
@@ -162,8 +171,9 @@ class UserPostModel(Database):
       connection.close()
     return count
 
-  def getPreviousFollowingPosts(self, uid, upid, number):
-    connection = self.getConnection() 
+  @staticmethod
+  def getPreviousFollowingPosts(uid, upid, number):
+    connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
 
     try:
@@ -185,8 +195,9 @@ class UserPostModel(Database):
       connection.close()
     return result
 
-  def likeUserPost(self, uid, upid):
-    connection = self.getConnection() 
+  @staticmethod
+  def likeUserPost(uid, upid):
+    connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
     try:
       query = "INSERT INTO userPostLikes(uid, upid) VALUES(%s, %s)"
@@ -198,8 +209,9 @@ class UserPostModel(Database):
       cursor.close()
       connection.close()
   
-  def unlikeUserPost(self, uid, upid):
-    connection = self.getConnection() 
+  @staticmethod
+  def unlikeUserPost(uid, upid):
+    connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
     try:
       query = "DELETE FROM userPostLikes WHERE uid = %s AND upid = %s"
@@ -211,8 +223,9 @@ class UserPostModel(Database):
       cursor.close()
       connection.close()
 
-  def getUserPostLikeNumber(self, upid):
-    connection = self.getConnection() 
+  @staticmethod
+  def getUserPostLikeNumber(upid):
+    connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT COUNT(*) AS number FROM userPostLikes WHERE upid = %s"
@@ -226,8 +239,9 @@ class UserPostModel(Database):
       connection.close()
     return result
 
-  def getUserPostCommentNumber(self, upid):
-    connection = self.getConnection() 
+  @staticmethod
+  def getUserPostCommentNumber(upid):
+    connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT COUNT(*) AS number FROM userPostComments WHERE upid = %s"
@@ -241,8 +255,9 @@ class UserPostModel(Database):
       connection.close()
     return result
 
+  @staticmethod
   def isPostLiked(self,uid, upid):
-    connection = self.getConnection() 
+    connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT * FROM userPostLikes WHERE uid = %s AND upid = %s"
@@ -258,8 +273,9 @@ class UserPostModel(Database):
 
   #COMMENT OPERATIONS
   
-  def addUserPostComment(self, uid, upid, comment):
-    connection = self.getConnection() 
+  @staticmethod
+  def addUserPostComment(uid, upid, comment):
+    connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
     try:
       query = "INSERT INTO userPostComments(uid, upid, comment) VALUES(%s, %s, %s)"
@@ -271,8 +287,9 @@ class UserPostModel(Database):
       cursor.close()
       connection.close()
   
-  def getUserPostComment(self, upcid, currentUser = None):
-    connection = self.getConnection() 
+  @staticmethod
+  def getUserPostComment(upcid, currentUser = None):
+    connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT 
@@ -292,8 +309,9 @@ class UserPostModel(Database):
       connection.close()
     return result
 
-  def removeUserPostComment(self, upcid):
-    connection = self.getConnection() 
+  @staticmethod
+  def removeUserPostComment(upcid):
+    connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
     try:
       query = "DELETE FROM userPostComments WHERE upcid = %s"
@@ -305,8 +323,9 @@ class UserPostModel(Database):
       cursor.close()
       connection.close()
 
-  def updateUserPostComment(self, upcid, comment):
-    connection = self.getConnection() 
+  @staticmethod
+  def updateUserPostComment(upcid, comment):
+    connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
     try:
       query = "UPDATE userPostComments SET comment = %s WHERE upcid = %s"
@@ -318,8 +337,9 @@ class UserPostModel(Database):
       cursor.close()
       connection.close()
 
-  def getLastUserPostComments(self, upid, number, currentUser = None):
-    connection = self.getConnection() 
+  @staticmethod
+  def getLastUserPostComments(upid, number, currentUser = None):
+    connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT 
@@ -339,8 +359,9 @@ class UserPostModel(Database):
       connection.close()
     return result
   
-  def getPreviousUserPostComments(self, upid, upcid, number, currentUser = None):
-    connection = self.getConnection() 
+  @staticmethod
+  def getPreviousUserPostComments(upid, upcid, number, currentUser = None):
+    connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT 
@@ -360,8 +381,9 @@ class UserPostModel(Database):
       connection.close()
     return result
 
-  def getLastUserPostComment(self, upid, currentUser = None):
-    connection = self.getConnection() 
+  @staticmethod
+  def getLastUserPostComment(upid, currentUser = None):
+    connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT 
@@ -381,8 +403,9 @@ class UserPostModel(Database):
       connection.close()
     return result
 
-  def likeUserPostComment(self, uid, upcid):
-    connection = self.getConnection() 
+  @staticmethod
+  def likeUserPostComment(uid, upcid):
+    connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
     try:
       query = "INSERT INTO userPostCommentLikes(uid, upcid) VALUES(%s, %s)"
@@ -394,8 +417,9 @@ class UserPostModel(Database):
       cursor.close()
       connection.close()
   
-  def unlikeUserPostComment(self, uid, upcid):
-    connection = self.getConnection() 
+  @staticmethod
+  def unlikeUserPostComment(uid, upcid):
+    connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
     try:
       query = "DELETE FROM userPostCommentLikes WHERE uid = %s AND upcid = %s"
@@ -407,8 +431,9 @@ class UserPostModel(Database):
       cursor.close()
       connection.close()
 
-  def getUserPostCommentLikeNumber(self, upcid):
-    connection = self.getConnection() 
+  @staticmethod
+  def getUserPostCommentLikeNumber(upcid):
+    connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT COUNT(*) AS number FROM userPostCommentLikes WHERE upcid = %s"
@@ -422,8 +447,9 @@ class UserPostModel(Database):
       connection.close()
     return result
   
-  def isCommentLiked(self, uid, upcid):
-    connection = self.getConnection() 
+  @staticmethod
+  def isCommentLiked(uid, upcid):
+    connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT * FROM userPostCommentLikes WHERE uid = %s AND upcid = %s"

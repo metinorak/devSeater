@@ -1,9 +1,10 @@
-from models.database import Database
+from project.models.database import Database
 
 class NotificationModel(Database):
   
-  def getNotifications(self, uid, number):
-    connection = self.getConnection()
+  @staticmethod
+  def getNotifications(uid, number):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT * FROM notifications WHERE uid = %s ORDER BY time DESC LIMIT %s"
@@ -22,9 +23,9 @@ class NotificationModel(Database):
 
     return result
 
-  
-  def getNewNotifications(self, uid, number):
-    connection = self.getConnection()
+  @staticmethod
+  def getNewNotifications(uid, number):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT * FROM notifications WHERE uid = %s AND isRead = 0 ORDER BY time DESC LIMIT %s"
@@ -43,9 +44,9 @@ class NotificationModel(Database):
       connection.close()
     return result
   
-  
-  def getNewNotificationNumber(self, uid):
-    connection = self.getConnection()
+  @staticmethod
+  def getNewNotificationNumber(uid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT * FROM notifications WHERE uid = %s AND isRead = 0"

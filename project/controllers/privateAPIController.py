@@ -1,7 +1,18 @@
-from common import *
+from project.common import *
 from datetime import datetime
 import json
 import os
+
+# import required models
+from project.models.contactModel import ContactModel
+from project.models.messageModel import MessageModel
+from project.models.notificationModel import NotificationModel
+from project.models.projectModel import ProjectModel
+from project.models.projectPostModel import ProjectPostModel
+from project.models.seaterModel import SeaterModel
+from project.models.skillModel import SkillModel
+from project.models.userModel import UserModel
+from project.models.userPostModel import UserPostModel
 
 class DateTimeEncoder(json.JSONEncoder):
     def default(self, o):
@@ -25,11 +36,11 @@ def getUser():
         email = request.args.get("email")
 
         if uid != None:
-            user = ModelObject["userModel"].getUser(uid)
+            user = UserModel.getUser(uid)
         elif username != None:
-            user = ModelObject["userModel"].getUserByUsername(username)
+            user = UserModel.getUserByUsername(username)
         elif email != None:
-            user = ModelObject["userModel"].getUserByEmail(email)
+            user = UserModel.getUserByEmail(email)
         else:
             return render_template("private-api/unknown-request.html")
         try:
@@ -52,7 +63,7 @@ def currentUser():
 @login_required
 def isThereThisUsername(username):
     data = dict()
-    if ModelObject["userModel"].isThereThisUsername(username):
+    if UserModel.isThereThisUsername(username):
         data["result"] = True
     else:
         data["result"] = False
@@ -63,7 +74,7 @@ def isThereThisUsername(username):
 @login_required
 def isThereThisEmail(email):
     data = dict()
-    if ModelObject["userModel"].isThereThisEmail(email):
+    if UserModel.isThereThisEmail(email):
         data["result"] = True
     else:
         data["result"] = False
@@ -74,7 +85,7 @@ def isThereThisEmail(email):
 @login_required
 def isGlobalAdmin(uid):
     data = dict()
-    if ModelObject["userModel"].isGlobalAdmin(uid):
+    if UserModel.isGlobalAdmin(uid):
         data["result"] = True
     else:
         data["result"] = False
@@ -84,7 +95,7 @@ def isGlobalAdmin(uid):
 @app.route("/private-api/follow/<string:uid>")
 @login_required
 def follow(uid):
-    ModelObject["userModel"].follow(getCurrentUid(), uid)
+    UserModel.follow(getCurrentUid(), uid)
 
     return json.dumps({
         "result": "success"
@@ -93,7 +104,7 @@ def follow(uid):
 @app.route("/private-api/unfollow/<string:uid>")
 @login_required
 def unfollow(uid):
-    ModelObject["userModel"].unFollow(getCurrentUid(), uid)
+    UserModel.unFollow(getCurrentUid(), uid)
 
     return json.dumps({
         "result": "success"
@@ -107,7 +118,7 @@ def userLinks():
         if uid == None:
             uid = getCurrentUid()
         #Getting all user's links
-        links = ModelObject["userModel"].getUserLinks(uid)
+        links = UserModel.getUserLinks(uid)
         return json.dumps(links, cls=DateTimeEncoder)
     elif request.method == "POST":
         #Stripping
@@ -117,7 +128,7 @@ def userLinks():
 
         #Adding new user link
         if data["name"] != "" and data["link"] != "":
-            ulid = ModelObject["userModel"].addUserLink(getCurrentUid(), data["name"], data["link"])
+            ulid = UserModel.addUserLink(getCurrentUid(), data["name"], data["link"])
             return json.dumps({
                 "result" : "success",
                 "ulid": ulid 
@@ -127,10 +138,10 @@ def userLinks():
         #Updating a user link
         data = json.loads(request.data)
         ulid = request.args.get("ulid")
-        link = ModelObject["userModel"].getUserLink(ulid)
+        link = UserModel.getUserLink(ulid)
 
         if link["uid"] == getCurrentUid():
-            ModelObject["userModel"].updateUserLink(ulid, data["name"], data["link"])
+            UserModel.updateUserLink(ulid, data["name"], data["link"])
             return json.dumps({"result" : "success"})
         else:
             return render_template("private-api/forbidden-request.html")
@@ -140,10 +151,10 @@ def userLinks():
         #DELETE request
 
         ulid = request.args.get("ulid")
-        link = ModelObject["userModel"].getUserLink(ulid)
+        link = UserModel.getUserLink(ulid)
 
         if link["uid"] == getCurrentUid():
-            ModelObject["userModel"].removeUserLink(ulid)
+            UserModel.removeUserLink(ulid)
             return json.dumps({"result" : "success"})
         else:
             return render_template("private-api/forbidden-request.html")
@@ -163,9 +174,9 @@ def userPosts():
             uid = getCurrentUid()
         
         if upid == None:
-            posts = ModelObject["userPostModel"].getLastUserPosts(uid, 10, getCurrentUid())
+            posts = UserPostModel.getLastUserPosts(uid, 10, getCurrentUid())
         else:
-            posts = ModelObject["userPostModel"].getPreviousUserPosts(uid, upid, 10, getCurrentUid())
+            posts = UserPostModel.getPreviousUserPosts(uid, upid, 10, getCurrentUid())
         
         return json.dumps(posts, cls=DateTimeEncoder)
 
@@ -175,7 +186,7 @@ def userPosts():
         data["post"] = data["post"].strip()
 
         if data["post"] != "":
-            ModelObject["userPostModel"].addUserPost(getCurrentUid(), data["post"])
+            UserPostModel.addUserPost(getCurrentUid(), data["post"])
             return json.dumps({"result" : "success"})
         else:
             return json.dumps({
@@ -199,10 +210,10 @@ def userPosts():
                 "msg": "upid and post cannot be empty"
             })
 
-        post = ModelObject["userPostModel"].getUserPost(["upid"])
+        post = UserPostModel.getUserPost(["upid"])
 
         if post["uid"] == getCurrentUid():
-            ModelObject["userPostModel"].updateUserPost(upid, data["post"])
+            UserPostModel.updateUserPost(upid, data["post"])
             return json.dumps({"result" : "success"})
         else:
             return render_template("private-api/forbidden-request.html")
@@ -210,10 +221,10 @@ def userPosts():
     else:
         #Delete a user post
         upid = request.args.get("upid")
-        post = ModelObject["userPostModel"].getUserPost(upid)
+        post = UserPostModel.getUserPost(upid)
 
         if post["uid"] == getCurrentUid() and isLoggedIn():
-            ModelObject["userPostModel"].removeUserPost(upid)
+            UserPostModel.removeUserPost(upid)
             return json.dumps({"result": "success"})
         else:
             return render_template("private-api/forbidden-request.html")
@@ -225,7 +236,7 @@ def getPreviousFollowingPosts():
     upid = request.args.get("upid")
     
     if upid != None:
-        posts = ModelObject["userPostModel"].getPreviousFollowingPosts(getCurrentUid(), upid, 10)
+        posts = UserPostModel.getPreviousFollowingPosts(getCurrentUid(), upid, 10)
         return json.dumps(posts, cls=DateTimeEncoder)
     
     return render_template("private-api/unknown-request.html")
@@ -235,7 +246,7 @@ def getPreviousFollowingPosts():
 def getNewFollowingPostNumber():
     upid = request.args.get("upid")
     if upid != None:
-        number = ModelObject["userPostModel"].getNewFollowingPostNumber(getCurrentUid(), upid)
+        number = UserPostModel.getNewFollowingPostNumber(getCurrentUid(), upid)
 
         return json.dumps({
             "number" : number
@@ -248,7 +259,7 @@ def getNewFollowingPosts():
     upid = request.args.get("upid")
 
     if upid != None:
-        posts = ModelObject["userPostModel"].getNewFollowingPosts(getCurrentUid(), upid)
+        posts = UserPostModel.getNewFollowingPosts(getCurrentUid(), upid)
         return json.dumps(posts, cls=DateTimeEncoder)
 
     return render_template("private-api/unknown-request.html")
@@ -257,7 +268,7 @@ def getNewFollowingPosts():
 @login_required
 def likeUserPost(upid):
 
-    ModelObject["userPostModel"].likeUserPost(getCurrentUid(), upid)
+    UserPostModel.likeUserPost(getCurrentUid(), upid)
     return json.dumps({"result" : "success"})
 
 
@@ -265,20 +276,20 @@ def likeUserPost(upid):
 @login_required
 def unlikeUserPost(upid):
 
-    ModelObject["userPostModel"].unlikeUserPost(getCurrentUid(), upid)
+    UserPostModel.unlikeUserPost(getCurrentUid(), upid)
     return json.dumps({"result" : "success"})
 
 @app.route("/private-api/user-posts/<string:upid>/likes/number")
 @login_required
 def userPostLikeNumber(upid):
-    number = ModelObject["userPostModel"].getUserPostLikeNumber(upid)
+    number = UserPostModel.getUserPostLikeNumber(upid)
     return json.dumps({"number" : number})
 
 
 @app.route("/private-api/user-posts/<string:upid>/comments/number")
 @login_required
 def userPostCommentNumber(upid):
-    number = ModelObject["userPostModel"].getUserPostCommentNumber(upid)
+    number = UserPostModel.getUserPostCommentNumber(upid)
     return json.dumps({"number" : number})
 
 @app.route("/private-api/user-posts/<string:upid>/comments", methods = ["GET", "POST", "PUT", "DELETE"])
@@ -295,25 +306,25 @@ def userPostComments(upid):
             number = 2
 
         if upcid == None:
-            comments = ModelObject["userPostModel"].getLastUserPostComments(upid, number, getCurrentUid())
+            comments = UserPostModel.getLastUserPostComments(upid, number, getCurrentUid())
         else:
-            comments = ModelObject["userPostModel"].getPreviousUserPostComments(upid, upcid, number, getCurrentUid())
+            comments = UserPostModel.getPreviousUserPostComments(upid, upcid, number, getCurrentUid())
         return json.dumps(comments, cls=DateTimeEncoder)
 
     elif request.method == "POST":
         #Add a new user post comment
         data = json.loads(request.data)
-        ModelObject["userPostModel"].addUserPostComment(getCurrentUid(), upid, data["comment"])
+        UserPostModel.addUserPostComment(getCurrentUid(), upid, data["comment"])
 
         return json.dumps({"result" : "success"})
     elif request.method == "PUT":
         #Update user post comment
         upcid = request.args.get("upcid")
         data = json.loads(request.data)
-        comment = ModelObject["userPostModel"].getUserPostComment(upcid)
+        comment = UserPostModel.getUserPostComment(upcid)
 
         if comment["uid"] == getCurrentUid():
-            ModelObject["userPostModel"].updateUserPostComment(upcid, data["comment"])
+            UserPostModel.updateUserPostComment(upcid, data["comment"])
             return json.dumps({"result" : "success"})
         
         return render_template("private-api/forbidden-request.html")
@@ -321,10 +332,10 @@ def userPostComments(upid):
     else:
         #Delete a user post comment
         upcid = request.args.get("upcid")
-        comment = ModelObject["userPostModel"].getUserPostComment(upcid)
+        comment = UserPostModel.getUserPostComment(upcid)
 
         if comment["uid"] == getCurrentUid():
-            ModelObject["userPostModel"].removeUserPostComment(upcid)
+            UserPostModel.removeUserPostComment(upcid)
             return json.dumps({"result": "success"})
         
         return render_template("private-api/forbidden-request.html")
@@ -335,20 +346,20 @@ def userPostComments(upid):
 @app.route("/private-api/user-posts/comments/<string:upcid>/like")
 @login_required
 def likeUserPostComment(upcid):
-    ModelObject["userPostModel"].likeUserPostComment(getCurrentUid(), upcid)
+    UserPostModel.likeUserPostComment(getCurrentUid(), upcid)
     return json.dumps({"result": "success"})
 
 
 @app.route("/private-api/user-posts/comments/<string:upcid>/unlike")
 @login_required
 def unlikeUserPostComment(upcid):
-    ModelObject["userPostModel"].unlikeUserPostComment(getCurrentUid(), upcid)
+    UserPostModel.unlikeUserPostComment(getCurrentUid(), upcid)
     return json.dumps({"result": "success"})
 
 @app.route("/private-api/user-posts/comments/<string:upcid>/like-number")
 @login_required
 def userPostCommentLikeNumber(upcid):
-    number = ModelObject["userPostModel"].getUserPostCommentLikeNumber(upcid)
+    number = UserPostModel.getUserPostCommentLikeNumber(upcid)
     return json.dumps({"number" : number})
 
 
@@ -361,7 +372,7 @@ def userPhoto(uid):
     except ValueError:
         uid = getCurrentUid()
     
-    user = ModelObject["userModel"].getUser(uid)
+    user = UserModel.getUser(uid)
 
     if request.method == "POST":
         size = len(request.data) / 1000000
@@ -375,7 +386,7 @@ def userPhoto(uid):
 
         with open(UPLOAD_FOLDER + "/users/up/" + newFileName, "wb") as fh:
             fh.write(request.data)
-            ModelObject["userModel"].updateProfilePhoto(getCurrentUid(), newFileName)
+            UserModel.updateProfilePhoto(getCurrentUid(), newFileName)
 
             #Delete old uploaded file
             if user["photo"] != None:
@@ -394,7 +405,7 @@ def userFullName():
     if fullname != None:
         fullname.strip()
         if fullname != "":
-            ModelObject["userModel"].updateFullname(getCurrentUid(), fullname)
+            UserModel.updateFullname(getCurrentUid(), fullname)
             return json.dumps({"result": "success"})
     else:
         return json.dumps({"result": "fail"})
@@ -406,7 +417,7 @@ def userBio():
     bio = json.loads(request.data)["bio"]
     bio.strip()
     if bio != "":
-        ModelObject["userModel"].updateBio(getCurrentUid(), bio)
+        UserModel.updateBio(getCurrentUid(), bio)
         return json.dumps({"result": "success"})
     else:
         return json.dumps({"result": "fail"})
@@ -420,7 +431,7 @@ def updateUsername():
     newUsername = data["username"]
     password = data["password"]
 
-    if not ModelObject["userModel"].checkPassword(getCurrentUid(), password):
+    if not UserModel.checkPassword(getCurrentUid(), password):
         return json.dumps({
             "result": "fail",
             "msg": "Password is not correct!"
@@ -433,7 +444,7 @@ def updateUsername():
         })
 
     if newUsername != None and newUsername != "":
-        ModelObject["userModel"].updateUsername(getCurrentUid(), newUsername)
+        UserModel.updateUsername(getCurrentUid(), newUsername)
         return json.dumps({
             "result" : "success",
             "msg": "Username successfully updated!"
@@ -452,7 +463,7 @@ def updateEmail():
     newEmail = data["email"]
     password = data["password"]
 
-    if not ModelObject["userModel"].checkPassword(getCurrentUid(), password):
+    if not UserModel.checkPassword(getCurrentUid(), password):
         return json.dumps({
             "result": "fail",
             "msg": "Password is not correct!"
@@ -470,7 +481,7 @@ def updateEmail():
             "msg": "This is your current email!"
         })
     
-    ModelObject["userModel"].updateEmail(getCurrentUid(), newEmail)
+    UserModel.updateEmail(getCurrentUid(), newEmail)
     return json.dumps({
         "result" : "success",
         "msg": "Email updated! You should activate your new email clicking the activation link we've sent you."
@@ -486,7 +497,7 @@ def updatePassword():
     newPassword = data["newPassword"]
     confirmNewPassword = data["confirmNewPassword"]
 
-    if not ModelObject["userModel"].checkPassword(getCurrentUid(), currentPassword):
+    if not UserModel.checkPassword(getCurrentUid(), currentPassword):
         return json.dumps({
             "result": "fail",
             "msg": "Current password is not correct!"
@@ -504,7 +515,7 @@ def updatePassword():
             "msg": "Password is not valid! It must be at least 6 characters."
         })
     
-    ModelObject["userModel"].updatePassword(getCurrentUid(), newPassword)
+    UserModel.updatePassword(getCurrentUid(), newPassword)
     return json.dumps({
         "result": "success",
         "msg": "Password has updated successfully!"
@@ -515,7 +526,7 @@ def updatePassword():
 @login_required
 def checkUsernameAvailability(username):
     return json.dumps({
-        "result": not ModelObject["userModel"].isThereThisUsername(username)
+        "result": not UserModel.isThereThisUsername(username)
     })
 
 #USER SKILLS
@@ -527,14 +538,14 @@ def userSkills():
         if uid == None:
             uid = getCurrentUid()
         
-        skills = ModelObject["skillModel"].getUserSkills(uid)
+        skills = SkillModel.getUserSkills(uid)
 
         return json.dumps(skills, cls=DateTimeEncoder)
 
     elif request.method == "POST" and isLoggedIn():
         skill = request.args.get("skill")
         if skill != None:
-            skid = ModelObject["skillModel"].addUserSkill(getCurrentUid(), skill)
+            skid = SkillModel.addUserSkill(getCurrentUid(), skill)
             return json.dumps({
                 "result": "success",
                 "skid": skid
@@ -545,7 +556,7 @@ def userSkills():
         skid = request.args.get("skid")
 
         if skid != None and isLoggedIn():
-            ModelObject["skillModel"].removeUserSkill(getCurrentUid(), skid)
+            SkillModel.removeUserSkill(getCurrentUid(), skid)
             return json.dumps({"result": "success"})
     
     return render_template("private-api/unknown-request.html")
@@ -558,7 +569,7 @@ def seaterSkills():
         sid = request.args.get("sid")
 
         if sid != None:
-            skills = ModelObject["skillModel"].getUserSkills(getCurrentUid)
+            skills = SkillModel.getUserSkills(getCurrentUid)
             return json.dumps(skills, cls=DateTimeEncoder)
         return render_template("private-api/unknown-request.html")
 
@@ -567,11 +578,11 @@ def seaterSkills():
         sid = request.args.get("sid")
         skill = request.args.get("skill")
 
-        pid = ModelObject["seaterModel"].getSeater(sid)["pid"]
+        pid = SeaterModel.getSeater(sid)["pid"]
 
-        if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), pid):
+        if ProjectModel.isProjectAdmin(getCurrentUid(), pid):
             if skill != None:
-                ModelObject["skillModel"].addSeaterSkill(sid, skill)
+                SkillModel.addSeaterSkill(sid, skill)
                 return json.dumps({"result": "success"})
 
     else:
@@ -579,10 +590,10 @@ def seaterSkills():
         skid = request.args.get("skid")
 
         if skid != None and isLoggedIn():
-            skill = ModelObject["skillModel"].getUserSkill(skid)
+            skill = SkillModel.getUserSkill(skid)
 
             if skill["uid"] == getCurrentUid():
-                ModelObject["skillModel"].removeUserSkill(skid)
+                SkillModel.removeUserSkill(skid)
                 return json.dumps({"result": "success"})
             else:
                 return render_template("private-api/forbidden-request.html")
@@ -593,55 +604,55 @@ def seaterSkills():
 #SEATERS
 @app.route("/private-api/projects/<string:pid>/seaters/all")
 def projectSeaters(pid):
-    seaters = ModelObject["seaterModel"].getAllProjectSeaters(pid)
+    seaters = SeaterModel.getAllProjectSeaters(pid)
 
     return json.dumps(seaters, cls=DateTimeEncoder)
 
 @app.route("/private-api/projects/<string:pid>/seaters/empty")
 def projectEmptySeaters(pid):
-    seaters = ModelObject["seaterModel"].getEmptyProjectSeaters(pid)
+    seaters = SeaterModel.getEmptyProjectSeaters(pid)
 
     return json.dumps(seaters, cls=DateTimeEncoder)
 
 @app.route("/private-api/projects/<string:pid>/seaters/filled")
 def projectFilledSeaters(pid):
-    seaters = ModelObject["seaterModel"].getFilledProjectSeaters(pid)
+    seaters = SeaterModel.getFilledProjectSeaters(pid)
 
     return json.dumps(seaters, cls=DateTimeEncoder)
 
 @app.route("/private-api/projects/<string:pid>/seaters/number")
 def projectEmptySeaterNumber(pid):
-    number = ModelObject["seaterModel"].getEmptyProjectSeaterNumber(pid)
+    number = SeaterModel.getEmptyProjectSeaterNumber(pid)
 
     return json.dumps({"number" : number})
 
 @app.route("/private-api/users/<string:uid>/seaters")
 def userSeaters(uid):
-    seaters = ModelObject["seaterModel"].getUserSeaters(uid)
+    seaters = SeaterModel.getUserSeaters(uid)
     return json.dumps(seaters, cls=DateTimeEncoder)
 
 @app.route("/private-api/users/<string:uid>/seaters/number")
 def userSeaterNumber(uid):
-    number = ModelObject["seaterModel"].getUserSeaterNumber(uid)
+    number = SeaterModel.getUserSeaterNumber(uid)
     return json.dumps({"number" : number})
 
 @app.route("/private-api/seaters/<string:sid>")
 def getSeater(sid):
-    seater = ModelObject["seaterModel"].getSeater(sid)
-    seater["skills"] = ModelObject["skillModel"].getSeaterSkills(sid)
+    seater = SeaterModel.getSeater(sid)
+    seater["skills"] = SkillModel.getSeaterSkills(sid)
     return json.dumps(seater, cls=DateTimeEncoder)
 
 @app.route("/private-api/projects/<string:pid>/seaters", methods = ["POST"])
 @login_required
 def createSeater(pid):
-    if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), pid):
+    if ProjectModel.isProjectAdmin(getCurrentUid(), pid):
         seater = json.loads(request.data)
         seater["pid"] = pid
-        sid = ModelObject["seaterModel"].createSeater(pid, seater)
+        sid = SeaterModel.createSeater(pid, seater)
 
         #Add skills
         for skill in seater["skills"]:
-            ModelObject["skillModel"].addSeaterSkill(sid, skill)
+            SkillModel.addSeaterSkill(sid, skill)
 
         return json.dumps({
             "result": "success",
@@ -652,10 +663,10 @@ def createSeater(pid):
 @app.route("/private-api/seaters/<string:sid>", methods = ["DELETE"])
 @login_required
 def removeSeater(sid):
-    seater = ModelObject["seaterModel"].getSeater(sid)
+    seater = SeaterModel.getSeater(sid)
     if seater != None:
-        if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), seater["pid"]):
-            ModelObject["seaterModel"].removeSeater(sid)
+        if ProjectModel.isProjectAdmin(getCurrentUid(), seater["pid"]):
+            SeaterModel.removeSeater(sid)
             return json.dumps({"result": "success"})
         else:
             return render_template("private-api/forbidden-request.html")
@@ -664,12 +675,12 @@ def removeSeater(sid):
 @app.route("/private-api/seaters/<string:sid>/dismiss-user")
 @login_required
 def dismissUserFromSeater(sid):
-    seater = ModelObject["seaterModel"].getSeater(sid)
+    seater = SeaterModel.getSeater(sid)
 
     if seater != None:
-        if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), seater["pid"]) or (seater["uid"] == getCurrentUid()):
-            ModelObject["seaterModel"].dismissUser(sid)
-            ModelObject["seaterModel"].cancelAspirationToTheSeater(seater["uid"], sid)
+        if ProjectModel.isProjectAdmin(getCurrentUid(), seater["pid"]) or (seater["uid"] == getCurrentUid()):
+            SeaterModel.dismissUser(sid)
+            SeaterModel.cancelAspirationToTheSeater(seater["uid"], sid)
             return json.dumps({"result": "success"})
         else:
             return render_template("private-api/forbidden-request.html")
@@ -679,12 +690,12 @@ def dismissUserFromSeater(sid):
 @app.route("/private-api/seaters/<string:sid>", methods = ["PUT"])
 @login_required
 def updateSeater(sid):
-    seater = ModelObject["seaterModel"].getSeater(sid)
+    seater = SeaterModel.getSeater(sid)
 
     if seater != None:
-        if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), seater["pid"]):
+        if ProjectModel.isProjectAdmin(getCurrentUid(), seater["pid"]):
             seater = json.loads(request.data)
-            ModelObject["seaterModel"].updateSeater(sid, seater["title"], seater["description"])
+            SeaterModel.updateSeater(sid, seater["title"], seater["description"])
             return json.dumps({"result": "success"})
         else:
             return render_template("private-api/forbidden-request.html")
@@ -694,12 +705,12 @@ def updateSeater(sid):
 @app.route("/private-api/seaters/<string:sid>/assign/<string:uid>")
 @login_required
 def assignUser(sid, uid):
-    seater = ModelObject["seaterModel"].getSeater(sid)
+    seater = SeaterModel.getSeater(sid)
 
     if seater != None:
-        if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), seater["pid"]):
-            if ModelObject["seaterModel"].isThereSeaterAspiration(uid, sid):
-                ModelObject["seaterModel"].assignUser(uid, sid)
+        if ProjectModel.isProjectAdmin(getCurrentUid(), seater["pid"]):
+            if SeaterModel.isThereSeaterAspiration(uid, sid):
+                SeaterModel.assignUser(uid, sid)
                 return json.dumps({"result": "success"})
         else:
             return render_template("private-api/forbidden-request.html")
@@ -709,18 +720,18 @@ def assignUser(sid, uid):
 @app.route("/private-api/seaters/<string:sid>/aspire")
 @login_required
 def aspireSeater(sid):
-    seater = ModelObject["seaterModel"].getSeater(sid)
-    if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), seater["pid"]):
-        ModelObject["seaterModel"].assignUser(getCurrentUid(), sid)
+    seater = SeaterModel.getSeater(sid)
+    if ProjectModel.isProjectAdmin(getCurrentUid(), seater["pid"]):
+        SeaterModel.assignUser(getCurrentUid(), sid)
     else:
-        ModelObject["seaterModel"].aspireSeater(getCurrentUid(), sid)
+        SeaterModel.aspireSeater(getCurrentUid(), sid)
     return json.dumps({"result": "success"})
 
 @app.route("/private-api/seaters/<string:sid>/cancel-aspiration")
 @login_required
 def cancelSeaterAspiration(sid):
-    if ModelObject["seaterModel"].isThereSeaterAspiration(getCurrentUid(), sid):
-        ModelObject["seaterModel"].cancelAspirationToTheSeater(getCurrentUid(), sid)
+    if SeaterModel.isThereSeaterAspiration(getCurrentUid(), sid):
+        SeaterModel.cancelAspirationToTheSeater(getCurrentUid(), sid)
         return json.dumps({"result": "success"})
     else:
         return render_template("private-api/forbidden-request.html")
@@ -728,28 +739,28 @@ def cancelSeaterAspiration(sid):
 @app.route("/private-api/seaters/<string:sid>/aspirations")
 @login_required
 def seaterAspirations(sid):
-    seater = ModelObject["seaterModel"].getSeater(sid)
-    if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), seater["pid"]):
-        aspirations = ModelObject["seaterModel"].getSeaterAspirations(sid)
+    seater = SeaterModel.getSeater(sid)
+    if ProjectModel.isProjectAdmin(getCurrentUid(), seater["pid"]):
+        aspirations = SeaterModel.getSeaterAspirations(sid)
         return json.dumps(aspirations, cls=DateTimeEncoder)
     return render_template("private-api/forbidden-request.html")
 
 @app.route("/private-api/seaters/<string:sid>/aspirations/number")
 def seaterAspirationNumber(sid):
-    seater = ModelObject["seaterModel"].getSeater(sid)
-    if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), seater["pid"]):
-        number = ModelObject["seaterModel"].getSeaterAspirationNumber(sid)
+    seater = SeaterModel.getSeater(sid)
+    if ProjectModel.isProjectAdmin(getCurrentUid(), seater["pid"]):
+        number = SeaterModel.getSeaterAspirationNumber(sid)
         return json.dumps({"number": number})
     return render_template("private-api/forbidden-request.html")
 
 @app.route("/private-api/seaters/<string:sid>/reject/<string:uid>")
 @login_required
 def rejectSeaterAspiration(sid, uid):
-    seater = ModelObject["seaterModel"].getSeater(sid)
+    seater = SeaterModel.getSeater(sid)
 
     if seater != None and uid != None:
-        if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), seater["pid"]):
-            ModelObject["seaterModel"].rejectSeaterAspiration(uid, sid)
+        if ProjectModel.isProjectAdmin(getCurrentUid(), seater["pid"]):
+            SeaterModel.rejectSeaterAspiration(uid, sid)
             return json.dumps({"result": "success"})
         else:
             return render_template("private-api/forbidden-request.html")
@@ -760,25 +771,25 @@ def rejectSeaterAspiration(sid, uid):
 #PROJECT CONTROLLER
 @app.route("/private-api/user/<string:uid>/projects")
 def getUserProjects(uid):
-    projects = ModelObject["projectModel"].getUserProjects(uid)
+    projects = ProjectModel.getUserProjects(uid)
 
     return json.dumps(projects, cls=DateTimeEncoder)
 
 @app.route("/private-api/projects/<string:pid>")
 def getProject(pid):
-    project = ModelObject["projectModel"].getProject(pid)
+    project = ProjectModel.getProject(pid)
 
     return json.dumps(project, cls=DateTimeEncoder)
 
 @app.route("/private-api/projects/<string:pid>/members")
 def getProjectMembers(pid):
-    members = ModelObject["projectModel"].getMembers(pid, getCurrentUid())
+    members = ProjectModel.getMembers(pid, getCurrentUid())
 
     return json.dumps(members, cls=DateTimeEncoder)
 
 @app.route("/private-api/projects/<string:pid>/members/number")
 def getNumberOfMembers(pid):
-    number = ModelObject["projectModel"].getNumberOfMembers(pid)
+    number = ProjectModel.getNumberOfMembers(pid)
 
     return json.dumps({"number" : number})
 
@@ -789,13 +800,13 @@ def getPopularProjects():
     if howMany == None:
         howMany = 4
 
-    projects = ModelObject["projectModel"].getPopularProjects(howMany)
+    projects = ProjectModel.getPopularProjects(howMany)
     
     return json.dumps(projects, cls=DateTimeEncoder)
 
 @app.route("/private-api/check-project-name/<string:name>")
 def isThereThisProjectName(name):
-    result = ModelObject["projectModel"].isThereThisProjectName(name)
+    result = ProjectModel.isThereThisProjectName(name)
 
     return json.dumps({
         "result": result
@@ -805,8 +816,8 @@ def isThereThisProjectName(name):
 @app.route("/private-api/projects/<string:pid>/photo", methods = ["POST", "DELETE"])
 @login_required
 def projectPhoto(pid):
-    project = ModelObject["projectModel"].getProject(pid)
-    if not ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), pid):
+    project = ProjectModel.getProject(pid)
+    if not ProjectModel.isProjectAdmin(getCurrentUid(), pid):
         return render_template("private-api/forbidden-request.html")
 
     if request.method == "POST":
@@ -821,7 +832,7 @@ def projectPhoto(pid):
 
         with open(UPLOAD_FOLDER + "/projects/pp/" + newFileName, "wb") as fh:
             fh.write(request.data)
-            ModelObject["projectModel"].updateProjectPhoto(pid, newFileName)
+            ProjectModel.updateProjectPhoto(pid, newFileName)
 
             #Delete old uploaded file
             if project["photo"] != None:
@@ -836,7 +847,7 @@ def projectPhoto(pid):
 @app.route("/private-api/projects/<string:pid>/name/<string:newName>", methods = ["PUT"])
 @login_required
 def updateProjectName(pid, newName):
-    if not ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), pid):
+    if not ProjectModel.isProjectAdmin(getCurrentUid(), pid):
         return render_template("private-api/forbidden-request.html")
 
     if not isValidProjectName(newName):
@@ -845,41 +856,41 @@ def updateProjectName(pid, newName):
             "msg" : "Project name is not valid"
         })
     
-    ModelObject["projectModel"].updateProjectName(pid, newName)
+    ProjectModel.updateProjectName(pid, newName)
     return json.dumps({"result": "success"})
 
 @app.route("/private-api/projects/<string:pid>/short-description", methods = ["PUT"])
 @login_required
 def updateProjectShortDescription(pid):
-    if not ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), pid):
+    if not ProjectModel.isProjectAdmin(getCurrentUid(), pid):
         return render_template("private-api/forbidden-request.html")
     
     description = json.loads(request.data)["description"]
 
-    ModelObject["projectModel"].updateShortDescription(pid, description)
+    ProjectModel.updateShortDescription(pid, description)
     return json.dumps({"result": "success"})
 
 @app.route("/private-api/projects/<string:pid>/full-description", methods = ["PUT"])
 @login_required
 def updateProjectFullDescription(pid):
-    if not ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), pid):
+    if not ProjectModel.isProjectAdmin(getCurrentUid(), pid):
         return render_template("private-api/forbidden-request.html")
     
     description = json.loads(request.data)["description"]
 
-    ModelObject["projectModel"].updateFullDescription(pid, description)
+    ProjectModel.updateFullDescription(pid, description)
     return json.dumps({"result": "success"})
 
 @app.route("/private-api/projects/<string:pid>/admins")
 def getProjectAdmins(pid):
-    admins = ModelObject["projectModel"].getProjectAdmins(pid)
+    admins = ProjectModel.getProjectAdmins(pid)
     return json.dumps(admins, cls=DateTimeEncoder)
 
 @app.route("/private-api/projects/<string:pid>/links", methods = ["GET", "POST", "PUT", "DELETE"])
 def projectLinks(pid):
     if request.method == "GET":
         #Getting all project's links
-        links = ModelObject["projectModel"].getProjectLinks(pid)
+        links = ProjectModel.getProjectLinks(pid)
         return json.dumps(links, cls=DateTimeEncoder)
     elif request.method == "POST":
         #Stripping
@@ -889,7 +900,7 @@ def projectLinks(pid):
 
         #Adding new project link
         if data["name"] != "" and data["link"] != "":
-            plid = ModelObject["projectModel"].addProjectLink(pid, data["name"], data["link"])
+            plid = ProjectModel.addProjectLink(pid, data["name"], data["link"])
             return json.dumps({
                 "result" : "success",
                 "plid": plid 
@@ -899,10 +910,10 @@ def projectLinks(pid):
         #Updating a user link
         data = json.loads(request.data)
         plid = request.args.get("plid")
-        link = ModelObject["projectModel"].getProjectLink(plid)
+        link = ProjectModel.getProjectLink(plid)
 
-        if ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), pid):
-            ModelObject["projectModel"].updateProjectLink(plid, data["name"], data["link"])
+        if ProjectModel.isProjectAdmin(getCurrentUid(), pid):
+            ProjectModel.updateProjectLink(plid, data["name"], data["link"])
             return json.dumps({"result" : "success"})
         else:
             return render_template("private-api/forbidden-request.html")
@@ -912,10 +923,10 @@ def projectLinks(pid):
         #DELETE request
 
         plid = request.args.get("plid")
-        link = ModelObject["projectModel"].getProjectLink(plid)
+        link = ProjectModel.getProjectLink(plid)
 
-        if isLoggedIn() and ModelObject["projectModel"].isProjectAdmin(getCurrentUid(), link["pid"]):
-            ModelObject["projectModel"].removeProjectLink(plid)
+        if isLoggedIn() and ProjectModel.isProjectAdmin(getCurrentUid(), link["pid"]):
+            ProjectModel.removeProjectLink(plid)
             return json.dumps({"result" : "success"})
         else:
             return render_template("private-api/forbidden-request.html")
@@ -930,14 +941,14 @@ def projectPosts(pid):
         #Get last posts
         ppid = request.args.get("ppid")
         if ppid == None:
-            posts = ModelObject["projectPostModel"].getLastProjectPosts(pid, 10, getCurrentUid())
+            posts = ProjectPostModel.getLastProjectPosts(pid, 10, getCurrentUid())
         else:
-            posts = ModelObject["projectPostModel"].getPreviousProjectPosts(pid, ppid, 10, getCurrentUid())
+            posts = ProjectPostModel.getPreviousProjectPosts(pid, ppid, 10, getCurrentUid())
 
         return json.dumps(posts, cls=DateTimeEncoder)
 
     elif request.method == "POST" and isLoggedIn():
-        if not ModelObject["projectModel"].isProjectMember(getCurrentUid(), pid):
+        if not ProjectModel.isProjectMember(getCurrentUid(), pid):
             return render_template("private-api/forbidden-request.html")
 
         #Stripping
@@ -946,7 +957,7 @@ def projectPosts(pid):
 
         if data["post"] != "":
             #Add project post
-            ModelObject["projectPostModel"].addProjectPost(getCurrentUid(), pid, data["post"])
+            ProjectPostModel.addProjectPost(getCurrentUid(), pid, data["post"])
             return json.dumps({"result" : "success"})
         else:
             return json.dumps({
@@ -955,7 +966,7 @@ def projectPosts(pid):
             })
 
     elif request.method == "PUT" and isLoggedIn():
-        if not ModelObject["projectModel"].isProjectMember(getCurrentUid(), pid):
+        if not ProjectModel.isProjectMember(getCurrentUid(), pid):
             return render_template("private-api/forbidden-request.html")
 
         #Stripping
@@ -972,10 +983,10 @@ def projectPosts(pid):
                 "msg": "ppid and post cannot be empty"
             })
 
-        post = ModelObject["projectPostModel"].getProjectPost(ppid)
+        post = ProjectPostModel.getProjectPost(ppid)
 
         if post["uid"] == getCurrentUid():
-            ModelObject["projectPostModel"].updateProjectPost(ppid, data["post"])
+            ProjectPostModel.updateProjectPost(ppid, data["post"])
             return json.dumps({"result" : "success"})
         else:
             return render_template("private-api/forbidden-request.html")
@@ -983,10 +994,10 @@ def projectPosts(pid):
     else:
         #Delete a project post
         ppid = request.args.get("ppid")
-        post = ModelObject["projectPostModel"].getProjectPost(ppid, getCurrentUid())
+        post = ProjectPostModel.getProjectPost(ppid, getCurrentUid())
 
         if post["uid"] == getCurrentUid() and isLoggedIn():
-            ModelObject["projectPostModel"].removeProjectPost(ppid)
+            ProjectPostModel.removeProjectPost(ppid)
             return json.dumps({"result": "success"})
         else:
             return render_template("private-api/forbidden-request.html")
@@ -995,39 +1006,39 @@ def projectPosts(pid):
 @app.route("/private-api/projects/<string:pid>/members/check/<string:uid>")
 @login_required
 def isProjectMember(pid, uid):
-    result = ModelObject["projectModel"].isProjectMember(uid, pid)
+    result = ProjectModel.isProjectMember(uid, pid)
     return json.dumps({"result": result})
 
 @app.route("/private-api/projects/<string:pid>/admins/check/<string:uid>")
 @login_required
 def isProjectAdmin(pid, uid):
-    result = ModelObject["projectModel"].isProjectAdmin(uid, pid)
+    result = ProjectModel.isProjectAdmin(uid, pid)
     return json.dumps({"result": result})
 
 @app.route("/private-api/project-posts/<string:ppid>/like")
 @login_required
 def likeProjectPost(ppid):
-    ModelObject["projectPostModel"].likeProjectPost(getCurrentUid(), ppid)
+    ProjectPostModel.likeProjectPost(getCurrentUid(), ppid)
     return json.dumps({"result" : "success"})
 
 
 @app.route("/private-api/project-posts/<string:ppid>/unlike")
 @login_required
 def unlikeProjectPost(ppid):
-    ModelObject["projectPostModel"].unlikeProjectPost(getCurrentUid(), ppid)
+    ProjectPostModel.unlikeProjectPost(getCurrentUid(), ppid)
     return json.dumps({"result" : "success"})
 
 @app.route("/private-api/project-posts/<string:ppid>/likes/number")
 @login_required
 def projectPostLikeNumber(ppid):
-    number = ModelObject["projectPostModel"].getProjectPostLikeNumber(ppid)
+    number = ProjectPostModel.getProjectPostLikeNumber(ppid)
     return json.dumps({"number" : number})
 
 
 @app.route("/private-api/project-posts/<string:ppid>/comments/number")
 @login_required
 def projectPostCommentNumber(ppid):
-    number = ModelObject["projectPostModel"].getProjectPostCommentNumber(ppid)
+    number = ProjectPostModel.getProjectPostCommentNumber(ppid)
     return json.dumps({"number" : number})
 
 
@@ -1043,24 +1054,24 @@ def projectPostComments(ppid):
             number = 2
 
         if ppcid == None:
-            comments = ModelObject["projectPostModel"].getLastProjectPostComments(ppid, number, getCurrentUid())
+            comments = ProjectPostModel.getLastProjectPostComments(ppid, number, getCurrentUid())
         else:
-            comments = ModelObject["projectPostModel"].getPreviousProjectPostComments(ppid, ppcid, number, getCurrentUid())
+            comments = ProjectPostModel.getPreviousProjectPostComments(ppid, ppcid, number, getCurrentUid())
         return json.dumps(comments, cls=DateTimeEncoder)
     elif request.method == "POST" and isLoggedIn():
         #Add a new user post comment
         data = json.loads(request.data)
-        ModelObject["projectPostModel"].addProjectPostComment(getCurrentUid(), ppid, data["comment"])
+        ProjectPostModel.addProjectPostComment(getCurrentUid(), ppid, data["comment"])
 
         return json.dumps({"result" : "success"})
     elif request.method == "PUT" and isLoggedIn():
         #Update user post comment
         data = json.loads(request.data)
         ppcid = request.args.get("ppcid")
-        comment = ModelObject["projectPostModel"].getProjectPostComment(ppcid, getCurrentUid())
+        comment = ProjectPostModel.getProjectPostComment(ppcid, getCurrentUid())
 
         if comment["uid"] == getCurrentUid():
-            ModelObject["projectPostModel"].updateProjectPostComment(ppcid, data["comment"])
+            ProjectPostModel.updateProjectPostComment(ppcid, data["comment"])
             return json.dumps({"result" : "success"})
         
         return render_template("private-api/forbidden-request.html")
@@ -1068,10 +1079,10 @@ def projectPostComments(ppid):
     else:
         #Delete a user post comment
         ppcid = request.args.get("ppcid")
-        comment = ModelObject["projectPostModel"].getProjectPostComment(ppcid, getCurrentUid())
+        comment = ProjectPostModel.getProjectPostComment(ppcid, getCurrentUid())
 
         if isLoggedIn() and comment["uid"] == getCurrentUid():
-            ModelObject["projectPostModel"].removeProjectPostComment(ppcid)
+            ProjectPostModel.removeProjectPostComment(ppcid)
             return json.dumps({"result": "success"})
         
         return render_template("private-api/forbidden-request.html")
@@ -1082,32 +1093,32 @@ def projectPostComments(ppid):
 @app.route("/private-api/project-posts/comments/<string:ppcid>/like")
 @login_required
 def likeProjectPostComment(ppcid):
-    ModelObject["projectPostModel"].likeProjectPostComment(getCurrentUid(), ppcid)
+    ProjectPostModel.likeProjectPostComment(getCurrentUid(), ppcid)
     return json.dumps({"result": "success"})
 
 
 @app.route("/private-api/project-posts/comments/<string:ppcid>/unlike")
 @login_required
 def unlikeProjectPostComment(ppcid):
-    ModelObject["projectPostModel"].unlikeProjectPostComment(getCurrentUid(), ppcid)
+    ProjectPostModel.unlikeProjectPostComment(getCurrentUid(), ppcid)
     return json.dumps({"result": "success"})
 
 @app.route("/private-api/project-posts/comments/<string:ppcid>/likes/number")
 def projectPostCommentLikeNumber(ppcid):
-    number = ModelObject["projectPostModel"].getProjectPostCommentLikeNumber(ppcid)
+    number = ProjectPostModel.getProjectPostCommentLikeNumber(ppcid)
     return json.dumps({"number": number})
 
 #NOTIFICATION CONTROLLER
 @app.route("/private-api/notifications/new")
 @login_required
 def getNewNotifications():
-    notifications = ModelObject["notificationModel"].getNewNotifications(getCurrentUid(), 10)
+    notifications = NotificationModel.getNewNotifications(getCurrentUid(), 10)
     return json.dumps(notifications, cls=DateTimeEncoder)
 
 @app.route("/private-api/notifications/new/number")
 @login_required
 def getNewNotificationNumber():
-    number = ModelObject["notificationModel"].getNewNotificationNumber(getCurrentUid())
+    number = NotificationModel.getNewNotificationNumber(getCurrentUid())
     return json.dumps({
         "number" : number
     })
@@ -1115,7 +1126,7 @@ def getNewNotificationNumber():
 @app.route("/private-api/notifications/last")
 @login_required
 def getLastNotifications():
-    notifications = ModelObject["notificationModel"].getNotifications(getCurrentUid(), 20)
+    notifications = NotificationModel.getNotifications(getCurrentUid(), 20)
     return json.dumps(notifications, cls=DateTimeEncoder)
 
 
@@ -1124,7 +1135,7 @@ def getLastNotifications():
 @login_required
 def sendMessage():
     message = json.loads(request.data)
-    mid = ModelObject["messageModel"].sendMessage(getCurrentUid(), message["receiver_id"], message["text"])
+    mid = MessageModel.sendMessage(getCurrentUid(), message["receiver_id"], message["text"])
     return json.dumps({
         "result": "success",
         "mid": mid
@@ -1133,16 +1144,16 @@ def sendMessage():
 @app.route("/private-api/messages/delete/<string:mid>")
 @login_required
 def deleteMessage(mid):
-    if not ModelObject["messageModel"].isTheUserMessageOwner(getCurrentUid(), mid):
+    if not MessageModel.isTheUserMessageOwner(getCurrentUid(), mid):
         return render_template("private-api/forbidden-request.html")
 
-    ModelObject["messageModel"].deleteMessage(getCurrentUid(), mid)
+    MessageModel.deleteMessage(getCurrentUid(), mid)
     return json.dumps({"result": "success"})
 
 @app.route("/private-api/messages/new-dialog-number")
 @login_required
 def newDialogNumber():
-    number = ModelObject["messageModel"].getNewMessageDialogNumber(getCurrentUid())
+    number = MessageModel.getNewMessageDialogNumber(getCurrentUid())
     return json.dumps({
         "number" : number
     })
@@ -1150,7 +1161,7 @@ def newDialogNumber():
 @app.route("/private-api/messages/dialogs")
 @login_required
 def getDialogList():
-    dialogList = ModelObject["messageModel"].getDialogList(getCurrentUid())
+    dialogList = MessageModel.getDialogList(getCurrentUid())
 
     return json.dumps({
         "dialogList" : dialogList
@@ -1162,9 +1173,9 @@ def getDialogList():
 def getDialog(uid):
     mid = request.args.get("mid")
     if mid == None:
-        msgList = ModelObject["messageModel"].getDialogLastMessages(getCurrentUid(), uid, 10)
+        msgList = MessageModel.getDialogLastMessages(getCurrentUid(), uid, 10)
     else:
-        msgList = ModelObject["messageModel"].getDialogPreviousMessages(getCurrentUid(), uid, mid, 10)
+        msgList = MessageModel.getDialogPreviousMessages(getCurrentUid(), uid, mid, 10)
 
     return json.dumps({
         "msgList" : msgList
@@ -1173,15 +1184,15 @@ def getDialog(uid):
 @app.route("/private-api/messages/dialogs/<string:uid>", methods = ["DELETE"])
 @login_required
 def deleteDialog(uid):
-    ModelObject["messageModel"].deleteDialog(getCurrentUid(), uid)
+    MessageModel.deleteDialog(getCurrentUid(), uid)
     return json.dumps({"result" : "success"})
 
 
 #SEARCH CONTROLLER
 @app.route("/private-api/q/<string:query>")
 def generalSearch(query):
-    userResults = ModelObject["userModel"].searchUsers(query, 5)
-    projectResults = ModelObject["projectModel"].searchProjects(query, 5)
+    userResults = UserModel.searchUsers(query, 5)
+    projectResults = ProjectModel.searchProjects(query, 5)
 
     return json.dumps({
         "userResults" : userResults,
@@ -1191,6 +1202,6 @@ def generalSearch(query):
 @app.route("/private-api/q/skills/<string:query>")
 @login_required
 def skillSearch(query):
-    skills = ModelObject["skillModel"].searchSkills(query, 5)
+    skills = SkillModel.searchSkills(query, 5)
 
     return json.dumps(skills, cls=DateTimeEncoder)

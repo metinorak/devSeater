@@ -1,9 +1,10 @@
-from models.database import Database
+from project.models.database import Database
 
 class SkillModel(Database):
   
-  def getUserSkills(self, uid):
-    connection = self.getConnection()
+  @staticmethod
+  def getUserSkills(uid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT * FROM userSkills
@@ -18,8 +19,9 @@ class SkillModel(Database):
       connection.close()
     return result
   
-  def getUserSkill(self, skid):
-    connection = self.getConnection()
+  @staticmethod
+  def getUserSkill(skid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT * FROM userSkills
@@ -34,8 +36,9 @@ class SkillModel(Database):
       connection.close()
     return result
 
-  def getSeaterSkill(self, skid):
-    connection = self.getConnection()
+  @staticmethod
+  def getSeaterSkill(skid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT * FROM seaterSkills
@@ -50,9 +53,9 @@ class SkillModel(Database):
       connection.close()
     return result
 
-  
-  def getSeaterSkills(self, sid):
-    connection = self.getConnection()
+  @staticmethod
+  def getSeaterSkills(sid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT * FROM seaterSkills
@@ -67,8 +70,9 @@ class SkillModel(Database):
       connection.close()
     return result
   
-  def getSkillByName(self, name):
-    connection = self.getConnection()
+  @staticmethod
+  def getSkillByName(name):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT * FROM skills WHERE name = %s"
@@ -82,13 +86,14 @@ class SkillModel(Database):
       connection.close()
     return result
 
-  def addUserSkill(self, uid, skill):
-    connection = self.getConnection()
+  @staticmethod
+  def addUserSkill(uid, skill):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
 
     try:
-      if self.isThereThisSkill(skill):
-        skid = self.getSkillByName(skill)["skid"]
+      if isThereThisSkill(skill):
+        skid = getSkillByName(skill)["skid"]
       
       else:
         #Adding skill to the skills table
@@ -111,14 +116,14 @@ class SkillModel(Database):
       connection.close()
     return skid
 
-  
-  def addSeaterSkill(self, sid, skill):
-    connection = self.getConnection()
+  @staticmethod
+  def addSeaterSkill(sid, skill):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
 
     try:
-      if self.isThereThisSkill(skill):
-        skid = self.getSkillByName(skill)["skid"]
+      if isThereThisSkill(skill):
+        skid = getSkillByName(skill)["skid"]
       
       else:
         #Adding skill to the skills table
@@ -141,8 +146,9 @@ class SkillModel(Database):
       connection.close()
     return skid
 
-  def removeUserSkill(self, uid, skid):
-    connection = self.getConnection()
+  @staticmethod
+  def removeUserSkill(uid, skid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "DELETE FROM userSkills WHERE uid = %s AND skid = %s"
@@ -154,8 +160,9 @@ class SkillModel(Database):
       cursor.close()
       connection.close()
   
-  def removeSeaterSkill(self, sid, skid):
-    connection = self.getConnection()
+  @staticmethod
+  def removeSeaterSkill(sid, skid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "DELETE FROM seaterSkills WHERE sid = %s AND skid = %s"
@@ -167,8 +174,9 @@ class SkillModel(Database):
       cursor.close()
       connection.close()
 
-  def searchSkills(self, keyword, number):
-    connection = self.getConnection()
+  @staticmethod
+  def searchSkills(keyword, number):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT * FROM skills WHERE name LIKE %s LIMIT %s"
@@ -182,8 +190,9 @@ class SkillModel(Database):
       connection.close()
     return result
 
-  def isThereThisSkill(self, skillName):
-    connection = self.getConnection()
+  @staticmethod
+  def isThereThisSkill(skillName):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT * FROM skills WHERE name = %s"

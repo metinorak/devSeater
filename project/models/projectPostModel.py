@@ -1,9 +1,10 @@
-from models.database import Database
+from project.models.database import Database
 
 class ProjectPostModel(Database):
   
-  def addProjectPost(self, uid, pid, post):
-    connection = self.getConnection()
+  @staticmethod
+  def addProjectPost(uid, pid, post):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "INSERT INTO projectPosts(uid, pid, post) VALUES(%s, %s, %s)"
@@ -15,8 +16,9 @@ class ProjectPostModel(Database):
       cursor.close()
       connection.close()
   
-  def getProjectPost(self, ppid, currentUser):
-    connection = self.getConnection()
+  @staticmethod
+  def getProjectPost(ppid, currentUser):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT 
@@ -36,9 +38,9 @@ class ProjectPostModel(Database):
       connection.close()
     return result
 
-  
-  def getLastProjectPosts(self, pid, number, currentUser):
-    connection = self.getConnection()
+  @staticmethod
+  def getLastProjectPosts(pid, number, currentUser):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT 
@@ -58,8 +60,9 @@ class ProjectPostModel(Database):
       connection.close()
     return result
 
-  def getPreviousProjectPosts(self, pid, ppid, number, currentUser):
-    connection = self.getConnection()
+  @staticmethod
+  def getPreviousProjectPosts(pid, ppid, number, currentUser):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT 
@@ -80,9 +83,9 @@ class ProjectPostModel(Database):
       connection.close()
     return result
 
-  
-  def removeProjectPost(self, ppid):
-    connection = self.getConnection()
+  @staticmethod
+  def removeProjectPost(ppid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "DELETE FROM projectPosts WHERE ppid = %s"
@@ -94,9 +97,9 @@ class ProjectPostModel(Database):
       cursor.close()
       connection.close()
   
-  
-  def updateProjectPost(self, ppid, post):
-    connection = self.getConnection()
+  @staticmethod
+  def updateProjectPost(ppid, post):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "UPDATE projectPosts SET post = %s WHERE ppid = %s"
@@ -108,8 +111,9 @@ class ProjectPostModel(Database):
       cursor.close()
       connection.close()
 
-  def likeProjectPost(self, uid, ppid):
-    connection = self.getConnection()
+  @staticmethod
+  def likeProjectPost(uid, ppid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "INSERT INTO projectPostLikes(uid, ppid) VALUES(%s, %s)"
@@ -121,8 +125,9 @@ class ProjectPostModel(Database):
       cursor.close()
       connection.close()
   
-  def unlikeProjectPost(self, uid, ppid):
-    connection = self.getConnection()
+  @staticmethod
+  def unlikeProjectPost(uid, ppid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "DELETE FROM projectPostLikes WHERE uid = %s AND ppid = %s"
@@ -134,9 +139,9 @@ class ProjectPostModel(Database):
       cursor.close()
       connection.close()
 
-  
-  def getProjectPostLikeNumber(self, ppid):
-    connection = self.getConnection()
+  @staticmethod
+  def getProjectPostLikeNumber(ppid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT COUNT(*) AS number FROM projectPostLikes WHERE ppid = %s"
@@ -150,9 +155,9 @@ class ProjectPostModel(Database):
       connection.close()
     return result
 
-  
-  def getProjectPostCommentNumber(self, ppid):
-    connection = self.getConnection()
+  @staticmethod
+  def getProjectPostCommentNumber(ppid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT COUNT(*) AS number FROM projectPostComments WHERE ppid = %s"
@@ -165,9 +170,9 @@ class ProjectPostModel(Database):
       connection.close()
     return result
 
-  
-  def isPostLiked(self, uid, ppid):
-    connection = self.getConnection() 
+  @staticmethod
+  def isPostLiked(uid, ppid):
+    connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT * FROM projectPostCommentLikes WHERE uid = %s AND ppid = %s"
@@ -184,8 +189,9 @@ class ProjectPostModel(Database):
 
   #COMMENT OPERATIONS
   
-  def addProjectPostComment(self, uid, ppid, comment):
-    connection = self.getConnection()
+  @staticmethod
+  def addProjectPostComment(uid, ppid, comment):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "INSERT INTO projectPostComments(uid, ppid, comment) VALUES(%s, %s, %s)"
@@ -197,8 +203,9 @@ class ProjectPostModel(Database):
       cursor.close()
       connection.close()
 
-  def removeProjectPostComment(self, ppcid):
-    connection = self.getConnection()
+  @staticmethod
+  def removeProjectPostComment(ppcid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "DELETE FROM projectPostComments WHERE ppcid = %s"
@@ -210,8 +217,9 @@ class ProjectPostModel(Database):
       cursor.close()
       connection.close()
 
-  def updateProjectPostComment(self, ppcid, comment):
-    connection = self.getConnection()
+  @staticmethod
+  def updateProjectPostComment(ppcid, comment):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "UPDATE projectPostComments SET comment = %s WHERE ppcid = %s"
@@ -223,8 +231,9 @@ class ProjectPostModel(Database):
       cursor.close()
       connection.close()
 
-  def getProjectPostComment(self, ppcid, currentUser):
-    connection = self.getConnection()
+  @staticmethod
+  def getProjectPostComment(ppcid, currentUser):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT 
@@ -243,8 +252,9 @@ class ProjectPostModel(Database):
       connection.close()
     return result
   
-  def getLastProjectPostComments(self, ppid, number, currentUser):
-    connection = self.getConnection()
+  @staticmethod
+  def getLastProjectPostComments(ppid, number, currentUser):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT 
@@ -264,8 +274,9 @@ class ProjectPostModel(Database):
       connection.close()
     return result
   
-  def getPreviousProjectPostComments(self, ppid, ppcid, number, currentUser):
-    connection = self.getConnection()
+  @staticmethod
+  def getPreviousProjectPostComments(ppid, ppcid, number, currentUser):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT 
@@ -285,8 +296,9 @@ class ProjectPostModel(Database):
       connection.close()
     return result
 
-  def likeProjectPostComment(self, uid, ppcid):
-    connection = self.getConnection()
+  @staticmethod
+  def likeProjectPostComment(uid, ppcid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "INSERT INTO projectPostCommentLikes(uid, ppcid) VALUES(%s, %s)"
@@ -298,8 +310,9 @@ class ProjectPostModel(Database):
       cursor.close()
       connection.close()
   
-  def unlikeProjectPostComment(self, uid, ppcid):
-    connection = self.getConnection()
+  @staticmethod
+  def unlikeProjectPostComment(uid, ppcid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "DELETE FROM projectPostCommentLikes WHERE uid = %s AND ppcid = %s"
@@ -311,8 +324,9 @@ class ProjectPostModel(Database):
       cursor.close()
       connection.close()
 
-  def getProjectPostCommentLikeNumber(self, ppcid):
-    connection = self.getConnection()
+  @staticmethod
+  def getProjectPostCommentLikeNumber(ppcid):
+    connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT COUNT(*) AS number FROM projectPostCommentLikes WHERE ppcid = %s"
@@ -326,8 +340,9 @@ class ProjectPostModel(Database):
       connection.close()
     return result
 
-  def isCommentLiked(self, uid, ppcid):
-    connection = self.getConnection() 
+  @staticmethod
+  def isCommentLiked(uid, ppcid):
+    connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
     try:
       query = "SELECT * FROM projectPostCommentLikes WHERE uid = %s AND ppcid = %s"

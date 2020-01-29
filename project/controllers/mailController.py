@@ -1,9 +1,12 @@
-from common import *
+from project.common import *
 
 #Mail Libs
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+
+# import required models
+from project.models.userModel import UserModel
 
 #MAIL CONTROLLER
 def sendMail(email):
@@ -36,16 +39,16 @@ def passwordReset():
     password = request.form.get("password")
     confirmPassword = request.form.get("confirm-password")
 
-    if email != None and ModelObject["userModel"].isThereThisEmail(email):
+    if email != None and UserModel.isThereThisEmail(email):
       hashCode = generatePasswordResetHashCode(email)
 
       if hashCodeFromUser != None and password != None and confirmPassword != None:
         if hashCode == hashCodeFromUser and password == confirmPassword:
           #Get user id
-          userId = ModelObject["userModel"].getUserByEmail(email)["uid"]
+          userId = UserModel.getUserByEmail(email)["uid"]
 
           #Update password
-          ModelObject["userModel"].updatePassword(userId, password)
+          UserModel.updatePassword(userId, password)
 
           flash("Your password updated succesfully. Now you can log in.", "success")
           return redirect(url_for("login"))
@@ -79,9 +82,9 @@ def emailVerify():
     email = request.args.get("email")
     hashCode = request.args.get("hash")
     
-    if email != None and ModelObject["userModel"].isThereThisEmail(email) and hashCode != None:
+    if email != None and UserModel.isThereThisEmail(email) and hashCode != None:
       if hashCode == generateEmailVerificationHashCode(email):
-        ModelObject["userModel"].verifyEmail(email)
+        UserModel.verifyEmail(email)
         flash("Your email address verified successfully!", "success")
         return redirect(url_for("login"))
 
@@ -95,14 +98,14 @@ def verificationMail(mailAddress):
   return redirect(url_for('login'))
 
 def generatePasswordResetHashCode(email):
-  user = ModelObject["userModel"].getUserByEmail(email)
+  user = UserModel.getUserByEmail(email)
   h = hashlib.sha256()
   stringToHash = user["email"] + user["password"] + user["full_name"] + user["username"]
   h.update(stringToHash.encode("utf-8"))
   return h.hexdigest()
 
 def generateEmailVerificationHashCode(email):
-  user = ModelObject["userModel"].getUserByEmail(email)
+  user = UserModel.getUserByEmail(email)
   h = hashlib.sha256()
   stringToHash = user["email"] + user["password"] + user["full_name"] + user["username"]
   h.update(stringToHash.encode("utf-8"))
