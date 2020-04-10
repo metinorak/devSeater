@@ -1,12 +1,10 @@
 email==6.0.0a1
 Flask==1.0.2
 Flask-Cors==3.0.6
-Flask-WTF==0.14.2
 Jinja2>=2.10.1
 mysql-connector==2.2.9
 passlib==1.7.1
 requests==2.20.0
 Werkzeug==0.15.3
 gunicorn
-flask-compress
-flask-cache
+wheel

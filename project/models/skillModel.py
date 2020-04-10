@@ -92,7 +92,7 @@ class SkillModel(Database):
     cursor = connection.cursor(dictionary=True)
 
     try:
-      if isThereThisSkill(skill):
+      if SkillModel.isThereThisSkill(skill):
         skid = getSkillByName(skill)["skid"]
       
       else:
@@ -122,7 +122,7 @@ class SkillModel(Database):
     cursor = connection.cursor(dictionary=True)
 
     try:
-      if isThereThisSkill(skill):
+      if SkillModel.isThereThisSkill(skill):
         skid = getSkillByName(skill)["skid"]
       
       else:
