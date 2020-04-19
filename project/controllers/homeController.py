@@ -7,10 +7,6 @@ from project.models.userPostModel import UserPostModel
 from project.models.projectModel import ProjectModel
 from project.models.contactModel import ContactModel
 
-@app.route("/deneme")
-def fsdnfkjjf():
-  return "fdfdsf"
-
 #HOME CONTROLLER
 @app.route("/", methods = ["GET", "POST"])
 def index():
