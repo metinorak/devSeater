@@ -1,15 +1,11 @@
 from project.common import *
-from project.controllers.mailController import sendVerificationEmail
+from project.controller.mail import sendVerificationEmail
 
 # import required models
-from project.models.userModel import UserModel
-from project.models.userPostModel import UserPostModel
-from project.models.projectModel import ProjectModel
-from project.models.contactModel import ContactModel
-
-@app.route("/deneme")
-def fsdnfkjjf():
-  return "fdfdsf"
+from project.model.user import UserModel
+from project.model.userPost import UserPostModel
+from project.model.project import ProjectModel
+from project.model.contact import ContactModel
 
 #HOME CONTROLLER
 @app.route("/", methods = ["GET", "POST"])

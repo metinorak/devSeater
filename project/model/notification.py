@@ -1,6 +1,6 @@
-from project.models.database import Database
+from project.lib.database import Database
 
-class NotificationModel(Database):
+class NotificationModel():
   
   @staticmethod
   def getNotifications(uid, number):

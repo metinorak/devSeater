@@ -1,6 +1,6 @@
-from project.models.database import Database
+from project.lib.database import Database
 
-class ContactModel(Database):
+class ContactModel():
 
   @staticmethod
   def addContactMessage(msg):

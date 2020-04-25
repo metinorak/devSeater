@@ -1,11 +1,11 @@
 from project.common import *
 
 # import required models
-from project.models.projectModel import ProjectModel
-from project.models.projectPostModel import ProjectPostModel
-from project.models.userModel import UserModel
-from project.models.skillModel import SkillModel
-from project.models.seaterModel import SeaterModel
+from project.model.project import ProjectModel
+from project.model.projectPost import ProjectPostModel
+from project.model.user import UserModel
+from project.model.skill import SkillModel
+from project.model.seater import SeaterModel
 
 @app.route("/create-a-project", methods = ["GET", "POST"])
 def createAProject():

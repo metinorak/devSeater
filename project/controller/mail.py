@@ -6,7 +6,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 # import required models
-from project.models.userModel import UserModel
+from project.model.user import UserModel
 
 #MAIL CONTROLLER
 def sendMail(email):

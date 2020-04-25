@@ -1,9 +1,9 @@
 from project.common import *
 
 # import required models
-from project.models.userModel import UserModel
-from project.models.userPostModel import UserPostModel
-from project.models.projectModel import ProjectModel
+from project.model.user import UserModel
+from project.model.userPost import UserPostModel
+from project.model.project import ProjectModel
 
 #USER CONTROLLER
 

@@ -4,15 +4,15 @@ import json
 import os
 
 # import required models
-from project.models.contactModel import ContactModel
-from project.models.messageModel import MessageModel
-from project.models.notificationModel import NotificationModel
-from project.models.projectModel import ProjectModel
-from project.models.projectPostModel import ProjectPostModel
-from project.models.seaterModel import SeaterModel
-from project.models.skillModel import SkillModel
-from project.models.userModel import UserModel
-from project.models.userPostModel import UserPostModel
+from project.model.contact import ContactModel
+from project.model.message import MessageModel
+from project.model.notification import NotificationModel
+from project.model.project import ProjectModel
+from project.model.projectPost import ProjectPostModel
+from project.model.seater import SeaterModel
+from project.model.skill import SkillModel
+from project.model.user import UserModel
+from project.model.userPost import UserPostModel
 
 class DateTimeEncoder(json.JSONEncoder):
     def default(self, o):

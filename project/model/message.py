@@ -1,6 +1,6 @@
-from project.models.database import Database
+from project.lib.database import Database
 
-class MessageModel(Database):
+class MessageModel():
 
   @staticmethod
   def sendMessage(senderId, receiverId, message):

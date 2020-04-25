@@ -1,7 +1,7 @@
-from project.models.database import Database
+from project.lib.database import Database
 from passlib.hash import sha256_crypt
 
-class UserModel(Database):
+class UserModel():
   
   @staticmethod
   def getUser(uid, currentUser = None):

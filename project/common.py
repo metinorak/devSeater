@@ -10,7 +10,7 @@ import string
 from project import app
 
 # import required models
-from project.models.userModel import UserModel
+from project.model.user import UserModel
 
 #Common Functions
 

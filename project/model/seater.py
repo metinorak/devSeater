@@ -1,6 +1,6 @@
-from project.models.database import Database
+from project.lib.database import Database
 
-class SeaterModel(Database):
+class SeaterModel():
   
   @staticmethod
   def getAllProjectSeaters(pid):

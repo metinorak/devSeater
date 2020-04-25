@@ -1,6 +1,6 @@
-from project.models.database import Database
+from project.lib.database import Database
 
-class UserPostModel(Database):
+class UserPostModel():
   
   @staticmethod
   def addUserPost(uid, post):

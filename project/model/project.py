@@ -1,6 +1,6 @@
-from project.models.database import Database
+from project.lib.database import Database
 
-class ProjectModel(Database):
+class ProjectModel():
   
   @staticmethod
   def createProject(project, founder_uid):
