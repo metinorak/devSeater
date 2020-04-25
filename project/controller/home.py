@@ -2,6 +2,7 @@ from project.common import *
 from project.controller.mail import sendVerificationEmail
 
 # import required models
+
 from project.model.user import UserModel
 from project.model.userPost import UserPostModel
 from project.model.project import ProjectModel
