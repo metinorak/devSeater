@@ -222,19 +222,22 @@ function eventListeners(){
 	//When touched the bottom
 	window.onscroll = function(e) {
 		if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-			// Load previous following posts
+			// Load previous project posts
 			let lastPost = getTheLastPost();
-			let ppid = lastPost.getAttribute("ppid");
 
-			devSeater.previousProjectPosts(pid, ppid)
-			.then(posts => {
-				console.log(posts);
-				posts = renderPosts(posts);
+			if(lastPost != undefined){
+				let ppid = lastPost.getAttribute("ppid");
 
-				ui.showPreviousPosts(posts, Session.getCurrentUser());
-				PR.prettyPrint();
-			})
-			.catch(err => console.error(err));
+				devSeater.previousProjectPosts(pid, ppid)
+				.then(posts => {
+					posts = renderPosts(posts);
+	
+					ui.showPreviousPosts(posts, Session.getCurrentUser());
+					PR.prettyPrint();
+				})
+				.catch(err => console.error(err));
+			}
+			
 		}
 	};
 }
