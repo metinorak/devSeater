@@ -85,18 +85,21 @@ function eventListeners(){
 	window.onscroll = function(e) {
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
 			// Load previous following posts
-			let lastPost = getTheLastPost();
-      let upid = lastPost.getAttribute("upid");
-      let uid = userProfileCard.getAttribute("uid");
+      let lastPost = getTheLastPost();
 
-			devSeater.previousUserPosts(uid, upid)
-			.then(posts => {
-				posts = renderPosts(posts);
-
-        ui.showPreviousPosts(posts, Session.getCurrentUser());
-        PR.prettyPrint();
-			})
-			.catch(err => console.error(err));
+      if(lastPost != undefined){
+        let upid = lastPost.getAttribute("upid");
+        let uid = userProfileCard.getAttribute("uid");
+  
+        devSeater.previousUserPosts(uid, upid)
+        .then(posts => {
+          posts = renderPosts(posts);
+  
+          ui.showPreviousPosts(posts, Session.getCurrentUser());
+          PR.prettyPrint();
+        })
+        .catch(err => console.error(err));
+      }
     }
   };
   
