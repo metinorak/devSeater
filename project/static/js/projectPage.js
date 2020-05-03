@@ -15,6 +15,10 @@ const aboutButton = document.getElementById("about-button");
 const membersLink = document.getElementById("members-link");
 const editProjectButton = document.querySelector("#edit-project-button");
 
+// State of the user
+var isProjectMember = false;
+var isProjectAdmin = false;
+
 //SIMPLEMDE textarea control
 if(postTextArea != null){
 	var simplemde = new SimpleMDE({
@@ -34,16 +38,22 @@ function eventListeners(){
 		devSeater.isProjectMember(pid, Session.getCurrentUser()["uid"])
 		.then(response => {
 			if(response["result"]){
+				isProjectMember = true;
 				ui.showPostTextAreaCard();
 			}
+
 		})
 		.catch(err => console.error(err));
 
 		devSeater.isProjectAdmin(pid, Session.getCurrentUser()["uid"])
 		.then(response => {
 			if(response["result"]){
+
+				isProjectAdmin = true;
+				
 				editProjectButton.style.display = "inline";
 			}
+
 		})
 		.catch(err => console.error(err));
 
@@ -85,7 +95,11 @@ function eventListeners(){
 		devSeater.lastProjectPosts(pid)
 		.then(posts => {
 			ui.clearContentArea();
-			ui.showPostTextAreaCard();
+			
+			if(isProjectMember){
+				ui.showPostTextAreaCard();
+			}
+
 			posts = renderPosts(posts);
 			ui.showPosts(posts, Session.getCurrentUser());
 			
