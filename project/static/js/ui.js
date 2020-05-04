@@ -153,7 +153,7 @@ class UI{
         var menuContent = ``;
       }
 
-      if(post["isLiked"] == "1"){
+      if(post["isLiked"] == 1){
         var likeButton = `<button class="btn btn-post mr-2 like-button liked">Like</button>`;
       }
       else{
@@ -385,8 +385,9 @@ class UI{
     }
 
     if(currentUser != null){
-      if(post["isLiked"] == "1"){
-        var likeButton = `<button class="btn btn-post mr-2 like-button liked">Like</button>`;
+      console.log(post);  
+      if(post["isLiked"] == 1){
+        var likeButton = `<button class="btn btn-post mr-2 like-button liked">Liked</button>`;
       }
       else{
         var likeButton = `<button class="btn btn-post mr-2 like-button">Like</button>`;
@@ -766,7 +767,7 @@ class UI{
 
 
   updateProjectPostCommentLikeNumber(ppcid, number){
-    console.log(number);
+
     let comment = document.querySelector(`.comment[ppcid="${ppcid}"]`);
     let likeNumber = comment.querySelector(".like-number");
 

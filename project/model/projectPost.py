@@ -64,16 +64,17 @@ class ProjectPostModel():
   def getPreviousProjectPosts(pid, ppid, number, currentUser):
     connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
+
     try:
       query = """SELECT 
-      (SELECT COUNT(*) FROM projectPostCommentLikes WHERE ppid = projectPosts.ppid AND uid = %s) AS isLiked, 
+      (SELECT COUNT(*) FROM projectPostLikes WHERE ppid = projectPosts.ppid AND uid = %s) AS isLiked,
       (SELECT COUNT(*) FROM projectPostLikes WHERE ppid = projectPosts.ppid) AS likeNumber,
-      (SELECT COUNT(*) FROM projectPostComments WHERE ppid = projectPosts.ppid AND uid = %s) AS commentNumber,
+      (SELECT COUNT(*) FROM projectPostComments WHERE ppid = projectPosts.ppid) AS commentNumber,
       projectPosts.*, users.photo, users.full_name, users.username 
       FROM projectPosts 
       INNER JOIN users ON users.uid = projectPosts.uid
       WHERE pid = %s AND ppid < %s ORDER BY time DESC LIMIT %s"""
-      cursor.execute(query, (currentUser, currentUser, pid, ppid, number))
+      cursor.execute(query, (currentUser, pid, ppid, number))
       result = cursor.fetchall()
     except Exception as e:
       print(e)
