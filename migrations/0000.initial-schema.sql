@@ -19,10 +19,9 @@
 -- Table structure for table `contactMessages`
 --
 
-DROP TABLE IF EXISTS `contactMessages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `contactMessages` (
+CREATE TABLE IF NOT EXISTS `contactMessages` (
   `cmid` int(11) NOT NULL AUTO_INCREMENT,
   `subject` tinytext COLLATE utf8_turkish_ci NOT NULL,
   `message` text COLLATE utf8_turkish_ci NOT NULL,
@@ -37,10 +36,9 @@ CREATE TABLE `contactMessages` (
 -- Table structure for table `followers`
 --
 
-DROP TABLE IF EXISTS `followers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `followers` (
+CREATE TABLE IF NOT EXISTS `followers` (
   `flwrid` int(11) NOT NULL,
   `flwdid` int(11) NOT NULL,
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -55,10 +53,9 @@ CREATE TABLE `followers` (
 -- Table structure for table `globalAdmins`
 --
 
-DROP TABLE IF EXISTS `globalAdmins`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `globalAdmins` (
+CREATE TABLE IF NOT EXISTS `globalAdmins` (
   `uid` int(11) NOT NULL,
   PRIMARY KEY (`uid`),
   CONSTRAINT `globalAdmins_ibfk_1` FOREIGN KEY (`uid`) REFERENCES `users` (`uid`) ON DELETE CASCADE
@@ -69,10 +66,9 @@ CREATE TABLE `globalAdmins` (
 -- Table structure for table `messages`
 --
 
-DROP TABLE IF EXISTS `messages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `messages` (
+CREATE TABLE IF NOT EXISTS `messages` (
   `mid` int(11) NOT NULL AUTO_INCREMENT,
   `isRead` tinyint(1) NOT NULL DEFAULT '0',
   `message` text COLLATE utf8_turkish_ci NOT NULL,
@@ -93,10 +89,9 @@ CREATE TABLE `messages` (
 -- Table structure for table `notifications`
 --
 
-DROP TABLE IF EXISTS `notifications`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `notifications` (
+CREATE TABLE IF NOT EXISTS `notifications` (
   `nfid` int(11) NOT NULL,
   `type` varchar(100) COLLATE utf8_turkish_ci NOT NULL,
   `related_id` int(11) NOT NULL,
@@ -116,10 +111,9 @@ CREATE TABLE `notifications` (
 -- Table structure for table `projectAdmins`
 --
 
-DROP TABLE IF EXISTS `projectAdmins`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `projectAdmins` (
+CREATE TABLE IF NOT EXISTS `projectAdmins` (
   `uid` int(11) NOT NULL,
   `pid` int(11) NOT NULL,
   PRIMARY KEY (`uid`,`pid`),
@@ -133,10 +127,9 @@ CREATE TABLE `projectAdmins` (
 -- Table structure for table `projectLinks`
 --
 
-DROP TABLE IF EXISTS `projectLinks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `projectLinks` (
+CREATE TABLE IF NOT EXISTS `projectLinks` (
   `plid` int(11) NOT NULL AUTO_INCREMENT,
   `name` tinytext COLLATE utf8_turkish_ci NOT NULL,
   `link` text COLLATE utf8_turkish_ci NOT NULL,
@@ -153,10 +146,9 @@ CREATE TABLE `projectLinks` (
 -- Table structure for table `projectPostCommentLikes`
 --
 
-DROP TABLE IF EXISTS `projectPostCommentLikes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `projectPostCommentLikes` (
+CREATE TABLE IF NOT EXISTS `projectPostCommentLikes` (
   `ppcid` int(11) NOT NULL,
   `uid` int(11) NOT NULL,
   PRIMARY KEY (`ppcid`,`uid`),
@@ -170,10 +162,9 @@ CREATE TABLE `projectPostCommentLikes` (
 -- Table structure for table `projectPostComments`
 --
 
-DROP TABLE IF EXISTS `projectPostComments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `projectPostComments` (
+CREATE TABLE IF NOT EXISTS `projectPostComments` (
   `ppcid` int(11) NOT NULL AUTO_INCREMENT,
   `ppid` int(11) NOT NULL,
   `comment` text COLLATE utf8_turkish_ci NOT NULL,
@@ -191,10 +182,9 @@ CREATE TABLE `projectPostComments` (
 -- Table structure for table `projectPostLikes`
 --
 
-DROP TABLE IF EXISTS `projectPostLikes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `projectPostLikes` (
+CREATE TABLE IF NOT EXISTS `projectPostLikes` (
   `ppid` int(11) NOT NULL,
   `uid` int(11) NOT NULL,
   PRIMARY KEY (`ppid`,`uid`),
@@ -208,10 +198,9 @@ CREATE TABLE `projectPostLikes` (
 -- Table structure for table `projectPosts`
 --
 
-DROP TABLE IF EXISTS `projectPosts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `projectPosts` (
+CREATE TABLE IF NOT EXISTS `projectPosts` (
   `ppid` int(11) NOT NULL AUTO_INCREMENT,
   `post` text COLLATE utf8_turkish_ci NOT NULL,
   `pid` int(11) NOT NULL,
@@ -229,10 +218,9 @@ CREATE TABLE `projectPosts` (
 -- Table structure for table `projects`
 --
 
-DROP TABLE IF EXISTS `projects`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `projects` (
+CREATE TABLE IF NOT EXISTS `projects` (
   `pid` int(11) NOT NULL AUTO_INCREMENT,
   `project_name` varchar(50) COLLATE utf8_turkish_ci NOT NULL,
   `short_description` varchar(100) COLLATE utf8_turkish_ci NOT NULL,
@@ -251,10 +239,9 @@ CREATE TABLE `projects` (
 -- Table structure for table `seaterAspirations`
 --
 
-DROP TABLE IF EXISTS `seaterAspirations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `seaterAspirations` (
+CREATE TABLE IF NOT EXISTS `seaterAspirations` (
   `uid` int(11) NOT NULL,
   `sid` int(11) NOT NULL,
   `isRejected` tinyint(1) NOT NULL DEFAULT '0',
@@ -269,10 +256,9 @@ CREATE TABLE `seaterAspirations` (
 -- Table structure for table `seaterSkills`
 --
 
-DROP TABLE IF EXISTS `seaterSkills`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `seaterSkills` (
+CREATE TABLE IF NOT EXISTS `seaterSkills` (
   `sid` int(11) NOT NULL,
   `skid` int(11) NOT NULL,
   PRIMARY KEY (`sid`,`skid`),
@@ -286,10 +272,9 @@ CREATE TABLE `seaterSkills` (
 -- Table structure for table `seaters`
 --
 
-DROP TABLE IF EXISTS `seaters`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `seaters` (
+CREATE TABLE IF NOT EXISTS `seaters` (
   `sid` int(11) NOT NULL AUTO_INCREMENT,
   `pid` int(11) NOT NULL,
   `uid` int(11) DEFAULT NULL,
@@ -310,25 +295,23 @@ CREATE TABLE `seaters` (
 -- Table structure for table `skills`
 --
 
-DROP TABLE IF EXISTS `skills`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `skills` (
+CREATE TABLE IF NOT EXISTS `skills` (
   `skid` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(80) COLLATE utf8_turkish_ci NOT NULL,
   PRIMARY KEY (`skid`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_turkish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_turkish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `userLinks`
 --
 
-DROP TABLE IF EXISTS `userLinks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `userLinks` (
+CREATE TABLE IF NOT EXISTS `userLinks` (
   `ulid` int(11) NOT NULL AUTO_INCREMENT,
   `name` tinytext COLLATE utf8_turkish_ci NOT NULL,
   `link` text COLLATE utf8_turkish_ci NOT NULL,
@@ -345,10 +328,9 @@ CREATE TABLE `userLinks` (
 -- Table structure for table `userPostCommentLikes`
 --
 
-DROP TABLE IF EXISTS `userPostCommentLikes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `userPostCommentLikes` (
+CREATE TABLE IF NOT EXISTS `userPostCommentLikes` (
   `upcid` int(11) NOT NULL,
   `uid` int(11) NOT NULL,
   PRIMARY KEY (`upcid`,`uid`),
@@ -362,10 +344,9 @@ CREATE TABLE `userPostCommentLikes` (
 -- Table structure for table `userPostComments`
 --
 
-DROP TABLE IF EXISTS `userPostComments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `userPostComments` (
+CREATE TABLE IF NOT EXISTS `userPostComments` (
   `upcid` int(11) NOT NULL AUTO_INCREMENT,
   `upid` int(11) NOT NULL,
   `comment` text COLLATE utf8_turkish_ci NOT NULL,
@@ -383,10 +364,9 @@ CREATE TABLE `userPostComments` (
 -- Table structure for table `userPostLikes`
 --
 
-DROP TABLE IF EXISTS `userPostLikes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `userPostLikes` (
+CREATE TABLE IF NOT EXISTS `userPostLikes` (
   `upid` int(11) NOT NULL,
   `uid` int(11) NOT NULL,
   PRIMARY KEY (`upid`,`uid`),
@@ -400,10 +380,9 @@ CREATE TABLE `userPostLikes` (
 -- Table structure for table `userPosts`
 --
 
-DROP TABLE IF EXISTS `userPosts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `userPosts` (
+CREATE TABLE IF NOT EXISTS `userPosts` (
   `upid` int(11) NOT NULL AUTO_INCREMENT,
   `post` text COLLATE utf8_turkish_ci NOT NULL,
   `uid` int(11) NOT NULL,
@@ -418,10 +397,9 @@ CREATE TABLE `userPosts` (
 -- Table structure for table `userSkills`
 --
 
-DROP TABLE IF EXISTS `userSkills`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `userSkills` (
+CREATE TABLE IF NOT EXISTS `userSkills` (
   `uid` int(11) NOT NULL,
   `skid` int(11) NOT NULL,
   PRIMARY KEY (`uid`,`skid`),
@@ -435,10 +413,9 @@ CREATE TABLE `userSkills` (
 -- Table structure for table `users`
 --
 
-DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `users` (
+CREATE TABLE IF NOT EXISTS `users` (
   `uid` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(150) COLLATE utf8_turkish_ci NOT NULL,
   `username` varchar(48) COLLATE utf8_turkish_ci NOT NULL,
@@ -451,7 +428,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`uid`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_turkish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_turkish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -463,4 +440,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-04  5:04:54
+-- Dump completed on 2020-05-04 18:27:42

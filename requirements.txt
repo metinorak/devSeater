@@ -8,3 +8,5 @@ requests==2.20.0
 Werkzeug==0.15.3
 gunicorn
 wheel
+yoyo-migrations
+pymysql
