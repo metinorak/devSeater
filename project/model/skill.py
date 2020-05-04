@@ -93,7 +93,7 @@ class SkillModel():
 
     try:
       if SkillModel.isThereThisSkill(skill):
-        skid = getSkillByName(skill)["skid"]
+        skid = SkillModel.getSkillByName(skill)["skid"]
       
       else:
         #Adding skill to the skills table
