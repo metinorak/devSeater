@@ -21,3 +21,6 @@ for param in params:
         
         except Exception as e:
             print(e)
+        finally:
+            cursor.close()
+            connection.close()
