@@ -10,8 +10,6 @@ const sid = seaterPageCard.getAttribute("sid");
 const pid = seaterPageCard.getAttribute("pid");
 const projectName = seaterPageCard.getAttribute("project-name");
 
-console.log(editSeaterButton);
-
 eventListeners();
 
 function eventListeners(){

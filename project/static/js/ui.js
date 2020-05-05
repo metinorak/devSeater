@@ -1351,8 +1351,8 @@ class UI{
           <input type="text" class="form-control" id="short-description-input" maxlength="100" value = "${shortDescriptionText}">
         </div>
         <div class="form-group">
-          <label for="long-description-input">Full Description (markdown)</label>
-          <textarea class="form-control" id="full-description-input"></textarea>
+          <label for="full-description-input">Full Description (markdown)</label>
+          <textarea class="form-control" style="color: black" id="full-description-input"></textarea>
         </div>
         <div class="form-group">
           <label for="skills-input">Skills</label>
