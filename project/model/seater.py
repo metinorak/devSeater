@@ -226,12 +226,17 @@ class SeaterModel():
       connection.close()
   
   @staticmethod
-  def updateSeater(sid, title, description):
+  def updateSeater(sid, seater):
     connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
-      query = "UPDATE seaters SET title = %s, description = %s WHERE sid = %s"
-      cursor.execute(query, (title, description, sid) )
+      query = """UPDATE seaters 
+                SET title = %s, 
+                short_description = %s,
+                full_description = %s 
+                WHERE sid = %s"""
+
+      cursor.execute(query, (seater["title"], seater["short_description"], seater["full_description"], sid) )
       connection.commit()
     except Exception as e:
       print(e)

@@ -267,6 +267,10 @@ class DevSeater{
     return this.request.post(this.url + `projects/${pid}/seaters`, seater)
   }
 
+  async updateSeater(pid, seater){
+    return this.request.put(this.url + `projects/${pid}/seaters`, seater)
+  }
+
   async seater(sid){
     return this.request.get(this.url + `seaters/${sid}`);
   }

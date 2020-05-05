@@ -1327,11 +1327,13 @@ class UI{
         titleText = seater["title"];
         shortDescriptionText = seater["short_description"];
         fullDescriptionText = seater["full_description"];
-        seater["skills"].forEach((index, skill) => {
+        seater["skills"].forEach((skill, index) => {
+
           if(index != (seater["skills"].length -1))
             skillsText += (skill["name"] + ",");
-          else
-          skillsText += (skill["name"] + ",");
+          else{
+            skillsText += (skill["name"] + ",");
+          }
         });
       }
 

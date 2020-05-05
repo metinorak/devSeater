@@ -123,7 +123,7 @@ class SkillModel():
 
     try:
       if SkillModel.isThereThisSkill(skill):
-        skid = getSkillByName(skill)["skid"]
+        skid = SkillModel.getSkillByName(skill)["skid"]
       
       else:
         #Adding skill to the skills table
@@ -161,12 +161,13 @@ class SkillModel():
       connection.close()
   
   @staticmethod
-  def removeSeaterSkill(sid, skid):
+  def removeSeaterSkill(sid, skillName):
     connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
-      query = "DELETE FROM seaterSkills WHERE sid = %s AND skid = %s"
-      cursor.execute(query, (sid, skid) )
+      query = """DELETE FROM seaterSkills WHERE sid = %s AND skid = 
+                (SELECT skid FROM skills WHERE name = %s)"""
+      cursor.execute(query, (sid, skillName) )
       connection.commit()
     except Exception as e:
       print(e)

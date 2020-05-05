@@ -2,12 +2,15 @@
 const aspireButton = document.getElementById("aspire-button");
 const dismissUserButton = document.getElementById("dismiss-user-button");
 const removeSeaterButton = document.getElementById("remove-seater-button");
+const editSeaterButton = document.getElementById("edit-seater-button");
 const aspirationsListButton = document.getElementById("aspirations-list-button");
 const cancelAspirationButton = document.getElementById("cancel-aspiration-button");
 const seaterPageCard = document.querySelector(".card");
 const sid = seaterPageCard.getAttribute("sid");
 const pid = seaterPageCard.getAttribute("pid");
 const projectName = seaterPageCard.getAttribute("project-name");
+
+console.log(editSeaterButton);
 
 eventListeners();
 
@@ -57,6 +60,26 @@ function eventListeners(){
         })
         .catch(err => console.error(err));
       }
+    });
+  }
+
+  if(editSeaterButton != null){
+    editSeaterButton.addEventListener("click", e => {
+      devSeater.seater(sid)
+      .then(async (seater) => {
+        seater = await ui.getSeaterFromUser(seater);
+        seater["sid"] = sid;
+
+        devSeater.updateSeater(pid, seater)
+        .then(response => {
+            if(response["result"] == "success"){
+              location.reload();
+            }
+        })
+        .catch(err => console.error(err));
+      })
+      .catch(err => console.error(err));
+
     });
   }
 

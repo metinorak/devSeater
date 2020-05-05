@@ -642,22 +642,53 @@ def getSeater(sid):
     seater["skills"] = SkillModel.getSeaterSkills(sid)
     return json.dumps(seater, cls=DateTimeEncoder)
 
-@app.route("/private-api/projects/<string:pid>/seaters", methods = ["POST"])
+@app.route("/private-api/projects/<string:pid>/seaters", methods = ["POST", "PUT"])
 @login_required
-def createSeater(pid):
+def saveSeater(pid):
     if ProjectModel.isProjectAdmin(getCurrentUid(), pid):
         seater = json.loads(request.data)
         seater["pid"] = pid
-        sid = SeaterModel.createSeater(pid, seater)
 
-        #Add skills
-        for skill in seater["skills"]:
-            SkillModel.addSeaterSkill(sid, skill)
+        if request.method == "POST":
+            # Create seater
 
-        return json.dumps({
-            "result": "success",
-            "sid": sid
-            })
+            sid = SeaterModel.createSeater(pid, seater)
+
+            #Add skills
+            for skill in seater["skills"]:
+                SkillModel.addSeaterSkill(sid, skill)
+
+            return json.dumps({
+                "result": "success",
+                "sid": sid
+                })
+        else:
+            # Update seater
+            
+            SeaterModel.updateSeater(seater["sid"], seater)
+
+            # Get current skills
+            currentSkills = [i["name"] for i in SkillModel.getSeaterSkills(seater["sid"])]
+
+            skillsToDelete = set(currentSkills).difference(set(seater["skills"]))
+            skillToAdd = set(seater["skills"]).difference(set(currentSkills))
+
+            # Delete skills
+            for skill in skillsToDelete:
+                skill.strip()
+                if skill != None and skill != "":
+                    SkillModel.removeSeaterSkill(seater["sid"], skill)
+            
+            # Add skills
+            for skill in skillToAdd:
+                skill.strip()
+                if skill != None and skill != "":
+                    SkillModel.addSeaterSkill(seater["sid"], skill)
+
+            return json.dumps({
+                "result": "success"
+                })
+
     return render_template("private-api/forbidden-request.html")
 
 @app.route("/private-api/seaters/<string:sid>", methods = ["DELETE"])
@@ -681,21 +712,6 @@ def dismissUserFromSeater(sid):
         if ProjectModel.isProjectAdmin(getCurrentUid(), seater["pid"]) or (seater["uid"] == getCurrentUid()):
             SeaterModel.dismissUser(sid)
             SeaterModel.cancelAspirationToTheSeater(seater["uid"], sid)
-            return json.dumps({"result": "success"})
-        else:
-            return render_template("private-api/forbidden-request.html")
-    
-    return render_template("private-api/unknown-request.html")
-
-@app.route("/private-api/seaters/<string:sid>", methods = ["PUT"])
-@login_required
-def updateSeater(sid):
-    seater = SeaterModel.getSeater(sid)
-
-    if seater != None:
-        if ProjectModel.isProjectAdmin(getCurrentUid(), seater["pid"]):
-            seater = json.loads(request.data)
-            SeaterModel.updateSeater(sid, seater["title"], seater["description"])
             return json.dumps({"result": "success"})
         else:
             return render_template("private-api/forbidden-request.html")
