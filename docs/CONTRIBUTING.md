@@ -20,8 +20,9 @@ We are open to any type of contributions. But in terms of giving ideas, we can s
 
   
 
-To become an active contributor, you can request the open positions(seaters) on devSeater project page in devSeater.com
-=>  [devSeater project page](https://devseater.com)
+To become an active contributor, you can request the open positions(seaters) on devSeater project page in devSeater.com:
+
+[devSeater project page](https://devseater.com/p/devSeater)
 
   
 
