@@ -72,7 +72,7 @@ To become an active contributor, you can request the open positions(seaters) on 
 
 **5. Run your mysql-server and create a mysql database and update the configuration file.**
 
-Configuration file is in `project/config.py`
+Configuration file is `project/config.py`
 
   
 
