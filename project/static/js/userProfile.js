@@ -137,7 +137,7 @@ function eventListeners(){
 
   });
 
-  contentArea.addEventListener("focusout", e => {
+  contentArea.addEventListener("change", e => {
     if(e.target.id == "user-full-name"){
       devSeater.updateUserFullName(e.target.value)
       .then(response => {

@@ -247,7 +247,7 @@ function eventListeners(){
 
   });
 
-  contentArea.addEventListener("focusout", e => {
+  contentArea.addEventListener("change", e => {
     if(e.target.id == "project-name"){
       devSeater.updateProjectName(pid, e.target.value)
       .then(response => {
