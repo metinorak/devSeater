@@ -1363,7 +1363,7 @@ class UI{
       `;
       modalBody.innerHTML = html;
 
-      this.setModal(this.generalModal, "Add New Seater", modalBody);
+      this.setModal(this.generalModal, "Create/Update Seater", modalBody);
 
       let simplemde = new SimpleMDE({
         element: this.generalModal.querySelector("#full-description-input"),
