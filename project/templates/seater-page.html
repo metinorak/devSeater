@@ -21,7 +21,7 @@
           <p class="card-text text-muted font-italic">{{seater.short_description}}</p>
           <p class="card-text" id="full-description">{{seater.full_description}}</p>
           
-          {% if seater.skills != None %}
+          {% if seater.skills is defined and seater.skills|length > 0 %}
             <h2 class="card-title">Skills</h2>
             <div class="d-flex flex-wrap">
               {% for skill in seater.skills %}

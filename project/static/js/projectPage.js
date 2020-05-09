@@ -144,7 +144,7 @@ function eventListeners(){
     .then(values => {
 			ui.clearContentArea();
 			ui.hidePostTextAreaCard();
-      ui.showProjectPageSettings(...values, mde => {
+      			ui.showProjectPageSettings(...values, mde => {
 				var fullDescriptionInput = mde;
 
 				//Add event to the fullDescriptionInput
