@@ -14,23 +14,29 @@ user_link_fields = {
     "link" : fields.String
 }
 
-parser = reqparse.RequestParser()
-parser.add_argument("uid", type=int)
-parser.add_argument("ulid", type=int)
-parser.add_argument("name", type=str, location="json")
-parser.add_argument("link", type=str, location="json")
-
 class UserLinks(Resource):
     @marshal_with(user_link_fields)
     def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("uid", type=int, location="args", required=True)
+
         args = parser.parse_args()
         uid = args["uid"]
+
+        user = UserModel.getUser(uid, getCurrentUid())
+
+        if not user:
+            abort(404, message="There is no such a user!")
 
         user_links = UserModel.getUserLinks(uid)
         return user_links
 
     @login_required
     def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("name", type=str, location="json", required=True)
+        parser.add_argument("link", type=str, location="json", required=True)
+
         args = parser.parse_args()
         ulid = UserModel.addUserLink(getCurrentUid(), args["name"], args["link"])
         
@@ -42,8 +48,12 @@ class UserLinks(Resource):
 
     @login_required
     def delete(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("ulid", type=int, location="args", required=True)
+
         args = parser.parse_args()
         ulid = args["ulid"]
+        
         user_link = UserModel.getUserLink(ulid)
 
         if user_link["uid"] is not getCurrentUid():
