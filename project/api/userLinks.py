@@ -14,16 +14,11 @@ user_link_fields = {
     "link" : fields.String
 }
 
-user_link_list_fields = {
-    fields.List(fields.Nested(user_link_fields)),
-}
-
 parser = reqparse.RequestParser()
 parser.add_argument("uid", type=int)
 parser.add_argument("ulid", type=int)
 parser.add_argument("name", type=str, location="json")
 parser.add_argument("link", type=str, location="json")
-
 
 class UserLinks(Resource):
     @marshal_with(user_link_fields)
