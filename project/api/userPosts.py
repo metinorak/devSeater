@@ -21,12 +21,6 @@ user_post_fields = {
     "time" : fields.DateTime(dt_format="iso8601")
 }
 
-parser = reqparse.RequestParser()
-parser.add_argument("uid", type=int)
-parser.add_argument("ulid", type=int)
-parser.add_argument("name", type=str, location="json")
-parser.add_argument("link", type=str, location="json")
-
 class UserPosts(Resource):
     @marshal_with(user_post_fields)
     def get(self):
