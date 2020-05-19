@@ -56,11 +56,11 @@ class UserLinks(Resource):
         
         user_link = UserModel.getUserLink(ulid)
 
-        if user_link["uid"] is not getCurrentUid():
-            abort(401, message = "Unauthorized action!")
-
         if not user_link:
             abort(404, message = "There is no such a user link!")
+
+        if user_link["uid"] is not getCurrentUid():
+            abort(401, message = "Unauthorized action!")
 
         UserModel.removeUserLink(ulid)
         
