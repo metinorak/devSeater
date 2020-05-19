@@ -155,8 +155,8 @@ class SeaterModel():
     return result["number"]
   
   @staticmethod
-  def getSeater(sid, currentUser=None):
-    isAspirated = SeaterModel.isThereSeaterAspiration(currentUser, sid)
+  def getSeater(sid, currentUserId=None):
+    isAspirated = SeaterModel.isThereSeaterAspiration(currentUserId, sid)
 
     connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
@@ -167,8 +167,8 @@ class SeaterModel():
       result = cursor.fetchone()
       result["isAspirated"] = isAspirated
 
-      if currentUser != None:
-        result["isAssigned"] = (result["uid"] == currentUser)
+      if currentUserId != None:
+        result["isAssigned"] = (result["uid"] == currentUserId)
       else:
         result["isAssigned"] = False
     except Exception as e:

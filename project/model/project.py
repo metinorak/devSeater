@@ -87,7 +87,7 @@ class ProjectModel():
     return result
   
   @staticmethod
-  def getMembers(pid, currentUser):
+  def getMembers(pid, currentUserId):
     connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
@@ -102,7 +102,7 @@ class ProjectModel():
       FROM users WHERE uid IN 
       (SELECT uid FROM projectAdmins JOIN projects ON(projects.pid = projectAdmins.pid) WHERE projects.pid = %s))
       """
-      cursor.execute(query, (currentUser, pid, currentUser, pid) )
+      cursor.execute(query, (currentUserId, pid, currentUserId, pid) )
       result = cursor.fetchall()
     except Exception as e:
       print(e)

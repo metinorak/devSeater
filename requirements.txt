@@ -10,3 +10,4 @@ gunicorn
 wheel
 yoyo-migrations
 pymysql
+flask-restful

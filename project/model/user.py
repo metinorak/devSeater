@@ -4,7 +4,7 @@ from passlib.hash import sha256_crypt
 class UserModel():
   
   @staticmethod
-  def getUser(uid, currentUser = None):
+  def getUser(uid, currentUserId = None):
     connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     
@@ -12,7 +12,7 @@ class UserModel():
       query = """SELECT
       (SELECT COUNT(*) FROM followers WHERE flwrid = %s AND flwdid = users.uid) AS isFollowed,
       users.* FROM users WHERE uid = %s"""
-      cursor.execute(query, (currentUser, uid) )
+      cursor.execute(query, (currentUserId, uid) )
       result = cursor.fetchone()
     except Exception as e:
       print(e)
@@ -40,14 +40,14 @@ class UserModel():
     return result
 
   @staticmethod
-  def getUserByUsername(username, currentUser = None):
+  def getUserByUsername(username, currentUserId = None):
     connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT 
       (SELECT COUNT(*) FROM followers WHERE flwrid = %s AND flwdid = users.uid) AS isFollowed,
       users.* FROM users WHERE username = %s"""
-      cursor.execute(query, (currentUser, username))
+      cursor.execute(query, (currentUserId, username))
       result = cursor.fetchone()
     except Exception as e:
       print(e)
@@ -58,14 +58,14 @@ class UserModel():
     return result
 
   @staticmethod
-  def getUserByEmail(email, currentUser = None):
+  def getUserByEmail(email, currentUserId = None):
     connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
       query = """SELECT 
       (SELECT COUNT(*) FROM followers WHERE flwrid = %s AND flwdid = users.uid) AS isFollowed,
       users.* FROM users WHERE email = %s"""
-      cursor.execute(query, (currentUser, email))
+      cursor.execute(query, (currentUserId, email))
       result = cursor.fetchone()
     except Exception as e:
       print(e)
@@ -105,7 +105,7 @@ class UserModel():
       connection.close()
   
   @staticmethod
-  def getWhoToFollowList(number, currentUser = None):
+  def getWhoToFollowList(number, currentUserId = None):
     connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
@@ -120,7 +120,7 @@ class UserModel():
       WHERE uid NOT IN (SELECT flwdid FROM followers WHERE flwrid = %s)
       AND uid != %s
       ORDER BY (postNumber + postCommentNumber + followNumber) DESC, uid DESC LIMIT %s"""
-      cursor.execute(query, (currentUser, currentUser, number))
+      cursor.execute(query, (currentUserId, currentUserId, number))
       result = cursor.fetchall()
     except Exception as e:
       print(e)

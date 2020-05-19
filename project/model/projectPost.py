@@ -17,7 +17,7 @@ class ProjectPostModel():
       connection.close()
   
   @staticmethod
-  def getProjectPost(ppid, currentUser):
+  def getProjectPost(ppid, currentUserId):
     connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
@@ -28,7 +28,7 @@ class ProjectPostModel():
       projectPosts.* FROM projectPosts 
       INNER JOIN users ON users.uid = projectPosts.uid
       WHERE ppid = %s"""
-      cursor.execute(query, (currentUser, ppid) )
+      cursor.execute(query, (currentUserId, ppid) )
       result = cursor.fetchone()
     except Exception as e:
       print(e)
@@ -39,7 +39,7 @@ class ProjectPostModel():
     return result
 
   @staticmethod
-  def getLastProjectPosts(pid, number, currentUser):
+  def getLastProjectPosts(pid, number, currentUserId):
     connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
@@ -50,7 +50,7 @@ class ProjectPostModel():
       projectPosts.*, users.full_name, users.photo, users.username 
       FROM projectPosts INNER JOIN users ON users.uid = projectPosts.uid  WHERE projectPosts.pid = %s 
       ORDER BY time DESC LIMIT %s"""
-      cursor.execute(query, (currentUser, pid, number))
+      cursor.execute(query, (currentUserId, pid, number))
       result = cursor.fetchall()
     except Exception as e:
       print(e)
@@ -61,7 +61,7 @@ class ProjectPostModel():
     return result
 
   @staticmethod
-  def getPreviousProjectPosts(pid, ppid, number, currentUser):
+  def getPreviousProjectPosts(pid, ppid, number, currentUserId):
     connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
 
@@ -74,7 +74,7 @@ class ProjectPostModel():
       FROM projectPosts 
       INNER JOIN users ON users.uid = projectPosts.uid
       WHERE pid = %s AND ppid < %s ORDER BY time DESC LIMIT %s"""
-      cursor.execute(query, (currentUser, pid, ppid, number))
+      cursor.execute(query, (currentUserId, pid, ppid, number))
       result = cursor.fetchall()
     except Exception as e:
       print(e)
@@ -233,7 +233,7 @@ class ProjectPostModel():
       connection.close()
 
   @staticmethod
-  def getProjectPostComment(ppcid, currentUser):
+  def getProjectPostComment(ppcid, currentUserId):
     connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
@@ -244,7 +244,7 @@ class ProjectPostModel():
       FROM projectPostComments PPC 
       INNER JOIN users ON users.uid = PPC.uid 
       WHERE ppcid = %s"""
-      cursor.execute(query, (currentUser, ppcid) )
+      cursor.execute(query, (currentUserId, ppcid) )
       result = cursor.fetchone()
     except Exception as e:
       print(e)
@@ -254,7 +254,7 @@ class ProjectPostModel():
     return result
   
   @staticmethod
-  def getLastProjectPostComments(ppid, number, currentUser):
+  def getLastProjectPostComments(ppid, number, currentUserId):
     connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
@@ -265,7 +265,7 @@ class ProjectPostModel():
       FROM projectPostComments PPC 
       INNER JOIN users ON users.uid = PPC.uid 
       WHERE ppid = %s ORDER BY time DESC LIMIT %s"""
-      cursor.execute(query, (currentUser, ppid, number))
+      cursor.execute(query, (currentUserId, ppid, number))
       result = cursor.fetchall()
     except Exception as e:
       print(e)
@@ -276,7 +276,7 @@ class ProjectPostModel():
     return result
   
   @staticmethod
-  def getPreviousProjectPostComments(ppid, ppcid, number, currentUser):
+  def getPreviousProjectPostComments(ppid, ppcid, number, currentUserId):
     connection = Database.getConnection()
     cursor = connection.cursor(dictionary=True)
     try:
@@ -287,7 +287,7 @@ class ProjectPostModel():
       FROM projectPostComments PPC 
       INNER JOIN users ON users.uid = PPC.uid 
       WHERE ppid = %s AND ppcid < %s ORDER BY time DESC LIMIT %s"""
-      cursor.execute(query, (currentUser, ppid, ppcid, number))
+      cursor.execute(query, (currentUserId, ppid, ppcid, number))
       result = cursor.fetchall()
     except Exception as e:
       print(e)
