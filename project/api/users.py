@@ -25,8 +25,6 @@ class Users(Resource):
             abort(404, "User does not exist!")
         return user
         
-
-
 class CurrentUser(Resource):
     @marshal_with(user_fields)
     @login_required
