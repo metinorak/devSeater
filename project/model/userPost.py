@@ -9,15 +9,17 @@ class UserPostModel():
     try:
       query = "INSERT INTO userPosts(uid, post) VALUES(%s, %s)"
       cursor.execute(query, (uid, post) )
+      upid = cursor.lastrowid
       connection.commit()
     except Exception as e:
       print(e)
     finally:
       cursor.close()
       connection.close()
+    return upid
     
   @staticmethod
-  def getUserPost(upid, currentUser = None):
+  def getUserPost(upid, currentUserId = None):
     connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
     try:
@@ -26,7 +28,7 @@ class UserPostModel():
       (SELECT COUNT(*) FROM userPostLikes WHERE upid = userPosts.upid) AS likeNumber,
       (SELECT COUNT(*) FROM userPostComments WHERE upid = userPosts.upid) AS commentNumber,
       userPosts.* FROM userPosts WHERE upid = %s """
-      cursor.execute(query, (currentUser, upid,) )
+      cursor.execute(query, (currentUserId, upid,) )
       result = cursor.fetchone()
     except Exception as e:
       print(e)
@@ -37,7 +39,7 @@ class UserPostModel():
     return result
 
   @staticmethod
-  def getLastUserPosts(uid, number, currentUser = None):
+  def getLastUserPosts(uid, number, currentUserId = None):
     connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
     try:
@@ -48,7 +50,7 @@ class UserPostModel():
       userPosts.*, users.full_name, users.photo, users.username 
       FROM userPosts INNER JOIN users ON users.uid = userPosts.uid  WHERE userPosts.uid = %s 
       ORDER BY time DESC LIMIT %s"""
-      cursor.execute(query, (currentUser, uid, number))
+      cursor.execute(query, (currentUserId, uid, number))
       result = cursor.fetchall()
     except Exception as e:
       print(e)
@@ -59,7 +61,7 @@ class UserPostModel():
     return result
 
   @staticmethod
-  def getPreviousUserPosts(uid, upid, number, currentUser = None):
+  def getPreviousUserPosts(uid, upid, number, currentUserId = None):
     connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
     try:
@@ -70,7 +72,7 @@ class UserPostModel():
       userPosts.*, users.full_name, users.photo, users.username 
       FROM userPosts INNER JOIN users ON users.uid = userPosts.uid  WHERE userPosts.uid = %s AND upid < %s 
       ORDER BY time DESC LIMIT %s"""
-      cursor.execute(query, (currentUser, uid, upid, number))
+      cursor.execute(query, (currentUserId, uid, upid, number))
       result = cursor.fetchall()
     except Exception as e:
       print(e)
@@ -288,7 +290,7 @@ class UserPostModel():
       connection.close()
   
   @staticmethod
-  def getUserPostComment(upcid, currentUser = None):
+  def getUserPostComment(upcid, currentUserId = None):
     connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
     try:
@@ -299,7 +301,7 @@ class UserPostModel():
       FROM userPostComments 
       INNER JOIN users ON users.uid = userPostComments.uid
       WHERE upcid = %s"""
-      cursor.execute(query, (currentUser, upcid,) )
+      cursor.execute(query, (currentUserId, upcid,) )
       result = cursor.fetchone()
     except Exception as e:
       print(e)
@@ -338,7 +340,7 @@ class UserPostModel():
       connection.close()
 
   @staticmethod
-  def getLastUserPostComments(upid, number, currentUser = None):
+  def getLastUserPostComments(upid, number, currentUserId = None):
     connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
     try:
@@ -349,7 +351,7 @@ class UserPostModel():
       FROM userPostComments 
       INNER JOIN users ON users.uid = userPostComments.uid
       WHERE upid = %s ORDER BY time DESC LIMIT %s"""
-      cursor.execute(query, (currentUser, upid, number))
+      cursor.execute(query, (currentUserId, upid, number))
       result = cursor.fetchall()
     except Exception as e:
       print(e)
@@ -360,7 +362,7 @@ class UserPostModel():
     return result
   
   @staticmethod
-  def getPreviousUserPostComments(upid, upcid, number, currentUser = None):
+  def getPreviousUserPostComments(upid, upcid, number, currentUserId = None):
     connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
     try:
@@ -371,7 +373,7 @@ class UserPostModel():
       FROM userPostComments 
       INNER JOIN users ON users.uid = userPostComments.uid
       WHERE upid = %s AND upcid < %s ORDER BY time DESC LIMIT %s"""
-      cursor.execute(query, (currentUser, upid, upcid, number))
+      cursor.execute(query, (currentUserId, upid, upcid, number))
       result = cursor.fetchall()
     except Exception as e:
       print(e)
@@ -382,7 +384,7 @@ class UserPostModel():
     return result
 
   @staticmethod
-  def getLastUserPostComment(upid, currentUser = None):
+  def getLastUserPostComment(upid, currentUserId = None):
     connection = Database.getConnection() 
     cursor = connection.cursor(dictionary=True)
     try:
@@ -393,7 +395,7 @@ class UserPostModel():
       FROM userPostComments 
       INNER JOIN users ON users.uid = userPostComments.uid
       WHERE upid = %s ORDER BY time DESC LIMIT 1"""
-      cursor.execute(query, (currentUser, upid) )
+      cursor.execute(query, (currentUserId, upid) )
       result = cursor.fetchone()
     except Exception as e:
       print(e)
