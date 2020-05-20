@@ -280,7 +280,7 @@ class UserPostCommentNumber(Resource):
 
 class UserPostCommentLikes(Resource):
     @login_required
-    def post(self, upid, upcid):
+    def post(self, upcid):
         # Get the comment
         comment = UserPostModel.getUserPostComment(upcid, getCurrentUid())
 
@@ -294,7 +294,7 @@ class UserPostCommentLikes(Resource):
         }
 
     @login_required
-    def delete(self, upid, upcid):
+    def delete(self, upcid):
         # Get the comment
         comment = UserPostModel.getUserPostComment(upcid, getCurrentUid())
 
@@ -307,6 +307,15 @@ class UserPostCommentLikes(Resource):
             "result" : "success"
         }
 
+class UserPostCommentLikeNumber(Resource):
+    def get(self, upcid):
+        # Get the number
+        number = UserPostModel.getUserPostCommentLikeNumber(upcid)
+
+        return {
+            "number" : number
+        }
+
 api.add_resource(UserPosts, "/api/user-posts")
 api.add_resource(PreviousFollowingPosts, "/api/user-posts/previous-following")
 api.add_resource(NewFollowingPosts, "/api/user-posts/new-following")
@@ -315,4 +324,5 @@ api.add_resource(UserPostLikes, "/api/user-posts/<upid>/likes")
 api.add_resource(UserPostLikeNumber, "/api/user-posts/<upid>/likes/number")
 api.add_resource(UserPostComments, "/api/user-posts/<upid>/comments")
 api.add_resource(UserPostCommentNumber, "/api/user-posts/<upid>/comments/number")
-api.add_resource(UserPostCommentLikes, "/api/user-posts/<upid>/comments/<upcid>/likes")
+api.add_resource(UserPostCommentLikes, "/api/user-posts/comments/<upcid>/likes")
+api.add_resource(UserPostCommentLikeNumber, "/api/user-posts/comments/<upcid>/likes/number")
