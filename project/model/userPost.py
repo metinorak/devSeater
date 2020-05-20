@@ -282,12 +282,14 @@ class UserPostModel():
     try:
       query = "INSERT INTO userPostComments(uid, upid, comment) VALUES(%s, %s, %s)"
       cursor.execute(query, (uid, upid, comment) )
+      upcid = cursor.lastrowid
       connection.commit()
     except Exception as e:
       print(e)
     finally:
       cursor.close()
       connection.close()
+    return upcid
   
   @staticmethod
   def getUserPostComment(upcid, currentUserId = None):

@@ -21,6 +21,18 @@ user_post_fields = {
     "time" : fields.DateTime(dt_format="iso8601")
 }
 
+user_post_comment_fields{
+    "isLiked" : fields.Boolean,
+    "likeNumber" : fields.Integer,
+    "upcid" : fields.Integer,
+    "upid" : fields.Integer,
+    "comment" : fields.String,
+    "username" : fields.String,
+    "full_name" : fields.String,
+    "photo" : fields.String,
+    "time" : fields.DateTime(dt_format="iso8601")
+}
+
 class UserPosts(Resource):
     @marshal_with(user_post_fields)
     def get(self):
@@ -109,4 +121,198 @@ class UserPosts(Resource):
             "message" : "The post was removed!"
         }
 
-api.add_resource(UserPosts, '/api/user-posts')
+class PreviousFollowingPosts(Resource):
+    @login_required
+    @marshal_with(user_post_fields)
+    def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("upid", type=int, location="args", required=True)
+
+        args = parser.parse_args()
+        upid = args["upid"]
+
+        posts = UserPostModel.getPreviousFollowingPosts(getCurrentUid(), upid, 10)
+
+        return posts
+
+class NewFollowingPosts(Resource):
+    @login_required
+    @marshal_with(user_post_fields)
+    def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("upid", type=int, location="args", required=True)
+
+        args = parser.parse_args()
+        upid = args["upid"]  
+
+        posts = UserPostModel.getNewFollowingPosts(getCurrentUid(), upid)
+
+        return posts
+
+class NewFollowingPostNumber(Resource):
+    @login_required
+    def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("upid", type=int, location="args", required=True)
+
+        args = parser.parse_args()
+        upid = args["upid"]
+
+        number = UserPostModel.getNewFollowingPostNumber(getCurrentUid(), upid)
+
+        return {
+            "number" : number
+        }
+
+class UserPostLikes(Resource):
+    @login_required
+    def post(self, upid):
+        UserPostModel.likeUserPost(getCurrentUid(), upid)
+
+        return {
+            "result" : "success"
+        }
+
+    @login_required
+    def delete(self, upid):
+        UserPostModel.unlikeUserPost(getCurrentUid(), upid)
+
+        return {
+            "result" : "success"
+        }
+
+class UserPostLikeNumber(Resource):
+    def get(self, upid):
+        number = UserPostModel.getUserPostLikeNumber(upid)
+
+        return {
+            "number" : number
+        }
+
+class UserPostComments(Resource):
+    @marshal_with(user_post_comment_fields)
+    def get(self, upid):
+        parser = reqparse.RequestParser()
+        parser.add_argument("upcid", type=int, location="args", required=True)
+
+        args = parser.parse_args()
+        upcid = args["upcid"]
+
+        if not upcid:
+            comments = UserPostModel.getLastUserPostComments(upid, 2, getCurrentUid())
+        else:
+            comments = UserPostModel.getPreviousUserPostComments(upid, upcid, 2, getCurrentUid())
+
+        return comments
+
+    @login_required
+    @marshal_with(user_post_comment_fields)
+    def post(self, upid):
+        parser = reqparse.RequestParser()
+        parser.add_argument("comment", type=str, location="json", required=True)
+
+        args = parser.parse_args()
+        comment = args["comment"]
+
+        upcid = UserPostModel.addUserPostComment(getCurrentUid(), upid, comment)
+
+        # Get the saved comment
+        saved_comment = UserPostModel.getUserPostComment(upcid, getCurrentId())
+
+        return saved_comment
+    
+    @login_required
+    @marshal_with(user_post_comment_fields)
+    def put(self, upid):
+        parser = reqparse.RequestParser()
+        parser.add_argument("upcid", type=int, location="json", required=True)
+        parser.add_argument("comment", type=str, location="json", required=True)
+
+        args = parser.parse_args()
+        
+        # Get the comment
+        comment = UserPostModel.getUserPostComment(args["upcid"])
+
+        if not comment:
+            abort(404, message = "There is no such a comment!")
+        
+        if comment["uid"] is not getCurrentUid():
+            abort(401, message = "Unauthorized action!")
+        
+        # Update the comment
+        UserPostModel.updateUserPostComment(upcid, args["comment"])
+
+        # Get updated comment
+        updated_comment = UserPostModel.getUserPostComment(upcid, getCurrentUid())
+
+        return updated_comment
+    
+    @login_required
+    def delete(self, upid):
+        parser = reqparse.RequestParser()
+        parser.add_argument("upcid", type=int, location="args", required=True)
+
+        args = parser.parse_args()
+
+        # Get the comment
+        comment = UserPostModel.getUserPostComment(args["upcid"])
+
+        if not comment:
+            abort(404, message = "There is no such a comment!")
+        
+        if comment["uid"] is not getCurrentUid():
+            abort(401, message = "Unauthorized action!")
+        
+        # Delete the comment
+        UserPostModel.removeUserPostComment(upcid)
+
+        return {
+            "result" : "success"
+        }
+
+class UserPostCommentNumber(Resource):
+    def get(self, upid):
+        number = UserPostModel.getUserPostCommentNumber(upid)
+
+        return {
+            "number" : number
+        }
+
+class UserPostCommentLikes(Resource):
+    @login_required
+    def post(self, upid, upcid):
+        # Get the comment
+        comment = UserPostModel.getUserPostComment(upcid, getCurrentUid())
+
+        if not comment:
+            abort(404, message = "There is no such a comment!")
+
+        UserPostModel.likeUserPostComment(getCurrentUid(), upcid)
+
+        return {
+            "result" : "success"
+        }
+
+    @login_required
+    def delete(self, upid, upcid):
+        # Get the comment
+        comment = UserPostModel.getUserPostComment(upcid, getCurrentUid())
+
+        if not comment:
+            abort(404, message = "There is no such a comment!")
+            
+        UserPostModel.unlikeUserPostComment(getCurrentUid(), upcid)
+
+        return {
+            "result" : "success"
+        }
+
+api.add_resource(UserPosts, "/api/user-posts")
+api.add_resource(PreviousFollowingPosts, "/api/user-posts/previous-following")
+api.add_resource(NewFollowingPosts, "/api/user-posts/new-following")
+api.add_resource(NewFollowingPostNumber, "/api/user-posts/new-following/number")
+api.add_resource(UserPostLikes, "/api/user-posts/<upid>/likes")
+api.add_resource(UserPostLikeNumber, "/api/user-posts/<upid>/likes/number")
+api.add_resource(UserPostComments, "/api/user-posts/<upid>/comments")
+api.add_resource(UserPostCommentNumber, "/api/user-posts/<upid>/comments/number")
+api.add_resource(UserPostCommentLikes, "/api/user-posts/<upid>/comments/<upcid>/likes")
