@@ -38,8 +38,21 @@ def isValidEmail(email):
   return (p.fullmatch(email) != None)
 
 def isValidUsername(username):
+  username = username.strip()
+
+  if len(username < 1):
+    return false
+
   p = re.compile("([A-z0-9_-]*)")
   return (p.fullmatch(username) != None)
+
+def isValidFullName(full_name):
+  full_name = full_name.strip()
+
+  if len(full_name < 1):
+    return False
+
+  return True
 
 def isValidProjectName(projectName):
   if projectName == "" or projectName == None:
