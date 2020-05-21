@@ -21,7 +21,7 @@ user_post_fields = {
     "time" : fields.DateTime(dt_format="iso8601")
 }
 
-user_post_comment_fields{
+user_post_comment_fields = {
     "isLiked" : fields.Boolean,
     "likeNumber" : fields.Integer,
     "upcid" : fields.Integer,
