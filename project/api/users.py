@@ -19,7 +19,7 @@ user_fields = {
     'registration_time': fields.DateTime(dt_format='iso8601'),
 }
 
-user_skill_fields = {
+skill_fields = {
     "skid" : fields.Integer,
     "name" : fields.String
 }
@@ -196,7 +196,7 @@ class CurrentUserSkills(Resource):
         return skills
     
     @login_required
-    @marshal_with(user_skill_fields)
+    @marshal_with(skill_fields)
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument("skill", type=str, location="json", required=True)
@@ -217,12 +217,9 @@ class CurrentUserSkills(Resource):
             "name" : args["skill"]
         }
 
+class CurrentUserSingleSkill(Resource):
     @login_required
-    def delete(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument("skid", type=int, location="args", required=True)
-        args = parser.parse_args()
-
+    def delete(self, skid):
         # Get the skill
         skill = SkillModel.getUserSkill(args["skid"])
 
@@ -272,5 +269,6 @@ api.add_resource(CurrentUserUsername, "/api/users/current/username")
 api.add_resource(CurrentUserEmail, "/api/users/current/email")
 api.add_resource(CurrentUserPassword, "/api/users/current/password")
 api.add_resource(CurrentUserSkills, "/api/users/current/skills")
+api.add_resource(CurrentUserSingleSkill, "/api/users/current/skills/<skid>")
 api.add_resource(UserSeaters, "/api/users/<user_id>/seaters")
 api.add_resource(UserSeaterNumber, "/api/users/<user_id>/seaters/number")
