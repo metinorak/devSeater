@@ -6,6 +6,7 @@ from .auth import login_required
 # import required models
 from project.model.user import UserModel
 from project.model.skill import SkillModel
+from project.model.seater import SeaterModel
 
 api = Api(app)
 
@@ -21,6 +22,14 @@ user_fields = {
 user_skill_fields = {
     "skid" : fields.Integer,
     "name" : fields.String
+}
+
+seater_fields = {
+    "project_name" : fields.String,
+    "short_description" : fields.String,
+    "full_description" : fields.String,
+    "title" : fields.String,
+    "time" : fields.DateTime(dt_format='iso8601')
 }
 
 class Users(Resource):
@@ -227,6 +236,33 @@ class CurrentUserSkills(Resource):
             "result" : "success"
         }
 
+class UserSeaters(Resource):
+    @marshal_with(seater_fields)
+    def get(self, user_id):
+        # Get the user
+        user = UserModel.getUser(user_id, getCurrentUid())
+
+        if not user:
+            abort(404, message = "There is no such a user!")
+
+        # Get the seaters
+        seaters = SeaterModel.getUserSeaters(user_id)
+
+        return seaters
+
+class UserSeaterNumber(Resource):
+    def get(self, user_id):
+        # Get the user
+        user = UserModel.getUser(user_id, getCurrentUid())
+
+        if not user:
+            abort(404, message = "There is no such a user!")
+
+        # Get the number
+        number = SeaterModel.getUserSeaterNumber(user_id)
+
+        return number
+
 api.add_resource(Users, "/api/users/<user_id>")
 api.add_resource(CurrentUser, "/api/users/current")
 api.add_resource(CurrentUserPhoto, "/api/users/current/photo")
@@ -236,3 +272,5 @@ api.add_resource(CurrentUserUsername, "/api/users/current/username")
 api.add_resource(CurrentUserEmail, "/api/users/current/email")
 api.add_resource(CurrentUserPassword, "/api/users/current/password")
 api.add_resource(CurrentUserSkills, "/api/users/current/skills")
+api.add_resource(UserSeaters, "/api/users/<user_id>/seaters")
+api.add_resource(UserSeaterNumber, "/api/users/<user_id>/seaters/number")
