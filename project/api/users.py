@@ -5,6 +5,7 @@ from .auth import login_required
 
 # import required models
 from project.model.user import UserModel
+from project.model.skill import SkillModel
 
 api = Api(app)
 
@@ -15,6 +16,11 @@ user_fields = {
     "isEmailVerified" : fields.Boolean,
     "photo" : fields.String,
     'registration_time': fields.DateTime(dt_format='iso8601'),
+}
+
+user_skill_fields = {
+    "skid" : fields.Integer,
+    "name" : fields.String
 }
 
 class Users(Resource):
@@ -173,6 +179,54 @@ class CurrentUserPassword(Resource):
             "result": "success"
         }
 
+class CurrentUserSkills(Resource):
+    def get(self):
+        # Get the skills
+        skills = SkillModel.getUserSkills(getCurrentUid())
+
+        return skills
+    
+    @login_required
+    @marshal_with(user_skill_fields)
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("skill", type=str, location="json", required=True)
+        args = parser.parse_args()
+        skill_name = args["skill"]
+
+        if len(skill_name) == 0:
+            abort(400, message = "Skill cannot be empty!")
+
+        # Strip and uppercase first letters
+        skill_name = skill_name.strip().title()
+
+        # Save the skill
+        skid = SkillModel.addUserSkill(getCurrentUid(), skill_name)
+
+        return {
+            "skid" : skid,
+            "name" : args["skill"]
+        }
+
+    @login_required
+    def delete(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("skid", type=int, location="args", required=True)
+        args = parser.parse_args()
+
+        # Get the skill
+        skill = SkillModel.getUserSkill(args["skid"])
+
+        if not skill:
+            abort(400, message = "There is no such a skill")
+
+        # Delete the skill
+        SkillModel.removeUserSkill(getCurrentUid(), args["skid"])
+
+        return {
+            "result" : "success"
+        }
+
 api.add_resource(Users, "/api/users/<user_id>")
 api.add_resource(CurrentUser, "/api/users/current")
 api.add_resource(CurrentUserPhoto, "/api/users/current/photo")
@@ -181,3 +235,4 @@ api.add_resource(CurrentUserBio, "/api/users/current/bio")
 api.add_resource(CurrentUserUsername, "/api/users/current/username")
 api.add_resource(CurrentUserEmail, "/api/users/current/email")
 api.add_resource(CurrentUserPassword, "/api/users/current/password")
+api.add_resource(CurrentUserSkills, "/api/users/current/skills")
